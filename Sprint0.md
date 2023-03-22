@@ -14,7 +14,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Potential Risks](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks)
     - [What is Risk?](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#what-is-risk)
     - [Potential Threats](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#potential-threats)
-    - [Risk Analysis]
+    - [Risk Analysis](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#risk-analysis)
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
     - Hello
