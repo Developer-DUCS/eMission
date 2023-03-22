@@ -21,7 +21,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
     - [Nominal Effort Calculation](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#nominal-effort-calculation)
-    - [Effor Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#effort-estimate-1)
+    - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#effort-estimate-1)
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
 - [Project Goals](https://github.com/DUCS-SE/eMission/wiki/Project-Goals)
 - [Team Charter](https://github.com/DUCS-SE/eMission/wiki/Team-Charter)
