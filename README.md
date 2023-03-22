@@ -7,7 +7,7 @@ Build your Project ReadMe here.  Your design documentation, will go in your Wiki
 
 ## Table of Contents
 
-* [System Inception](Sprint0.md)
+* [System Inception](SystemInception.md)
 * Sprint 1
   - Sprint 1 Inception
   - Sprint 1 Elaboration
