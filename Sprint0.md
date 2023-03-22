@@ -14,6 +14,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
     - Hello World
+    - Goodbye World
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
 - [Potential Risks](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks)
 - [Project Goals](https://github.com/DUCS-SE/eMission/wiki/Project-Goals)
