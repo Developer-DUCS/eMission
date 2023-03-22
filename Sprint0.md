@@ -12,7 +12,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Requirements](https://github.com/DUCS-SE/eMission/wiki/User-Information)
 - [Business Goals](https://github.com/DUCS-SE/eMission/wiki/Business-Go)
 - [Potential Risks](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks)
-    - Hello
+    - [What is Risk?](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#what-is-risk)
     - World
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
