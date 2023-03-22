@@ -20,7 +20,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
     - [Risk Analysis](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#risk-analysis)
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
-- 
+
     - [Nominal Effort Calculation](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#nominal-effort-calculation)
     - [Effor Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#effort-estimate-1)
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
