@@ -9,7 +9,7 @@ In this Sprint, we came up with our project, our project requirements, project a
 
 These documents can be viewed on our wiki, which is made up of 9 section:
 - [Home](https://github.com/DUCS-SE/eMission/wiki)
-- [User](https://github.com/DUCS-SE/eMission/wiki/User-Information)
+- [User Information](https://github.com/DUCS-SE/eMission/wiki/User-Information)
     - [User Descriptions](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-descriptions)
     - [User Stories](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-descriptions)
     - [User Case Diagram](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-case-diagram)
@@ -20,8 +20,9 @@ These documents can be viewed on our wiki, which is made up of 9 section:
     - [Risk Analysis](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks#risk-analysis)
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
+
     - [Nominal Effort Calculation](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#nominal-effort-calculation)
-    - World
+    - [Effor Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate#effort-estimate-1)
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
 - [Project Goals](https://github.com/DUCS-SE/eMission/wiki/Project-Goals)
 - [Team Charter](https://github.com/DUCS-SE/eMission/wiki/Team-Charter)
