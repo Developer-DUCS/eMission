@@ -10,7 +10,7 @@ In this Sprint, we came up with our project, our project requirements, project a
 These documents can be viewed on our wiki, which is made up of 9 section:
 - [Home](https://github.com/DUCS-SE/eMission/wiki)
 - [Requirements](https://github.com/DUCS-SE/eMission/wiki/User-Information)
-    - [User Descriptions]
+    - [User Descriptions](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-descriptions)
     - [Something]
     - [Use Case Diagram]
 - [Business Goals](https://github.com/DUCS-SE/eMission/wiki/Business-Go)
