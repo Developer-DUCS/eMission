@@ -9,6 +9,7 @@ In this Sprint, we came up with our project, our project requirements, project a
 
 These documents can be viewed on our wiki, which is made up of 9 section:
 - [Home](https://github.com/DUCS-SE/eMission/wiki)
+- [User Information](https://github.com/DUCS-SE/eMission/wiki/User-Information)
 - [Business Goals](https://github.com/DUCS-SE/eMission/wiki/Business-Go)
 - [Effort Estimate](https://github.com/DUCS-SE/eMission/wiki/Effort-Estimate)
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
@@ -16,4 +17,4 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Project Goals](https://github.com/DUCS-SE/eMission/wiki/Project-Goals)
 - [Team Charter](https://github.com/DUCS-SE/eMission/wiki/Team-Charter)
 - [Technology Plan](https://github.com/DUCS-SE/eMission/wiki/Technology-Plan)
-- [User Information](https://github.com/DUCS-SE/eMission/wiki/User-Information)
+
