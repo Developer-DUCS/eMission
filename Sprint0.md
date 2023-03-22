@@ -11,7 +11,7 @@ These documents can be viewed on our wiki, which is made up of 9 section:
 - [Home](https://github.com/DUCS-SE/eMission/wiki)
 - [Requirements](https://github.com/DUCS-SE/eMission/wiki/User-Information)
     - [User Descriptions](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-descriptions)
-    - [Something]
+    - [User Stories](https://github.com/DUCS-SE/eMission/wiki/User-Information#user-descriptions)
     - [Use Case Diagram]
 - [Business Goals](https://github.com/DUCS-SE/eMission/wiki/Business-Go)
 - [Potential Risks](https://github.com/DUCS-SE/eMission/wiki/Potential-Risks)
