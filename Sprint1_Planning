@@ -1,0 +1,34 @@
+1. As an eMission User, I want to explore my carbon footprint, so I can better understand my environmental impact. TOTAL: 220
+
+       1a. As an eMission User, I want to log into my account, so that I can access the app. Middle of the Sprint given that green tasks are done
+	       13 story points (lower priority for this sprint)
+-	Create field for user info
+-	Verify user info and authorize user identity
+
+       1b. As an eMission User, I want to input my mileage before and after a drive, so I can receive an accurate calculation for my carbon emissions for the drive. MVP- addresses highest risk and is the main goal of the application
+21 story points
+-	Create field for user to input make and model of car as well as mileage
+-	eMission calculation using API
+-	Present results to the user
+
+       1c. As an eMission User, I want to click the button to track my drive, so that I can gain a more accurate carbon emission calculation after my drive. Stretch
+144 story points (GPS will be a stretch assignment, but adding a button could be added to MVP)
+-	Create/Program a button
+-	Learn how to access GPS data
+-	Ask user for permission to access GPS data
+
+          1c.1 .As an eMission User, I want to make sure my data stored securely via encryption, so that hackers don't have access to my past GPS data. Middle of the Sprint given that green tasks are done
+34 story points
+-	Pick a method to encrypt data
+-	Compare user input with the encrypted string
+-	Properly store data in a secure database
+       1d. As an eMission User, I want to receive an accurate carbon emission footprint calculation, so that I know how much carbon my unique driving habits are creating. MVP
+8 story points
+-	Using an API 
+-	Collect carbon emission data
+-	Return data to user
+	
+       1e. As an eMission User, I want to get tips for improvement, so that I can improve my rankings. Stretch
+5 story points
+- Have a database of improvements
+- Give to the user
