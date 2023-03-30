@@ -25,6 +25,7 @@ These documents can be viewed on our wiki, which is made up of 10 sections:
 - [Initial Architecture](https://github.com/DUCS-SE/eMission/wiki/Initial-Architecture)
 - [Project Goals](https://github.com/DUCS-SE/eMission/wiki/Project-Goals)
 - [Team Charter](https://github.com/DUCS-SE/eMission/wiki/Team-Charter)
+
 ---
 - [Sprint 1](https://github.com/DUCS-SE/eMission/wiki/Sprint-1)
     - [Sprint Inception](https://github.com/DUCS-SE/eMission/wiki/Sprint-1#sprint-inception)
