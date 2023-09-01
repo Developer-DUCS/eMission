@@ -9,7 +9,7 @@ Build your Project ReadMe here.  Your design documentation, will go in your Wiki
 ### Table of Contents
 
 * [System Inception](https://github.com/Developer-DUCS/eMission/blob/main/SystemInception.md)
-* [Sprint 1]
+* [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprint_1.md)
   - [Sprint 1 Inception]
   - [Sprint 1 Elaboration]
   - [Sprint 1 Construction]
