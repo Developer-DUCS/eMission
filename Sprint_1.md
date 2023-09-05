@@ -88,8 +88,7 @@ note* see stakeholder analysis
 * Android Studio 
 * Visual Studio Code
 
-#### 
-Extensions
+#### Extensions
 * Flutter(Dart)
 * Android iOS Emulator
 
