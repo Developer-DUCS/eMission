@@ -56,8 +56,9 @@ note* see stakeholder analysis
 <summary>Location Technologies</summary>
 <br>
 <ul>
-<li>something</li>
-<li>something</li>
+<li>Google Maps</li>
+<li>Apple Maps</li>
+<li>MapBox</li>
 </ul>
 </details>
 
@@ -65,8 +66,9 @@ note* see stakeholder analysis
 <summary>Application Development</summary>
 <br>
 <ul>
-<li>something</li>
-<li>something</li>
+<li>HTML</li>
+<li>Dart</li>
+<li>Javascript</li>
 </ul>
 </details>
 
@@ -74,11 +76,21 @@ note* see stakeholder analysis
 <summary>Web Server Scripting</summary>
 <br>
 <ul>
-<li>something</li>
-<li>something</li>
+<li>SQL</li>
+<li>MongoDB</li>
 </ul>
 </details>
 
 
 **Tools**
+
+#### Code Editor
+* Android Studio 
+* Visual Studio Code
+
+#### 
+Extensions
+* 
+*
+
 
