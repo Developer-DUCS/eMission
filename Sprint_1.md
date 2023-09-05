@@ -42,7 +42,7 @@ Upload a blank page written in Dart for Flutter to the Repo.
 ## Processes
 
 **Technology**
-<details open>
+<details>
 <summary>Mobile App Technologies</summary>
 <br>
 <ul>
@@ -51,7 +51,7 @@ Upload a blank page written in Dart for Flutter to the Repo.
 </ul>
 </details>
 
-<details open>
+<details>
 <summary>Location Technologies</summary>
 <br>
 <ul>
@@ -61,7 +61,7 @@ Upload a blank page written in Dart for Flutter to the Repo.
 </ul>
 </details>
 
-<details open>
+<details>
 <summary>Application Development</summary>
 <br>
 <ul>
@@ -71,7 +71,7 @@ Upload a blank page written in Dart for Flutter to the Repo.
 </ul>
 </details>
 
-<details open>
+<details>
 <summary>Web Server Scripting</summary>
 <br>
 <ul>
