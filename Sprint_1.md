@@ -7,6 +7,11 @@ Upload a blank page written in Dart for Flutter to the Repo.
 
 ## Team Organization
 
+
+### Team Dynamics
+
+### Conflict Resolution
+
 ### Roles (Application Development)
 **Project Manager**
 <sup>1</sup>
