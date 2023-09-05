@@ -11,7 +11,7 @@ Upload a blank page written in Dart for Flutter to the Repo.
 **Project Manager***
 * Christopher Warren - cwarren00@drury.edu
 
-note* no stakeholders
+note* see stakeholder analysis
 
 
 **Team Manager**
@@ -43,6 +43,42 @@ note* no stakeholders
 ## Processes
 
 **Technology**
+<details open>
+<summary>Mobile App Technologies</summary>
+<br>
+<ul>
+<li>React Native</li>
+<li>Flutter</li>
+</ul>
+</details>
+
+<details open>
+<summary>Location Technologies</summary>
+<br>
+<ul>
+<li>something</li>
+<li>something</li>
+</ul>
+</details>
+
+<details open>
+<summary>Application Development</summary>
+<br>
+<ul>
+<li>something</li>
+<li>something</li>
+</ul>
+</details>
+
+<details open>
+<summary>Web Server Scripting</summary>
+<br>
+<ul>
+<li>something</li>
+<li>something</li>
+</ul>
+</details>
+
 
 **Tools**
 
