@@ -8,10 +8,9 @@ Upload a blank page written in Dart for Flutter to the Repo.
 ## Team Organization
 
 ### Roles (Application Development)
-**Project Manager***
+**Project Manager**
+<sup>1</sup>
 * Christopher Warren - cwarren00@drury.edu
-
-note* see stakeholder analysis
 
 
 **Team Manager**
