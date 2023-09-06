@@ -19,10 +19,13 @@ Processes
 
 ### Team Dynamics
 
-| Good Team Member      | Bad Team Member |
+| Good Team Member      | Poor Team Member |
 | ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
+| Passion for the product      | Apathetic to the product       |
+| Willing to resolve conflicts and communicate when one arises   | Not willing to accept other ideas and does not communicate conflicts        |
+|Will communicate blockers |Not mention blockers until it causes larger project related issues |
+|Spends individual time being on task |Does not work for the project goals in individual time |
+|Performs neccesary research to contribute to project |Does not do any research and blindly uses tools |
 
 ### Conflict Resolution
 
