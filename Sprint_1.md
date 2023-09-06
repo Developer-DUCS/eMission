@@ -38,7 +38,6 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 ### Roles (Application Development)
 **Project Manager**
-<sup>1</sup>
 * Christopher Warren - cwarren00@drury.edu
 
 
