@@ -65,7 +65,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 **Technology**
 <details>
-<summary>Mobile App Technologies</summary>
+<summary>&nbsp;Mobile App Technologies</summary>
 <br>
 <ul>
 <li>React Native</li>
@@ -74,7 +74,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 </details>
 
 <details>
-<summary>Location Technologies</summary>
+<summary>&nbsp;Location Technologies</summary>
 <br>
 <ul>
 <li>Google Maps</li>
@@ -84,7 +84,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 </details>
 
 <details>
-<summary>Application Development</summary>
+<summary>&nbsp;Application Development</summary>
 <br>
 <ul>
 <li>HTML</li>
@@ -94,7 +94,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 </details>
 
 <details>
-<summary>Web Server Scripting</summary>
+<summary>&nbsp;Web Server Scripting</summary>
 <br>
 <ul>
 <li>SQL</li>
@@ -105,11 +105,11 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 **Tools**
 
-#### Code Editor
+*Code Editor*
 * Android Studio 
 * Visual Studio Code
 
-#### Extensions
+*Extensions*
 * Flutter(Dart)
 * Android iOS Emulator
 
