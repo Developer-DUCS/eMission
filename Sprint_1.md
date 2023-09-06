@@ -61,14 +61,6 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 * Professor/Team Mentor: Chris Branton - cbranton@drury.edu
 
-## Infastructure
-
-**Risk**
-
-**Prototype**
-
-**Stakeholder Analysis**
-
 ## Processes
 
 **Technology**
