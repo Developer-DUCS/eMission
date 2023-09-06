@@ -21,6 +21,16 @@ Processes
 
 ### Conflict Resolution
 
+If we reach a conflict, the first thing to do is make it be known that there is a disagreement, so that the issue is communicated with the whole group. From there, we will hold a quick conflict resolution meeting, which could look like messaging back and forth in the Discord, to suggest possible resolutions to the conflict. Should a member want to bring up the conflict with an outside related party, like a related stakeholder, then they may do so to get their honest opinion. (It is best if the conflicted members are made aware of this notification). If the discussion doesn't bring about a agreement, then the whole team will vote about the way that the conflict should be resolved. If the vote bring about an odd number of people, then the leader of the part of the project gets the final word.
+
+For example: 
+
+Business/ product related discussion - Product owner
+Techniques and coding related discussion - Technical leader 
+(if disagreement is met between leaders, refer to product owner)
+Development, IDE and version control - Tool Master
+Interpersonal conflicts - Team Master
+
 ### Roles (Application Development)
 **Project Manager**
 <sup>1</sup>
