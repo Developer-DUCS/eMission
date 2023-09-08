@@ -8,7 +8,7 @@ eMission is a mobile application designed to help people track their personal im
 In this Sprint, we came up with our project, our project requirements, project analysis, and started on the design.
 
 These documents can be viewed on our wiki, which is made up of 10 sections:
-### [Home](https://github.com/Developer-DUCS/eMission/wiki)
+### [Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 - [User Information](https://github.com/Developer-DUCS/eMission/wiki/User-Information)
     - [User Descriptions](https://github.com/Developer-DUCS/eMission/wiki/User-Information#user-descriptions)
     - [User Stories](https://github.com/Developer-DUCS/eMission/wiki/User-Information#user-stories)
