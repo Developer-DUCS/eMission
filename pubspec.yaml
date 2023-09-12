@@ -63,6 +63,7 @@ flutter:
   assets:
     - assets/images/pexels-robert-so-18127674-2.jpg
     - assets/images/drawing_new.svg
+    - assets/images/eMission_logo.svg
 
   # custom fonts
   fonts:

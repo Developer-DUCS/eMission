@@ -1,8 +1,12 @@
+//
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+//
 void main() => runApp(const MyApp());
 
+
+/* */
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -24,7 +28,7 @@ class MyApp extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              SvgPicture.asset('assets/images/drawing_new.svg', height: 100),
+              SvgPicture.asset('assets/images/eMission_logo.svg', height: 100),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                 decoration: const BoxDecoration( 
@@ -44,6 +48,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+/* */
 class  MyCustomForm extends StatelessWidget {
   const MyCustomForm({super.key});
 
@@ -97,19 +104,31 @@ class  MyCustomForm extends StatelessWidget {
             ),
           ),
         ),
-        TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor:const Color.fromARGB(244, 0, 0, 0),
-            backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+        Container(
+          alignment: Alignment.bottomCenter,
+          padding: const EdgeInsets.only(bottom: 10),
+          child: SizedBox(
+            height: 30,
+            width: 250,
+            child: TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor:const Color.fromARGB(244, 0, 0, 0),
+              backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+            ),
+            onPressed: () { },
+            child: const Text('Submit')),
           ),
-          onPressed: () { },
-          child: const Text('Submit'),
-        ),
+        ),        
       ],
     );
   }
 }
 
+
+
+
+
+/* */
 class HomePage extends StatelessWidget {
     const HomePage({super.key});
 
