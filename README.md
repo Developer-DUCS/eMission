@@ -11,5 +11,5 @@ Build your Project ReadMe here.  Your design documentation, will go in your Wiki
 * [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 * [System Inception](https://github.com/Developer-DUCS/eMission/blob/main/SystemInception.md)
 * [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprint_1.md)
-* Sprint 2
+* [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprint_2.md)
 * Sprint 3
