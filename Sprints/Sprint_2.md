@@ -5,13 +5,13 @@
 - [X] Assign Server Manager
 - [X] Design Visual Prototype for Settings page
 - [X] Design & Create a Splash Screen
-- [ ] Design Visual Assets (Buttons and Bars)
+- [X] Design Visual Assets (Buttons and Bars)
 - [ ] Implement Page Changing Functionality
 - [ ] Design Backend Infrastructure
 - [ ] Investigate DevOps Technologies (Docker)
 - [ ] Investigate Ability to Allow Direct Device Testing
 - [ ] Create Documentation for Each Individual Page of the App
-- [ ] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
+- [X] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
 - [ ] Splash Screen & Login Page
 - [ ] Home Page
 - [ ] Drive Button Page
