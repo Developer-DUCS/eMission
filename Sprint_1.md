@@ -1,5 +1,5 @@
 Sprint 1 Goals:
-- [ ] Upload a blank page written in Dart for Flutter to the Repo.
+- [X] Upload a blank page written in Dart for Flutter to the Repo.
 - [X] Team Roles
 - [X] Team Organization
 - [X] Team Processes
