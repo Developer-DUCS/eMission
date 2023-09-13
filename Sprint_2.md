@@ -4,10 +4,11 @@
 - [ ] Assign Codebase Manager
 - [ ] Assign Server Manager
 - [ ] Design Visual Prototype for Settings page
-- [ ] Goal 4
-- [ ] Goal 5
-- [ ] Goal 6
-- [ ] Goal 7
+- [ ] Design & Create a Splash Screen
+- [ ] Design Visual Assets (Buttons and Bars)
+- [ ] Implement Page Changing Functionality
+- [ ] Design Backend Infrastructure
+- [ ] Investigate DevOps Technologies (Docker)
 
 ### Roles (Application Development)
 **Project Manager**
