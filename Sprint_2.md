@@ -9,6 +9,8 @@
 - [ ] Implement Page Changing Functionality
 - [ ] Design Backend Infrastructure
 - [ ] Investigate DevOps Technologies (Docker)
+- [ ] Investigate Ability to Allow Direct Device Testing
+- [ ] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
 
 ### Roles (Application Development)
 **Project Manager**
