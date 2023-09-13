@@ -1,9 +1,9 @@
 # Sprint 2
 
 ## Sprint 2 Goals:
-- [ ] Goal 1
-- [ ] Goal 2
-- [ ] Goal 3
+- [ ] Assign Codebase Manager
+- [ ] Assign Server Manager
+- [ ] Design Visual Prototype for Settings page
 - [ ] Goal 4
 - [ ] Goal 5
 - [ ] Goal 6
@@ -37,7 +37,6 @@
 <summary>&nbsp;Mobile App Technologies</summary>
 <br>
 <ul>
-<li>React Native</li>
 <li>Flutter</li>
 </ul>
 </details>
