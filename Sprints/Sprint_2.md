@@ -12,6 +12,12 @@
 - [ ] Investigate Ability to Allow Direct Device Testing
 - [ ] Create Documentation for Each Individual Page of the App
 - [ ] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
+- [ ] Splash Screen & Login Page
+- [ ] Home Page
+- [ ] Drive Button Page
+- [ ] Challenges Page
+- [ ] Settings Page
+- [ ] Sprint 2 Review Slides
 
 ### Additional Sprint 2 Roles
 **_CodeBase Manager_**
