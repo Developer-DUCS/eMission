@@ -13,75 +13,18 @@
 - [ ] Create Documentation for Each Individual Page of the App
 - [ ] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
 
-### Roles (Application Development)
-**Project Manager**
-* Christopher Warren - cwarren00@drury.edu
+### Additional Sprint 2 Roles
+**_CodeBase Manager_**
+* Christopher Warren
+  
+**_Server Manager_**
+* Jacob Hutchinson
 
-**Team Manager**
-* Jali Purcell - jpurcell@drury.edu
-
-**Product Owner**
-
-* Christopher Warren - cwarren004@drury.edu
-
-**Technical Leader(s)**
-* Jacob Hutchinson - jhutchinson@drury.edu
-* Austin Skidmore - askidmore@drury.edu
-
-**Tool Master**
-* Jace Reinke - jreinke@drury.edu
-
-**Other Stakeholders** 
-
-* Professor/Team Mentor: Chris Branton - cbranton@drury.edu
-## Processes
-
-**Technology**
-<details>
-<summary>&nbsp;Mobile App Technologies</summary>
-<br>
-<ul>
-<li>Flutter</li>
-</ul>
-</details>
-
-<details>
-<summary>&nbsp;Location Technologies</summary>
-<br>
-<ul>
-<li>Google Maps</li>
-<li>Apple Maps</li>
-<li>MapBox</li>
-</ul>
-</details>
-
-<details>
-<summary>&nbsp;Application Development</summary>
-<br>
-<ul>
-<li>HTML</li>
-<li>Dart</li>
-<li>Javascript</li>
-</ul>
-</details>
-
-<details>
-<summary>&nbsp;Web Server Scripting</summary>
-<br>
-<ul>
-<li>SQL</li>
-<li>MongoDB</li>
-</ul>
-</details>
+### Backend Infrastructure
+**Something**
 
 
-**Tools**
+### DevOps Technologies (Docker)
+**Something else**
 
-*Code Editor*
-* Android Studio 
-* Visual Studio Code
-
-*Extensions*
-* Flutter(Dart)
-* Android iOS Emulator
-
+### 
