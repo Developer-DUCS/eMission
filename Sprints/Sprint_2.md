@@ -1,10 +1,10 @@
 # Sprint 2
 
 ## Sprint 2 Goals:
-- [ ] Assign Codebase Manager
-- [ ] Assign Server Manager
-- [ ] Design Visual Prototype for Settings page
-- [ ] Design & Create a Splash Screen
+- [X] Assign Codebase Manager
+- [X] Assign Server Manager
+- [X] Design Visual Prototype for Settings page
+- [X] Design & Create a Splash Screen
 - [ ] Design Visual Assets (Buttons and Bars)
 - [ ] Implement Page Changing Functionality
 - [ ] Design Backend Infrastructure
