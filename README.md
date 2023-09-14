@@ -51,10 +51,13 @@
 $ git clone https://github.com/Developer-DUCS/eMission.git
  ```
 
-2. Find file title main.dart
-   1. Choose on Android or iOS emulator
-   2. <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/a2740e08-41db-4536-b8b6-537050ec16d6" alt="vscode_devices" width="400" height="200"/>
-   3. <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/10e69d95-522f-44cf-8a29-a3d1c86edad0" alt="choose_device" width="400" height="200"/>
+2. Find/Open file called main.dart
+   1. Click devices in VSCode (bottom right)
+      * <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/a2740e08-41db-4536-b8b6-537050ec16d6" alt="vscode_devices" width="400" height="200"/>
+   2. Choose an Android or iOS emulator 
+      * <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/10e69d95-522f-44cf-8a29-a3d1c86edad0" alt="choose_device" width="400" height="200"/>
+      
+3. Open command line in your local repository and run ``` flutter run ```
 
 
 ## Documentation
