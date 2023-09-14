@@ -34,7 +34,7 @@
    - This will let you know if flutter is properly installed and list any issues that need to be resolved. 
 
 
-### For more installation help
+### Need more installation help?
 **_installation video links_**
 * installing flutter for macOS - [click me](https://www.youtube.com/watch?v=fzAg7lOWqVE)
 
