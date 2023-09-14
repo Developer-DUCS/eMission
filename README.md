@@ -61,7 +61,7 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 
 
 ## Documentation
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
 * [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 * [System Inception](https://github.com/Developer-DUCS/eMission/blob/main/SystemInception.md)
