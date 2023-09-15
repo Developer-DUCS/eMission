@@ -1,10 +1,25 @@
 //
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'home.dart'; // Import the home page
 
 //
 void main() => runApp(const MyApp());
 
+class Routes extends StatelessWidget {
+  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Redirect Example',
+      initialRoute: '/', // Specify the initial route
+      routes: {
+        '/': (context) => MyCustomForm(), // Define the root route
+        '/home': (context) => HomePage(), // Define the route to the Home Page
+      },
+    );
+  }
+}
 
 /* */
 class MyApp extends StatelessWidget {
@@ -115,7 +130,11 @@ class  MyCustomForm extends StatelessWidget {
               foregroundColor:const Color.fromARGB(244, 0, 0, 0),
               backgroundColor: const Color.fromARGB(244, 244, 248, 6),
             ),
-            onPressed: () { },
+            onPressed: () {
+              Navigator.pushNamed(
+                context, '/home'
+              );
+             },
             child: const Text('Submit')),
           ),
         ),        
@@ -123,26 +142,3 @@ class  MyCustomForm extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-/* */
-class HomePage extends StatelessWidget {
-    const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
-      body: Center(child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('BUTTON')
-      ))
-    );
-  }
-}
-
