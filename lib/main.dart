@@ -115,7 +115,12 @@ class  MyCustomForm extends StatelessWidget {
               foregroundColor:const Color.fromARGB(244, 0, 0, 0),
               backgroundColor: const Color.fromARGB(244, 244, 248, 6),
             ),
-            onPressed: () { },
+            onPressed: () { 
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChallengePage()),
+              );
+            },
             child: const Text('Submit')),
           ),
         ),        
@@ -146,3 +151,69 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
+
+
+
+/* */
+class ChallengePage extends StatelessWidget {
+  const ChallengePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Challenge Page'),
+        backgroundColor: Colors.green[300],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child:  Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          //
+          //
+          children:<Widget> [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                'Duration',
+                style:TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                  fontFamily: 'Nunito',
+                  ),
+                ),
+                Text(
+                  'Pts',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+                Text(
+                  'Challenge',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    fontFamily: 'Nunito',
+                  ),
+                )
+              ], 
+            ),
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              color: Colors.cyan,
+              child: const Text('one'),
+            ),
+          ],
+        )
+      ),
+    );
+  }
+}
