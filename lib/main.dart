@@ -1,6 +1,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'drive-button.dart';
 
 //
 void main() => runApp(const MyApp());
@@ -115,20 +116,60 @@ class  MyCustomForm extends StatelessWidget {
               foregroundColor:const Color.fromARGB(244, 0, 0, 0),
               backgroundColor: const Color.fromARGB(244, 244, 248, 6),
             ),
-            onPressed: () { },
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomePage()));
+            },
             child: const Text('Submit')),
           ),
         ),        
       ],
     );
   }
+}/*
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
 }
 
+class _HomePageState extends State<HomePage> {
+  bool isGreen = false; // Track whether the button is green or not
+
+  void toggleColor() {
+    setState(() {
+      isGreen = !isGreen; // Toggle the color state
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Color buttonColor = isGreen ? Colors.green : Colors.amber; // Define the button color
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home Page')),
+      body: Center(
+        child: RawMaterialButton(
+          constraints: BoxConstraints.tight(Size(300, 300)),
+          onPressed: toggleColor, // Call toggleColor when button is pressed
+          elevation: 2.0,
+          fillColor: buttonColor, // Set the button color dynamically
+          child: Icon(
+            Icons.directions_car,
+            size: 100.0,
+          ),
+          shape: CircleBorder(),
+        ),
+      ),
+    );
+  }
+}*/
 
 
 
-
-/* */
+/*
+*//* *//*
 class HomePage extends StatelessWidget {
     const HomePage({super.key});
 
@@ -136,15 +177,24 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Home Page')),
-      body: Center(child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('BUTTON')
-      ))
-    );
+      body: Center(child: RawMaterialButton(
+        constraints: BoxConstraints.tight(Size(300,300)),
+        onPressed: () {// change color here
+          },
+          elevation: 2.0,
+          fillColor: Colors.amber,
+          child: Icon(
+            Icons.directions_car,
+            size: 100.0,
+          ),
+          shape: CircleBorder(),
+      )
+    )
+        //child: const Text('BUTTON')
+
+      );
   }
-}
+}*/
 
 
 
