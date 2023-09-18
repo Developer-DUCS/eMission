@@ -123,6 +123,8 @@ class _HomePageState extends State<HomePage> {
 */
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -204,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                     buttonText,
                     style: TextStyle(fontSize: 24.0), // Increase font size
                   ),
-                  SizedBox(height: 40.0), // Increase the space between text and button
+                  SizedBox(height: 50.0), // Increase the space between text and button
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -242,8 +244,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  if (isGreen)
-                    SizedBox(height: 20.0),
+
+                    SizedBox(height: 50.0),
                   Text(
                     'Drive Time: ${Duration(seconds: secondsElapsed).toString().split('.').first}',
                     style: TextStyle(fontSize: 20.0), // Increase font size
@@ -272,20 +274,32 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.directions_car,
-                  size: 36.0, // Adjust the icon size
+                Expanded(
+                  child: SvgPicture.asset(
+                    './assets/images/leaderboard-outline.svg',
+                    height:30,
+                    //width: 200.0, // Adjust the icon width
+                    //height: 295.0, // Adjust the icon height
+
+                  ),
                 ),
-                Icon(
-                  Icons.directions_car,
-                  size: 36.0, // Adjust the icon size
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: Icon(
+                    Icons.home_outlined,
+                    size: 34.0, // Adjust the icon size
+                  ),
                 ),
-                Icon(
-                  Icons.directions_car,
-                  size: 36.0, // Adjust the icon size
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: Icon(
+                    Icons.settings_outlined,
+                    size: 34.0, // Adjust the icon size
+                  ),
                 ),
               ],
-            ),
+            )
+
           ),
         ],
       ),
