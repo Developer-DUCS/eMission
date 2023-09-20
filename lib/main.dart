@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'eMission',
       home: Scaffold(
         appBar: AppBar(
+
           title: const Text('eMission Application'),
           backgroundColor: const Color.fromRGBO(124, 184, 22, 40),
         ),
@@ -117,7 +118,7 @@ class  MyCustomForm extends StatelessWidget {
               backgroundColor: const Color.fromARGB(244, 244, 248, 6),
             ),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomePage()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ButtonPage()));
             },
             child: const Text('Submit')),
           ),

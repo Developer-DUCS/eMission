@@ -126,31 +126,42 @@ import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
+/*
 void main() {
   runApp(MyApp());
 }
+*/
 
-class MyApp extends StatelessWidget {
+/*class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HomePage(),
     );
   }
-}
+}*/
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
+class ButtonPage extends StatefulWidget {
+  const ButtonPage({Key? key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _ButtonPageState createState() => _ButtonPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ButtonPageState extends State<ButtonPage> {
   bool isGreen = false; // Track whether the button is green or not
+  bool isDone = false;
   String buttonText = "Press to start drive";
   Timer? timer;
   int secondsElapsed = 0;
+  //Currentpage = getCurrentPage()
+  bool isHome = false;
+  bool isLeaderboard=false;
+  bool isSettings=false;
+
+  /*void getCurrentPage(){
+
+  }*/
 
   void toggleColor() {
     setState(() {
@@ -158,12 +169,14 @@ class _HomePageState extends State<HomePage> {
       if (isGreen) {
         buttonText = "Drive time";
         startTimer();
-      } else {
+      }
+      else {
         buttonText = "Press to start drive";
         stopTimer();
       }
     });
   }
+
 
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -178,9 +191,14 @@ class _HomePageState extends State<HomePage> {
       timer!.cancel();
       setState(() {
         secondsElapsed = 0;
+        isDone=true;
+        //displayStats();
       });
     }
   }
+
+
+
 
   @override
   void dispose() {
@@ -193,7 +211,38 @@ class _HomePageState extends State<HomePage> {
     Color buttonColor = isGreen ? Color(0xFF7CB816) : Color(0xFFE3A71B); // Custom colors
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
+      appBar: AppBar(title:
+      const Text('eMission',
+        style: TextStyle(color: Colors.black,
+        fontFamily: 'Sarpanch',),
+        ),
+
+        backgroundColor: Color(0xFF7CB816),
+
+
+      ),
+      endDrawer:
+        Drawer(
+            backgroundColor: Colors.black,
+
+            child: ListView(
+                padding: EdgeInsets.zero,
+                children: const [
+                  DrawerHeader(
+                      decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Text('Drawer Header'),
+                  ),
+                  ListTile(
+                    title: Text('Item 1'),
+                    textColor: Colors.yellow,
+                  ),
+                ]
+            )
+            //icon: Icon(Icons.menu, color:Colors.black),
+        ),
+
       body: Column(
         children: [
           Expanded(
@@ -275,28 +324,41 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: SvgPicture.asset(
-                    './assets/images/leaderboard-outline.svg',
-                    height:30,
-                    //width: 200.0, // Adjust the icon width
-                    //height: 295.0, // Adjust the icon height
+                  child: RawMaterialButton(
+                    onPressed: (){},
+                    child: SvgPicture.asset(
+                      './assets/images/leaderboard-outline.svg',
+                      height:30,
+                      //width: 200.0, // Adjust the icon width
+                      //height: 295.0, // Adjust the icon height
 
+                    ),
                   ),
                 ),
                 SizedBox(width: 20.0),
                 Expanded(
-                  child: Icon(
-                    Icons.home_outlined,
-                    size: 34.0, // Adjust the icon size
+                  child: RawMaterialButton(
+                    onPressed:(){},
+                    child: Icon(
+                      Icons.home_outlined,
+                      size: 34.0, // Adjust the icon size
+                    ),
                   ),
                 ),
                 SizedBox(width: 20.0),
+
                 Expanded(
-                  child: Icon(
-                    Icons.settings_outlined,
-                    size: 34.0, // Adjust the icon size
+
+                    child: RawMaterialButton(
+                      onPressed:(){
+
+                      },
+                      child: Icon (Icons.settings_outlined,
+                      size: 34.0), // Adjust the icon size
+                    ),
                   ),
-                ),
+
+
               ],
             )
 
