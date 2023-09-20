@@ -124,6 +124,8 @@ class _HomePageState extends State<HomePage> {
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 
 /*
@@ -151,6 +153,7 @@ class ButtonPage extends StatefulWidget {
 class _ButtonPageState extends State<ButtonPage> {
   bool isGreen = false; // Track whether the button is green or not
   bool isDone = false;
+  int lastDrive = 0;
   String buttonText = "Press to start drive";
   Timer? timer;
   int secondsElapsed = 0;
@@ -158,6 +161,7 @@ class _ButtonPageState extends State<ButtonPage> {
   bool isHome = false;
   bool isLeaderboard=false;
   bool isSettings=false;
+  bool isOverlayVisible = false;
 
   /*void getCurrentPage(){
 
@@ -181,6 +185,7 @@ class _ButtonPageState extends State<ButtonPage> {
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
+        lastDrive = 0;
         secondsElapsed++;
       });
     });
@@ -190,11 +195,20 @@ class _ButtonPageState extends State<ButtonPage> {
     if (timer != null) {
       timer!.cancel();
       setState(() {
+        lastDrive= secondsElapsed;
         secondsElapsed = 0;
         isDone=true;
+        isOverlayVisible=true;
         //displayStats();
       });
     }
+  }
+
+  void closeOverlay(){
+    setState(() {
+      isOverlayVisible = false;
+    });
+
   }
 
 
@@ -211,6 +225,9 @@ class _ButtonPageState extends State<ButtonPage> {
     Color buttonColor = isGreen ? Color(0xFF7CB816) : Color(0xFFE3A71B); // Custom colors
 
     return Scaffold(
+
+      backgroundColor: Color(0xFFFFC080),
+
       appBar: AppBar(title:
       const Text('eMission',
         style: TextStyle(color: Colors.black,
@@ -223,7 +240,7 @@ class _ButtonPageState extends State<ButtonPage> {
       ),
       endDrawer:
         Drawer(
-            backgroundColor: Colors.black,
+            //backgroundColor: Colors.black,
 
             child: ListView(
                 padding: EdgeInsets.zero,
@@ -244,16 +261,24 @@ class _ButtonPageState extends State<ButtonPage> {
         ),
 
       body: Column(
+
         children: [
+
           Expanded(
+
             flex: 2, // Top part of the screen
+
+
             child: Center(
+
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     buttonText,
-                    style: TextStyle(fontSize: 24.0), // Increase font size
+                    style: GoogleFonts.nunito(fontSize: 24.0),
+
                   ),
                   SizedBox(height: 50.0), // Increase the space between text and button
                   Stack(
@@ -266,7 +291,7 @@ class _ButtonPageState extends State<ButtonPage> {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: buttonColor,
-                            width: 10.0,
+                            width: 15.0,
                           ),
                         ),
                       ),
@@ -302,7 +327,6 @@ class _ButtonPageState extends State<ButtonPage> {
                 ],
               ),
             ),
-
           ),
 
           Container(
@@ -325,7 +349,9 @@ class _ButtonPageState extends State<ButtonPage> {
               children: [
                 Expanded(
                   child: RawMaterialButton(
-                    onPressed: (){},
+                    onPressed: (){
+
+                    },
                     child: SvgPicture.asset(
                       './assets/images/leaderboard-outline.svg',
                       height:30,
@@ -365,6 +391,34 @@ class _ButtonPageState extends State<ButtonPage> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: isOverlayVisible
+          ?
+
+
+
+              AlertDialog(
+                title: Text('Drive: $lastDrive seconds elapsed',
+                style: GoogleFonts.nunito(),
+              ),
+
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      closeOverlay();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              )
+
+
+
+
+
+          : null,
+
     );
   }
 }
