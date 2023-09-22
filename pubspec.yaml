@@ -75,6 +75,9 @@ flutter:
         - asset: assets/fonts/Nunito-Regular.ttf
         - asset: assets/fonts/Nunito-Italic.ttf
           style: italic
+    - family: Sarpanch
+      fonts: 
+        - asset: assets/fonts/Sarpanch-Regular.ttf
 
 
 
