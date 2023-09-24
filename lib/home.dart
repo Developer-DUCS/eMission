@@ -11,6 +11,7 @@ class Home extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
+                
                 Container(
                   height: MediaQuery.of(context).size.height / 4, // 1/4 of the screen height
                   color: Color.fromRGBO(24, 199, 38, 1),
@@ -18,6 +19,7 @@ class Home extends StatelessWidget {
                     child: profilePic(),
                   ),
                 ),
+
                 Expanded(
                   child: Container(
                     color: Color.fromRGBO(124, 184, 22, 1),
@@ -26,31 +28,13 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
+
               ],
             ),
           ),
         ],
       ),
     );
-    // return Container(
-    //   decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
-    //   padding: const EdgeInsets.only(left: 40),
-    //   width: double.infinity,
-    //   child: Align(
-    //     alignment: Alignment.centerLeft,
-    //     child: SizedBox(
-    //       width: 150,
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.center,
-    //         crossAxisAlignment: CrossAxisAlignment.stretch,
-    //         children: [
-    //           profilePic(),
-    //           progressBar()
-    //         ]
-    //       )
-    //     )
-    //   ),
-    // );
   }
 
   Widget profilePic() {
