@@ -5,37 +5,52 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
-      padding: const EdgeInsets.only(left: 40),
-      width: double.infinity,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: SizedBox(
-          width: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              profilePic(),
-              progressBar()
-            ]
-          )
-        )
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height / 4, // 1/4 of the screen height
+                  color: Color.fromRGBO(24, 199, 38, 1),
+                  child: Center(
+                    child: profilePic(),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    color: Color.fromRGBO(124, 184, 22, 1),
+                    child: Center(
+                      child: progressBar(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  Widget settingsButton(String text, String route, BuildContext context) {
-    return OutlinedButton(
-      style: const ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(Colors.white),
-        foregroundColor: MaterialStatePropertyAll(Colors.black54),
-        overlayColor: MaterialStatePropertyAll(Colors.black12)
-      ),
-      onPressed: ( ) { Navigator.pushNamed(context, route); },
-      child: Align(alignment: Alignment.centerLeft, child: Text(text))
-    );
+    // return Container(
+    //   decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
+    //   padding: const EdgeInsets.only(left: 40),
+    //   width: double.infinity,
+    //   child: Align(
+    //     alignment: Alignment.centerLeft,
+    //     child: SizedBox(
+    //       width: 150,
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         crossAxisAlignment: CrossAxisAlignment.stretch,
+    //         children: [
+    //           profilePic(),
+    //           progressBar()
+    //         ]
+    //       )
+    //     )
+    //   ),
+    // );
   }
 
   Widget profilePic() {
