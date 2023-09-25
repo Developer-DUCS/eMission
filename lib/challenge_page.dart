@@ -1,57 +1,32 @@
-//
-//
-//
+/// 
+/// challenge_page.dart
+/// Initializes ChallengePage and PastChallengesPage classes for eMision Application.
+/// 
+/// 
+/// Created: Chris Warren
 
+
+// import statements
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 
-/* */
+/*
+    Initializes ChallengePage Class and returns a container of the pages various Widgets
+*/
 class ChallengePage extends StatelessWidget {
   const ChallengePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Challenge Page'),
-        backgroundColor: Colors.green[300],
-      ),
-      endDrawer: Drawer(
-        backgroundColor: Colors.black,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              textColor: Colors.yellow,
-            ),
-          ]
-        )
-      ),
-      floatingActionButton: const FloatingActionButton(
-        shape: CircleBorder(),
-        splashColor: Colors.white,
-        backgroundColor: Colors.orangeAccent,
-        foregroundColor: Colors.white,
-        onPressed: null,
-        child: Icon(Icons.directions_car),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
+    return Container(
         padding: const EdgeInsets.all(16.0),
         color: const Color.fromRGBO(255, 168, 48, 100),
         child:  const Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children:<Widget> [
-            ChallengePageState(),
+            ToggleButton(isPastPage: false),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -87,47 +62,54 @@ class ChallengePage extends StatelessWidget {
             ChallengesTable(),   
           ],
         )
-      ),
-    );
+      );
   }
 }
 
 
 
-/* Challenge Page Segmented Button and State Change*/
-class ChallengePageState extends StatefulWidget{
-  const ChallengePageState({super.key});
+/*
+    A custom ToggleButton Widget that returns a CupertinoSegmentedControl Button.
+    This button gives the user the ability to toggle between the current and past challenges.
+    The constructor initializes a boolean value (isPastPage) that determines whether or not the past 
+    challenges page is being displayed. 
+    
+    If isPastPage is true, the past_challenges route is pushed from the Navigator and the Segmented Button color is changed.
+*/
+class ToggleButton extends StatelessWidget {
+  final bool isPastPage;
 
-  @override
-  State<ChallengePageState> createState() => _ChallengePageState();
-}
-
-class _ChallengePageState extends State<ChallengePageState> {
-  late int groupValue;
+  const ToggleButton({super.key, required this.isPastPage});
 
   @override
   Widget build(BuildContext context){
     return CupertinoSegmentedControl<String>(
       padding: const EdgeInsets.all(20.0),
-      //groupValue: groupValue,
-      selectedColor: Colors.green[300],
-      unselectedColor: Colors.grey[100],
-      borderColor: Colors.black38,
-      pressedColor: Colors.green[300],
-      children: const {
-        'Past': Text("Past Challenges"),
-        'Current': Text("Current Challenges"),
+      borderColor: Colors.black,
+      children: {
+        'Past': Container(
+          color: isPastPage 
+          ? Colors.orange[300]
+          : Colors.grey,
+          padding: const EdgeInsets.fromLTRB(9.5,5,9.5,5.8),
+          child: const Text("Past Challenges"),
+        ),
+        'Current': Container(
+          color: isPastPage
+          ? Colors.grey
+          : Colors.orange[300],
+          padding: const EdgeInsets.fromLTRB(1,5,1.3,5.8),
+          child: const Text("Current Challenges")
+        ),
       },
       onValueChanged: (String value){
-        setState(() {
-          if (value == 'Past'){
-            Navigator.of(context).pop();
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PastChallengesPage()));
-          } else if(value == 'Current') {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ChallengePage()));
-          } 
-        });
+        if (value == 'Past'){
+          Navigator.of(context).pop();
+          Navigator.pushNamed(context, 'past_challenges');
+        } else {
+          Navigator.of(context).pop();
+          Navigator.pushNamed(context, 'challenges');
+        } 
       },
     );
   }
@@ -135,67 +117,83 @@ class _ChallengePageState extends State<ChallengePageState> {
 
  
 
-
+/* 
+    The PastChallengesPage custom widget class returns a container with the widgets and assets necessary to display the user's 
+    past/completed challenges, along with any badges the user has earned.
+*/
 class PastChallengesPage extends StatelessWidget {
   const PastChallengesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Past Challenges Page'),
-        backgroundColor: Colors.green[300],
-      ),
-      endDrawer: Drawer(
-        backgroundColor: Colors.black,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      color:const Color.fromRGBO(124, 184, 22, 100),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:<Widget> [
+          Container(
+            padding: const EdgeInsets.all(18.0),
+            color: Colors.lightBlueAccent,
+            child: const Text("Profile_Info"),
+          ),
+          const ToggleButton(isPastPage: true),
+          // May need to create a '_tile' class to streamline the list tile processes 
+          Column(
+            children: [
+              Table(
+                border: const TableBorder(horizontalInside: BorderSide(width: 1, color: Color.fromRGBO(124, 184, 22, 100), style: BorderStyle.solid)),
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(50),
+                  1: FlexColumnWidth(),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: const <TableRow>[
+                  TableRow(
+                    children: <Widget>[
+                      TableCell(
+                        child: Icon(
+                          Icons.park_outlined,
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      TableCell(
+                        child: Text("Tree Hugger Badge"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: <Widget>[
+                      TableCell(
+                        child: Icon(
+                          Icons.star,
+                          color: Colors.yellowAccent,
+                        ),
+                      ),
+                      TableCell(
+                        child: Text("Energy Saver Star"),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: <Widget>[
+                      TableCell(
+                        child: Icon(
+                          Icons.emoji_events_outlined,
+                          color: Colors.yellow,
+                        ),
+                      ),
+                      TableCell(
+                        child: Text("Recycle Medal"),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              textColor: Colors.yellow,
-            ),
-          ]
-        )
-      ),
-      floatingActionButton: const FloatingActionButton(
-        shape: CircleBorder(),
-        splashColor: Colors.white,
-        backgroundColor: Colors.orangeAccent,
-        foregroundColor: Colors.white,
-        onPressed: null,
-        child: Icon(Icons.directions_car),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        color:const Color.fromRGBO(124, 184, 22, 100),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children:<Widget> [
-            ChallengePageState(),
-            // May need to create a '_tile' class to streamline the list tile processes 
-            Column(
-              children: [
-                ListTile(
-                  title: Text("something"),
-                  tileColor: Colors.black,
-                ),
-                ListTile(
-                  title: Text("something else"),
-                  tileColor: Colors.black,
-                ),
-              ],
-            ),
-          ],
-        )
-      ),
+            ],
+          ),
+        ],
+      )
     );
   }
 }
@@ -204,7 +202,14 @@ class PastChallengesPage extends StatelessWidget {
 
 
 
-/* Challenge Page Checkboxes */
+
+
+
+
+/* 
+    The Checkbox Example class creates and returns a Checkbox Widget that is rendered on the ChallengePage.
+    This checkbox can be clicked by the user changing it's state and color accordingly.
+ */
 class CheckboxExample extends StatefulWidget {
   const CheckboxExample({super.key});
 
@@ -243,14 +248,17 @@ class _CheckboxExampleState extends State<CheckboxExample> {
 }
 
 
-/* Challenge Page Table */
+/* 
+    The ChallengesTable Widget class returns a Table Widget to the application's Challenges Page. 
+    This table has 5 columns and lists the current challenges that the user can attempt alongside the number of points
+    the challenge is worth. 
+*/
 class ChallengesTable extends StatelessWidget {
   const ChallengesTable({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Table(
-      //border: TableBorder.all(),
       border: const TableBorder(horizontalInside: BorderSide(width: 1, color: Colors.blue, style: BorderStyle.solid)),
       columnWidths: const <int, TableColumnWidth>{
         0: FixedColumnWidth(45),

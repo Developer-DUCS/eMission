@@ -16,12 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'eMission',
-      initialRoute: 'home',
+      initialRoute: 'login',
       routes: {
         'login': (context) => const Layout(body: Login(), appBar: false, bottomBar: false),
         'home': (context) => const Layout(body: Settings(), pageIndex: 1,),
         'leaderboard': (context) => const Layout(body: Settings(), pageIndex: 0,),
-        'settings': (context) => const Layout(body: Settings(), pageIndex: 2,)
+        'settings': (context) => const Layout(body: Settings(), pageIndex: 2,),
+        'challenges': (context) => const Layout(body: ChallengePage(), pageIndex: 1,),
+        'past_challenges': (context) => const Layout(body: PastChallengesPage(), pageIndex: 1,)
       },
     );
   }
