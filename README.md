@@ -76,7 +76,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 * [System Inception](https://github.com/Developer-DUCS/eMission/blob/main/SystemInception.md)
 * [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
 * [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
-* Sprint 3
+* [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md)
 
 ## Helpful Links
 * [flutter documentation](https://docs.flutter.dev/)
