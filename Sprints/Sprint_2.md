@@ -33,4 +33,10 @@
 ### DevOps Technologies (Docker)
 **Something else**
 
-### 
+
+### Sprint Retrospective
+
+* All goals for Sprint 1 were met, with additional pages being added to our Figma Prototype as we go.
+* When we plan for next Sprint, we want to have individual goals set to keep everyone involved.
+* Clarification about processes: we will make a new sprint 2 branch, which is built off of sprint 1, and each person will make their own sub branch.
+* Jacob will be the server administrator, and Chris will maintain the code base.
