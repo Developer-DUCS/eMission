@@ -1,6 +1,6 @@
 # Sprint 2
 
-## Sprint 2 Goals:
+### Sprint 2 Goals:
 - [X] Assign Codebase Manager
 - [X] Assign Server Manager
 - [X] Design Visual Prototype for Settings page
