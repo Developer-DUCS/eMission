@@ -10,7 +10,9 @@ class Layout extends StatelessWidget {
   static const List<String> pages = ['leaderboard', 'home', 'settings'];
 
   const Layout({super.key, required this.body, this.appBar = true, this.bottomBar = true, this.pageIndex = 1});
-  
+  void navigateToButtonPage(BuildContext context){
+    Navigator.pushNamed(context, 'button-page');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,14 +35,18 @@ class Layout extends StatelessWidget {
           ]
         )
       ),
-      floatingActionButton: const FloatingActionButton(
-        shape: CircleBorder(),
-        splashColor: Colors.white,
-        backgroundColor: Colors.orangeAccent,
-        foregroundColor: Color.fromARGB(255, 98, 91, 91),
-        onPressed: null,
-        child: Icon(Icons.directions_car),
+      floatingActionButton :  FloatingActionButton(
+          backgroundColor: Colors.orangeAccent,
+          foregroundColor: Color.fromARGB(255, 98, 91, 91),
+          shape: CircleBorder(),
+          splashColor: Colors.white,
+          onPressed: () { Navigator.pushNamed(context,'button-page'); },
+          child: Icon(Icons.directions_car),
+
       ),
+
+
+
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: body,
       bottomNavigationBar: bottomBar ? BottomNavigationBar(
