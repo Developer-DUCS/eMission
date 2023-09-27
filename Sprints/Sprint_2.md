@@ -6,18 +6,18 @@
 - [X] Design Visual Prototype for Settings page
 - [X] Design & Create a Splash Screen
 - [X] Design Visual Assets (Buttons and Bars)
-- [ ] Implement Page Changing Functionality
+- [X] Implement Page Changing Functionality
 - [ ] Design Backend Infrastructure
 - [ ] Investigate DevOps Technologies (Docker)
 - [ ] Investigate Ability to Allow Direct Device Testing
-- [ ] Create Documentation for Each Individual Page of the App
+- [X] Create Documentation for Each Individual Page of the App
 - [X] Create and Assign Issues to Team Members to Complete Sprint 2 Goals
-- [ ] Splash Screen & Login Page
-- [ ] Home Page
-- [ ] Drive Button Page
-- [ ] Challenges Page
-- [ ] Settings Page
-- [ ] Sprint 2 Review Slides
+- [X] Splash Screen & Login Page
+- [X] Home Page
+- [X] Drive Button Page
+- [X] Challenges Page
+- [X] Settings Page
+- [X] Sprint 2 Review Slides
 
 ### Additional Sprint 2 Roles
 **_CodeBase Manager_**
@@ -26,17 +26,19 @@
 **_Server Manager_**
 * Jacob Hutchinson
 
-### Backend Infrastructure
-**Something**
 
-
-### DevOps Technologies (Docker)
-**Something else**
+### [Page Documentation](https://github.com/Developer-DUCS/eMission/wiki/Page-Documentation)
+* Splashscreen & Login Page
+* Home Page
+* Drive Button Page
+* Challenges Pages
+* Settings Page
+  
 
 
 ### Sprint Retrospective
 
-* All goals for Sprint 1 were met, with additional pages being added to our Figma Prototype as we go.
-* When we plan for next Sprint, we want to have individual goals set to keep everyone involved.
-* Clarification about processes: we will make a new sprint 2 branch, which is built off of sprint 1, and each person will make their own sub branch.
-* Jacob will be the server administrator, and Chris will maintain the code base.
+* Most of the goals for Sprint 2 have been completed
+* This includes the individual application pages which were the primary goals.
+* While we did research some backend technologies, designing the backend infrastructure will be moved to the next sprint.
+* Also moved to the next sprint is the Direct Device Testing & DevOps investigations.
