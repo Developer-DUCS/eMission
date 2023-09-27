@@ -6,6 +6,7 @@
 - [ ] Investigate Ability to Allow Direct Device Testing
 - [ ] Splash Screen & Login Page
 - [ ] Designing SQL Tables (MySQL)
+- [ ] SSH Server Connection 
 - [ ] Sprint 3 Review Slides
 
 
