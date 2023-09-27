@@ -71,6 +71,20 @@ flutter:
     - family: Social Monster
       fonts:
         - asset: assets/fonts/SocialMonsterNormal-Owjp.ttf
+    - family: Nunito
+      fonts: 
+        - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-Italic.ttf
+          style: italic
+    - family: Sarpanch
+      fonts: 
+        - asset: assets/fonts/Sarpanch-Regular.ttf
+
+
+
+
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
