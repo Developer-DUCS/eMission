@@ -4,9 +4,13 @@
 - [ ] Design/Implement Backend Infrastructure (Nodejs)
 - [ ] Investigate DevOps Technologies (Docker)
 - [ ] Investigate Ability to Allow Direct Device Testing
-- [ ] Splash Screen & Login Page
+- [ ] Merge Splash Screen & Login Page
 - [ ] Designing SQL Tables (MySQL)
-- [ ] SSH Server Connection 
+- [ ] SSH Server Connection
+- [ ] Leaderboard Page
+- [ ] Mileage Input Page
+- [ ] Carbon Report Page
+- [ ] Settings Subpages 
 - [ ] Sprint 3 Review Slides
 
 
