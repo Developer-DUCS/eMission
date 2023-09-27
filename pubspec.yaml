@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^5.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -79,8 +80,6 @@ flutter:
     - family: Sarpanch
       fonts: 
         - asset: assets/fonts/Sarpanch-Regular.ttf
-
-
 
 
 
