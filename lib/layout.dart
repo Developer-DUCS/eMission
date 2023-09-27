@@ -15,6 +15,33 @@ class Layout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar ? AppBar(title: const Text('eMission'), backgroundColor: Colors.white, foregroundColor: Colors.black54,) : null,
+      endDrawer: Drawer(
+        backgroundColor: Colors.black,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: Text('Item 1'),
+              textColor: Colors.yellow,
+            ),
+          ]
+        )
+      ),
+      floatingActionButton: const FloatingActionButton(
+        shape: CircleBorder(),
+        splashColor: Colors.white,
+        backgroundColor: Colors.orangeAccent,
+        foregroundColor: Color.fromARGB(255, 98, 91, 91),
+        onPressed: null,
+        child: Icon(Icons.directions_car),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: body,
       bottomNavigationBar: bottomBar ? BottomNavigationBar(
         onTap: (index) => { Navigator.pushNamed(context, pages[index])},

@@ -84,7 +84,7 @@ class Login extends StatelessWidget {
                       foregroundColor:const Color.fromARGB(244, 0, 0, 0),
                       backgroundColor: const Color.fromARGB(244, 244, 248, 6),
                     ),
-                    onPressed: () { Navigator.pushNamed(context, 'settings'); },
+                    onPressed: () { Navigator.pushNamed(context, 'challenges'); },
                     child: const Text('Submit')),
                   ),
                 ),        
