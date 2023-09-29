@@ -30,7 +30,7 @@
 
 
 5. Testing
-   - run ```flutter doctor ``` in your commandline interface
+   - run ```flutter doctor``` in your commandline interface
    - This will let you know if flutter is properly installed and list any issues that need to be resolved. 
 
 
