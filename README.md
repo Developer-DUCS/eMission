@@ -73,7 +73,6 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
 * [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
-* [System Inception](https://github.com/Developer-DUCS/eMission/blob/main/SystemInception.md)
 * [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
 * [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
 * [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md)
