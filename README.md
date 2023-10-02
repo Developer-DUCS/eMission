@@ -13,7 +13,7 @@
    - Be sure to install the **Flutter** plugin after downloading Android Studio.
    - [install android studio](https://developer.android.com/studio)
    
-**_Note_**: To access this code in VSCode, you'll need to install two extensions (Android iOS Emulator & Fluter)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**_Note_**: To run this application in VSCode (using emulator), you'll need to install two extensions (Android iOS Emulator & Fluter)
 
 2. install git
    - click the link below, choose your operating system and follow the steps.
