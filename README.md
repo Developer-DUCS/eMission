@@ -15,7 +15,7 @@
    
 **_Note_**: To access this code in VSCode, you'll need to install two extensions (Android iOS Emulator & Fluter)
 
-3. install git
+2. install git
    - click the link below, choose your operating system and follow the steps.
    - [install git](https://git-scm.com/downloads) 
 
