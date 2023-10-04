@@ -74,31 +74,31 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 
 1. [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 2. [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
-   1. [Sprint Goals]
-   2. [Team Organization]
-      1. [Team Dynamics]
-      2. [Conflict Resolution]
-      3. [Team Roles]
-   3. [Processes]
+   1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#sprint-1-goals)
+   2. [Team Organization](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#team-organization)
+      1. [Team Dynamics](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#team-dynamics)
+      2. [Conflict Resolution](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#conflict-resolution)
+      3. [Team Roles](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#roles-application-development)
+   3. [Processes](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#processes)
       1. [Version Control]
-      2. [Technologies]
-      3. [Tools]
-   4. [Sprint Retrospective]
+      2. [Technologies](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#technology)
+      3. [Tools](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#tools)
+   4. [Sprint Retrospective]()
 2. [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
-   1. [Sprint Goals]
-   2. [Additional Roles]
-   3. [Page Documentation]
-   4. [Sprint Retrospective]
+   1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-2-goals)
+   2. [Additional Roles](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#additional-sprint-2-roles)
+   3. [Page Documentation]()
+   4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-retrospective)
 3. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
-   1. [Sprint Goals]()
-   2. [Backend Infrastructure]()
-      1. [SSH Server Connection]()
-      2. [SQL Tables Design]()
-   3. [Docker (DevOps)]()
-      1. [Installation Guide]()
-      2. [Deployment Guide]()
-   4. [Direct-to-Device Testing]()
-   5. [Sprint Retrospective]()
+   1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-goals)
+   2. [Backend Infrastructure](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#backend-infrastructure)
+      1. [SSH Server Connection](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#ssh-server-connection)
+      2. [SQL Tables Design](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sql-tables-design)
+   3. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
+      1. [Installation Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#installation--setup)
+      2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
+   4. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
+   5. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
 
 
 
