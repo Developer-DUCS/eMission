@@ -60,7 +60,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 ## Processes
 
-**Technology**
+###Technology
 <details>
 <summary>&nbsp;Mobile App Technologies</summary>
 <br>
@@ -100,7 +100,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 </details>
 
 
-**Tools**
+###Tools
 
 *Code Editor*
 * Android Studio 
@@ -110,7 +110,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 * Flutter(Dart)
 * Android iOS Emulator
 
-### Sprint Retrospective
+## Sprint Retrospective
 
 * All goals for Sprint 1 were met, with additional pages being added to our Figma Prototype as we go.
 * When we plan for next Sprint, we want to have individual goals set to keep everyone involved.
