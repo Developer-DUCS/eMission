@@ -3,15 +3,15 @@
 ### Sprint 3 Goals
 - [ ] Design/Implement Backend Infrastructure (Nodejs)
 - [ ] Investigate DevOps Technologies (Docker)
-- [ ] Investigate Ability to Allow Direct Device Testing
+- [X] Investigate Ability to Allow Direct Device Testing
 - [ ] Merge Splash Screen & Login Page
 - [ ] Designing SQL Tables (MySQL)
 - [ ] SSH Server Connection
 - [ ] Leaderboard Page
 - [ ] Mileage Input Page
-- [ ] Carbon Report Page
+- [X] Carbon Report Page
 - [ ] Settings Subpages 
-- [ ] Sprint 3 Review Slides
+- [ ] Sprint 3 Midterm Video Presentation
 
 
 
