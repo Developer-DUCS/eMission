@@ -27,7 +27,8 @@
 * Jacob Hutchinson
 
 
-### [Page Documentation](https://github.com/Developer-DUCS/eMission/wiki/Page-Documentation)
+### Page Documentation
+(https://github.com/Developer-DUCS/eMission/wiki/Page-Documentation)
 * Splashscreen & Login Page
 * Home Page
 * Drive Button Page
