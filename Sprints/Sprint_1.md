@@ -60,7 +60,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 ## Processes
 
-###Technology
+### Technology
 <details>
 <summary>&nbsp;Mobile App Technologies</summary>
 <br>
@@ -100,7 +100,7 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 </details>
 
 
-###Tools
+### Tools
 
 *Code Editor*
 * Android Studio 
