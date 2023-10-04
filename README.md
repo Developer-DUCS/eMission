@@ -93,7 +93,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-goals)
    2. [Sprint 3 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-screens)
    3. [Backend Infrastructure](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#backend-infrastructure)
-      1. [NodeJS Server]()
+      1. [NodeJS Server](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#nodejs-server)
       2. [SSH Server Connection](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#ssh-server-connection)
       3. [SQL Tables Design](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sql-tables-design)
    4. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
