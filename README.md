@@ -80,7 +80,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
       2. [Conflict Resolution](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#conflict-resolution)
       3. [Team Roles](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#roles-application-development)
    3. [Processes](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#processes)
-      1. [Version Control]
+      1. [Version Control](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#version-control)
       2. [Technologies](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#technology)
       3. [Tools](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#tools)
    4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#sprint-retrospective)
