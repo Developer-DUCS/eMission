@@ -23,14 +23,17 @@
 ---
 ### Backend Infrastructure
 
+#### Nodejs Infrastructure
+**Something**
+
+
 #### SSH Server Connection
 **Something**
 
 
-
 #### SQL Tables Design
 **Something**
-* ![sql_tables](https://github.com/Developer-DUCS/eMission/assets/78006078/d34fb11f-71c2-432d-9f6f-13ca6fd39861)
+
 
 **Helpful Resources**
 
