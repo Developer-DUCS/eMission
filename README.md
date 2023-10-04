@@ -91,14 +91,15 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-retrospective)
 4. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-goals)
-   2. [Backend Infrastructure](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#backend-infrastructure)
+   2. [Sprint 3 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3md#sprint-3-screens)
+   3. [Backend Infrastructure](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#backend-infrastructure)
       1. [SSH Server Connection](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#ssh-server-connection)
       2. [SQL Tables Design](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sql-tables-design)
-   3. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
+   4. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
       1. [Installation Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#installation--setup)
       2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
-   4. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
-   5. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
+   5. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
+   6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
 
 
 
