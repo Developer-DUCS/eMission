@@ -15,23 +15,24 @@
 
 
 
-
----
-### SQL Tables Design
-**Some MySQL Tables:**
-* ![sql_tables](https://github.com/Developer-DUCS/eMission/assets/78006078/d34fb11f-71c2-432d-9f6f-13ca6fd39861)
-
 ---
 ### Backend Infrastructure
+
+#### SSH Server Connection
 **Something**
 
+
+
+#### SQL Tables Design
+**Something**
+* ![sql_tables](https://github.com/Developer-DUCS/eMission/assets/78006078/d34fb11f-71c2-432d-9f6f-13ca6fd39861)
 
 **Helpful Resources**
 
 
 ---
 ### DevOps Technologies (Docker)
-**Installation & Setup**
+#### Installation & Setup
 1. Install Docker Desktop on your Machine
    - Be sure to choose the correct platform for installation.
    - [install docker](https://docs.docker.com/get-docker/)
@@ -51,7 +52,7 @@
    - type and run ```docker pull node``` in a terminal. 
 
 
-**Starting Project Container**
+#### Starting Project Container
 1. Finding Docker Hub Repository
    -  Lorem ipsum
 2. Pull image from Repository 
@@ -64,6 +65,11 @@
 - [Docker Hub](https://hub.docker.com/)
 - [Docker Docs](https://docs.docker.com/)
 - [Docker Crash Course](https://www.youtube.com/watch?v=31ieHmcTUOk&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7&index=1)
+
+
+---
+### Direct-to-Device Testing
+* We've successfully tested our application on an apple device. Further research is requrired for Android testing.
 
 ---
 ### Sprint 3 Retrospective
