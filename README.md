@@ -72,29 +72,35 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 ## Documentation
 For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
-* [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
-* [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
-  1. [Sprint Goals]
-  2. [Team Organization]
-     * [Team Dynamics]
-     * [Conflict Resolution]
-     * [Project Roles]
-  4. [Processes]
-     * [Version Control]
-     * [Technologies]
-     * [Tools]
-  5. [Sprint Retrospective]
-* [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
-  1. [Sprint Goals]
-  2. [Additional Roles]
-  3. [Page Documentation]
-  4. [Sprint Retrospective]
-* [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md)
-  1. [Sprint Goals]
-  2. [SQL Tables Design]
-  3. [Backend Infrastructure]
-  4. [Docker (DevOps)]
-  5. [Sprint Retrospective]
+1. [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
+2. [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
+   1. [Sprint Goals]
+   2. [Team Organization]
+      1. [Team Dynamics]
+      2. [Conflict Resolution]
+      3. [Team Roles]
+   3. [Processes]
+      1. [Version Control]
+      2. [Technologies]
+      3. [Tools]
+   4. [Sprint Retrospective]
+2. [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
+   1. [Sprint Goals]
+   2. [Additional Roles]
+   3. [Page Documentation]
+   4. [Sprint Retrospective]
+3. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
+   1. [Sprint Goals]()
+   2. [Backend Infrastructure]()
+      1. [SSH Server Connection]()
+      2. [SQL Tables Design]()
+   3. [Docker (DevOps)]()
+      1. [Installation Guide]()
+      2. [Deployment Guide]()
+   4. [Direct-to-Device Testing]()
+   5. [Sprint Retrospective]()
+
+
 
 ## Helpful Links
 * [flutter documentation](https://docs.flutter.dev/)
