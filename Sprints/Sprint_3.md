@@ -14,7 +14,12 @@
 - [ ] Sprint 3 Midterm Video Presentation
 
 
-
+---
+### Sprint 3 Screens
+* Carbon Report Page
+* Leaderboard Page
+* Mileage Input Page
+* Settings Page
 ---
 ### Backend Infrastructure
 
