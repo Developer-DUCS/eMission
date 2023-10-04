@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class Manual extends StatelessWidget {
   const Manual({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +12,9 @@ class Manual extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Column(
-              children: <Widget>[
-
+              children: 
+              
+              <Widget>[
                 Expanded(
                   child: Container(
                     color: Color.fromRGBO(124, 184, 22, 1),
