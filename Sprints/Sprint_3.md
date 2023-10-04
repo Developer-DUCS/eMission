@@ -19,7 +19,7 @@
 * Carbon Report Page
 * Leaderboard Page
 * Mileage Input Page
-* Settings Page
+* Settings Subpages
 ---
 ### Backend Infrastructure
 
