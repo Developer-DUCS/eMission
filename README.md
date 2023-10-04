@@ -87,7 +87,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 3. [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-2-goals)
    2. [Additional Roles](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#additional-sprint-2-roles)
-   3. [Sprint 2 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#page-documentation)
+   3. [Sprint 2 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-2-screens)
    4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-retrospective)
 4. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-goals)
