@@ -89,17 +89,17 @@ class ToggleButton extends StatelessWidget {
       children: {
         'Past': Container(
           color: isPastPage 
-          ? Colors.orange[300]
-          : Colors.grey,
-          padding: const EdgeInsets.fromLTRB(9.5,5,9.5,5.8),
-          child: const Text("Past Challenges"),
+          ? const Color.fromRGBO(160, 197, 89, 100)
+          : Colors.grey[300],
+          padding: const EdgeInsets.fromLTRB(11,5,9.5,5.8),
+          child: const Text("Past Challenges", style: TextStyle(fontFamily: 'Nunito', color: Colors.black)),
         ),
         'Current': Container(
           color: isPastPage
-          ? Colors.grey
-          : Colors.orange[300],
+          ? Colors.grey[300]
+          : const Color.fromRGBO(160, 197, 89, 100),
           padding: const EdgeInsets.fromLTRB(1,5,1.3,5.8),
-          child: const Text("Current Challenges")
+          child: const Text("Current Challenges", style: TextStyle(fontFamily: 'Nunito', color: Colors.black))
         ),
       },
       onValueChanged: (String value){
@@ -132,13 +132,13 @@ class PastChallengesPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children:<Widget> [
+          const ToggleButton(isPastPage: true),
           Container(
             padding: const EdgeInsets.all(18.0),
             color: Colors.lightBlueAccent,
+            width: MediaQuery.of(context).size.width,
             child: const Text("Profile_Info"),
           ),
-          const ToggleButton(isPastPage: true),
-          // May need to create a '_tile' class to streamline the list tile processes 
           Column(
             children: [
               Table(
@@ -302,15 +302,15 @@ class ChallengesTable extends StatelessWidget {
             ),
             TableCell(
               child: Center(
-                child: Text('1 day')),
+                child: Text('1 week')),
             ),
             TableCell(
               child: Center(
-                child: Text('30')),
+                child: Text('100')),
             ),
             TableCell(
               child: Center(
-                child: Text('Make an eco-brick')),
+                child: Text('Bike to the store')),
             ),
             TableCell(
               child: IconButton(
@@ -332,11 +332,11 @@ class ChallengesTable extends StatelessWidget {
             ),
             TableCell(
               child: Center(
-                child: Text('30')),
+                child: Text('20')),
             ),
             TableCell(
               child: Center(
-                child: Text('Make an eco-brick')),
+                child: Text('Meatless Monday')),
             ),
             TableCell(
               child: IconButton(
@@ -354,15 +354,41 @@ class ChallengesTable extends StatelessWidget {
             ),
             TableCell(
               child: Center(
-                child: Text('1 day')),
+                child: Text('2 weeks')),
             ),
             TableCell(
               child: Center(
-                child: Text('30')),
+                child: Text('150')),
             ),
             TableCell(
               child: Center(
-                child: Text('Make an eco-brick')),
+                child: Text('Use reusable coffee')),
+            ),
+            TableCell(
+              child: IconButton(
+                        icon:  Icon(Icons.info),
+                        color: Colors.grey,
+                        onPressed: null,
+              )
+            ),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            TableCell(
+              child: CheckboxExample(),
+            ),
+            TableCell(
+              child: Center(
+                child: Text('1 week')),
+            ),
+            TableCell(
+              child: Center(
+                child: Text('50')),
+            ),
+            TableCell(
+              child: Center(
+                child: Text('Drive Track Streak')),
             ),
             TableCell(
               child: IconButton(
