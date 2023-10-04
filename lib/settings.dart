@@ -17,7 +17,7 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              settingsButton("Account", "", context),
+              settingsButton("Account", "manual", context),
               settingsButton("Notifications", "", context),
               settingsButton("Appearance", "", context),
               settingsButton("Privacy", "", context),

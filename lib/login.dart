@@ -33,7 +33,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'email',
+                      labelText: 'Email',
                     ),
                   ),
                 ),
@@ -42,7 +42,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'username',
+                      labelText: 'Username',
                     ),
                   ),
                 ),
@@ -51,7 +51,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'display name',
+                      labelText: 'Display name',
                     ),
                   ),
                 ),
@@ -60,7 +60,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'password',
+                      labelText: 'Password',
                     ),
                   ),
                 ),
@@ -69,7 +69,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'confirm password',
+                      labelText: 'Confirm Password',
                     ),
                   ),
                 ),
@@ -84,7 +84,7 @@ class Login extends StatelessWidget {
                       foregroundColor:const Color.fromARGB(244, 0, 0, 0),
                       backgroundColor: const Color.fromARGB(244, 244, 248, 6),
                     ),
-                    onPressed: () { Navigator.pushNamed(context, 'challenges'); },
+                    onPressed: () { Navigator.pushNamed(context, 'home'); },
                     child: const Text('Submit')),
                   ),
                 ),        

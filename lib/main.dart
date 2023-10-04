@@ -7,6 +7,7 @@ import 'home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'drive-button.dart';
+import 'manual.dart';
 
 //
 void main() => runApp(const MyApp());
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         'settings': (context) => const Layout(body: Settings(), pageIndex: 2,),
         'button-page': (context) => const Layout(body: ButtonPage(),pageIndex:0,appBar: false),
         'challenges': (context) => const Layout(body: ChallengePage(), pageIndex: 1,),
-        'past_challenges': (context) => const Layout(body: PastChallengesPage(), pageIndex: 1,)
+        'past_challenges': (context) => const Layout(body: PastChallengesPage(), pageIndex: 1,),
+        'manual': (context) => const Layout(body: Manual(), pageIndex: 1)
       },
     );
   }
