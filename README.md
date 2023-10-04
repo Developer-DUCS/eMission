@@ -74,8 +74,27 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 
 * [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 * [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
+  1. [Sprint Goals]
+  2. [Team Organization]
+     * [Team Dynamics]
+     * [Conflict Resolution]
+     * [Project Roles]
+  4. [Processes]
+     * [Version Control]
+     * [Technologies]
+     * [Tools]
+  5. [Sprint Retrospective]
 * [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
+  1. [Sprint Goals]
+  2. [Additional Roles]
+  3. [Page Documentation]
+  4. [Sprint Retrospective]
 * [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md)
+  1. [Sprint Goals]
+  2. [SQL Tables Design]
+  3. [Backend Infrastructure]
+  4. [Docker (DevOps)]
+  5. [Sprint Retrospective]
 
 ## Helpful Links
 * [flutter documentation](https://docs.flutter.dev/)
