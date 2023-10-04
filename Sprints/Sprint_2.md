@@ -20,7 +20,7 @@
 - [X] Sprint 2 Review Slides
 
 
-
+---
 ### Sprint 2 Screens
 (https://github.com/Developer-DUCS/eMission/wiki/Page-Documentation)
 * Splashscreen & Login Page
@@ -29,6 +29,7 @@
 * Challenges Pages
 * Settings Page
 
+---
 ### Additional Sprint 2 Roles
 **_CodeBase Manager_**
 * Christopher Warren
@@ -36,7 +37,7 @@
 **_Server Manager_**
 * Jacob Hutchinson
 
-
+---
 ### Sprint Retrospective
 
 * Most of the goals for Sprint 2 have been completed
