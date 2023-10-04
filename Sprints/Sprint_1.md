@@ -60,6 +60,15 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 ## Processes
 
+### Version Control
+We will make new branches for each Task in the project board. These task branches will be a created off the 'development' branch in the repository. If the developer believes he/she has completed the task, they will push their changes to their branch and submit a pull request. Pull requests will be reviewed by another member of the team before they are accepted and merged to the 'development' branch. At the end of the project the accumulated codebase will be reviewed and merged at once with the 'main' branch. 
+
+**_Branch Naming Conventions_**
+- branches made for program enhancements or tasks will be named as such:
+   * ```<task-enhancement-name>```
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Example: ```'task-button-page'```
+
 ### Technology
 <details>
 <summary>&nbsp;Mobile App Technologies</summary>
@@ -101,14 +110,16 @@ If we reach a conflict, the first thing to do is make it be known that there is 
 
 
 ### Tools
+*Team Organization*
+* Github Repository & Project Board
+  * lorem ipsum
+* Discord
+  * Lorem Ipsum
 
+  
 *Code Editor*
 * Android Studio 
 * Visual Studio Code
-
-*Extensions*
-* Flutter(Dart)
-* Android iOS Emulator
 
 ## Sprint Retrospective
 
