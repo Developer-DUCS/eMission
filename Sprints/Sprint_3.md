@@ -16,10 +16,10 @@
 
 ---
 ### Sprint 3 Screens
-* Carbon Report Page
-* Leaderboard Page
-* Mileage Input Page
-* Settings Subpages
+* [Carbon Report Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#carbon-report-page)
+* [Leaderboard Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#leaderboard-page)
+* [Mileage Input Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#manual-drive-input-page)
+* [Settings Subpages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
 ---
 ### Backend Infrastructure
 
