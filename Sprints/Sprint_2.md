@@ -24,7 +24,7 @@
 ### Sprint 2 Screens
 
 * [Splashscreen & Login Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#splash-screen--login)
-* [Home Page]()
+* [Home Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#home-page)
 * [Drive Button Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#drive-button-page)
 * [Challenges Pages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#challenges-page)
 * [Settings Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
