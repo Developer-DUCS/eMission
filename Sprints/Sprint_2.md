@@ -22,12 +22,12 @@
 
 ---
 ### Sprint 2 Screens
-(https://github.com/Developer-DUCS/eMission/wiki/Page-Documentation)
-* Splashscreen & Login Page
-* Home Page
-* Drive Button Page
-* Challenges Pages
-* Settings Page
+
+* [Splashscreen & Login Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#splash-screen--login)
+* [Home Page]()
+* [Drive Button Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#drive-button-page)
+* [Challenges Pages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#challenges-page)
+* [Settings Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
 
 ---
 ### Additional Sprint 2 Roles
