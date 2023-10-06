@@ -5,39 +5,39 @@
 - [ ] Investigate DevOps Technologies (Docker)
 - [X] Investigate Ability to Allow Direct Device Testing
 - [ ] Merge Splash Screen & Login Page
-- [ ] Designing SQL Tables (MySQL)
-- [ ] SSH Server Connection
+- [X] Designing SQL Tables (MySQL)
+- [X] SSH Server Connection
 - [ ] Leaderboard Page
 - [ ] Mileage Input Page
 - [X] Carbon Report Page
 - [ ] Settings Subpages 
-- [ ] Sprint 3 Midterm Video Presentation
+- [X] Sprint 3 Midterm Video Presentation
 
 
----
-### Sprint 3 Screens
-* [Carbon Report Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#carbon-report-page)
-* [Leaderboard Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#leaderboard-page)
-* [Mileage Input Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#manual-drive-input-page)
-* [Settings Subpages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
----
-### Backend Infrastructure
 
-#### NodeJS Server
+## Backend Infrastructure
+
+### NodeJS Server
 **Something**
-
-
-#### SSH Server Connection
-**Something**
-
-
-#### SQL Tables Design
-**Something**
-
 
 **Helpful Resources**
 - [freeCodeCamp - Video](https://www.youtube.com/watch?v=ylJz7N-dv1E)
 - [Node-to-Flutter](https://thiagoevoa.medium.com/creating-an-end-to-end-project-from-node-js-backend-to-flutter-app-a8df8ffdde5b)
+
+
+---
+### SSH Server Connection
+**Something**
+
+**Helpful Resources**
+
+
+---
+### SQL Tables Design
+**Something**
+
+**Helpful Resources**
+
 
 ---
 ### DevOps Technologies (Docker)
@@ -80,6 +80,13 @@
 ### Direct-to-Device Testing
 * We've successfully tested our application on an apple device. Further research is requrired for Android testing.
 
+
+---
+### Sprint 3 Screens
+* [Carbon Report Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#carbon-report-page)
+* [Leaderboard Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#leaderboard-page)
+* [Mileage Input Page](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#manual-drive-input-page)
+* [Settings Subpages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
 ---
 ### Sprint 3 Retrospective
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
