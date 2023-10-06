@@ -101,7 +101,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
          2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
    5. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
-
+5. [Sprint 4]
 
 
 ## Helpful Links
