@@ -36,7 +36,8 @@
 
 
 **Helpful Resources**
-
+- [freeCodeCamp - Video](https://www.youtube.com/watch?v=ylJz7N-dv1E)
+- [Node-to-Flutter](https://thiagoevoa.medium.com/creating-an-end-to-end-project-from-node-js-backend-to-flutter-app-a8df8ffdde5b)
 
 ---
 ### DevOps Technologies (Docker)
