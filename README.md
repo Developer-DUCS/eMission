@@ -96,9 +96,9 @@ For an in-depth look at the processes, user stories, and progress thus far, take
       1. [NodeJS Server](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#nodejs-server)
       2. [SSH Server Connection](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#ssh-server-connection)
       3. [SQL Tables Design](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sql-tables-design)
-   4. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
-      1. [Installation Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#installation--setup)
-      2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
+      4. [Docker (DevOps)](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#devops-technologies-docker)
+         1. [Installation Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#installation--setup)
+         2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
    5. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
 
