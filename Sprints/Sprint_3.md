@@ -30,7 +30,7 @@
 **Something**
 
 **Helpful Resources**
-
+* Windows Installation: https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui
 
 ---
 ### SQL Tables Design
