@@ -27,10 +27,11 @@
 
 ---
 ### SSH Server Connection
-**Something**
+*Connection to MCS Server is required for installation and setup of Docker & MySQL
 
 **Helpful Resources**
 * Windows Installation: https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui
+* Mac Installation: https://jumpcloud.com/blog/how-to-enable-ssh-mac
 
 ---
 ### SQL Tables Design
