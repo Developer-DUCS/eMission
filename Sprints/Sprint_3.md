@@ -18,7 +18,14 @@
 ## Backend Infrastructure
 
 ### NodeJS Server
-**Something**
+The application's backed server will be built using Nodejs. Make sure to install Node using Homebrew (MacOS) or Chocolatey (Windows). 
+
+1. To Create the Node environment on your machine use npm init in the project folder.
+   1. This will create your package.json file and confirm any important dependencies (express)
+2. Create your server.js file using express and listen for the 
+3. To test your app, run ```npm start``` in your terminal
+
+**_Note_**: Details for these steps or outlined the the resources below. 
 
 **Helpful Resources**
 - [freeCodeCamp - Video](https://www.youtube.com/watch?v=ylJz7N-dv1E)
@@ -27,7 +34,7 @@
 
 ---
 ### SSH Server Connection
-*Connection to MCS Server is required for installation and setup of Docker & MySQL
+* Connection to MCS Server is required for installation and setup of Docker & MySQL
 
 **Helpful Resources**
 * Windows Installation: https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui
