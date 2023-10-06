@@ -24,7 +24,7 @@ The application's backed server will be built using Nodejs. Make sure to install
 
 1. To Create the Node environment on your machine use ```npm init``` in the project folder.
    1. This will create your package.json file and confirm any important dependencies (express)
-2. Create your _server.js_ file using express and listen for the 
+2. Create your _server.js_ file and use express to create the example server here: [Node-to-Flutter](https://thiagoevoa.medium.com/creating-an-end-to-end-project-from-node-js-backend-to-flutter-app-a8df8ffdde5b)
 3. To test your app, run ```npm start``` in your terminal
 
 **_Note_**: Details for these steps are outlined in the resources below. 
