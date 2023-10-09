@@ -1,6 +1,6 @@
-import 'package:first_flutter_app/message_dto.dart';
 import 'package:retrofit/retrofit.dart';
-
+import 'package:dio/dio.dart';
+import 'message_dto.dart';
 part 'api.g.dart';
 
 @RestApi()

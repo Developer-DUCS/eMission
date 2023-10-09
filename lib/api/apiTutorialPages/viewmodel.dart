@@ -1,13 +1,13 @@
-import 'package: emission/lib/api.dart';
-import 'package:emission/dio_provider.dart';
-import 'package:emission/irepository.dart';
-import 'package:emission/message_dto.dart';
-import 'package:emission/repository.dart';
-import 'package: emission/flutter_riverpod.dart';
-import 'package:emission/message_dto.dart';
+import 'api.dart';
+import 'dio_provider.dart';
+import 'irepository.dart';
+import 'message_dto.dart';
+import 'repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'message_dto.dart';
 
 final viewModelProvider =
-    StateNotificationProvider<ViewModel, AsyncValue<MessageDTO>>(
+    StateNotifierProvider<ViewModel, AsyncValue<MessageDTO>>(
   (ref) => ViewModel(Repository(Api(ref.watch(dioProvider)))),
 );
 
