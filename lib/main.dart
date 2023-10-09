@@ -8,9 +8,11 @@ import 'home.dart';
 import 'package:flutter/material.dart';
 import 'drive-button.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-//
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
+}
 
 /* */
 class MyApp extends StatelessWidget {

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '/api/calculate.dart';
+import '/api/lookup_make.dart';
 
 class ButtonPage extends StatefulWidget {
   const ButtonPage({Key? key});
@@ -19,6 +20,7 @@ class _ButtonPageState extends State<ButtonPage> {
   Timer? timer;
   int secondsElapsed = 0;
   bool isOverlayVisible = false;
+  MakeLookupService lookUp = MakeLookupService();
 
   void toggleColor() {
     setState(() {
@@ -26,21 +28,18 @@ class _ButtonPageState extends State<ButtonPage> {
       if (isGreen) {
         buttonText = "Drive time";
         startTimer();
-
       } else {
         buttonText = "Press to start drive";
         stopTimer();
         showCustomDialog();
       }
-
     });
   }
-
 
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        isDone=false;
+        isDone = false;
         lastDrive = 0;
         secondsElapsed++;
       });
@@ -71,14 +70,23 @@ class _ButtonPageState extends State<ButtonPage> {
     super.dispose();
   }
 
-  @override
-  void showCustomDialog() {
+  Future<void> showCustomDialog() async {
+    //final apiService = CalculateApiService();
+    //final response = await apiService.calculateCarbonFootprint();
+    final makeLookupService = MakeLookupService();
+    final response = await makeLookupService.lookupMakeId('Toyota');
+    print(response);
+    // ignore: use_build_context_synchronously
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
             'Drive: $lastDrive seconds elapsed',
+            style: GoogleFonts.nunito(),
+          ),
+          content: Text(
+            'API Response: $response',
             style: GoogleFonts.nunito(),
           ),
           actions: <Widget>[
@@ -95,10 +103,33 @@ class _ButtonPageState extends State<ButtonPage> {
     );
   }
 
+  // @override
+  // void showCustomDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text(
+  //           'Drive: $lastDrive seconds elapsed',
+  //           style: GoogleFonts.nunito(),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () {
+  //               closeOverlay();
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Text('Close'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    Color buttonColor =
-    isGreen ? Color(0xFF7CB816) : Color(0xFFE3A71B);
+    Color buttonColor = isGreen ? Color(0xFF7CB816) : Color(0xFFE3A71B);
     Color originalColor = Color(0xFFf18f47); // Original color
 
     Color lighterColor = Color.fromARGB(
@@ -108,15 +139,12 @@ class _ButtonPageState extends State<ButtonPage> {
       (originalColor.blue + 255) ~/ 2,
     );
 
-
     return Container(
       color: lighterColor,
       child: Column(
         children: [
-
           Expanded(
             flex: 2,
-
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -128,8 +156,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                      height: 50.0),
+                  SizedBox(height: 50.0),
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -150,9 +177,10 @@ class _ButtonPageState extends State<ButtonPage> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color:
-                            Colors.white, // Border color same as button color
-                            width: 15.0, // Border width same as the white border
+                            color: Colors
+                                .white, // Border color same as button color
+                            width:
+                                15.0, // Border width same as the white border
                           ),
                         ),
                         child: RawMaterialButton(
@@ -167,18 +195,12 @@ class _ButtonPageState extends State<ButtonPage> {
                           ),
                           shape: CircleBorder(),
                         ),
-
-
                       ),
                     ],
                   ),
-
                   SizedBox(height: 50.0),
                   Text(
-                    'Drive Time: ${Duration(seconds: secondsElapsed)
-                        .toString()
-                        .split('.')
-                        .first}',
+                    'Drive Time: ${Duration(seconds: secondsElapsed).toString().split('.').first}',
                     style: TextStyle(fontSize: 20.0), // Increase font size
                   ),
                 ],
@@ -188,7 +210,5 @@ class _ButtonPageState extends State<ButtonPage> {
         ],
       ),
     );
-
   }
 }
-
