@@ -49,9 +49,9 @@ The application's backed server will be built using Nodejs. Make sure to install
 
 
 **Helpful Resources**
-*run the sudo /usr/local/mysql/support-files/mysql.server start 
+run the sudo /usr/local/mysql/support-files/mysql.server start 
 mysql@8.0 for work with mysqlworkbench
-* - [install mysql guide](https://medium.com/@imamun/installing-a-local-mysql-server-bdfb0af88666)
+* [install mysql guide](https://medium.com/@imamun/installing-a-local-mysql-server-bdfb0af88666)
 
 ---
 ### DevOps Technologies (Docker)
