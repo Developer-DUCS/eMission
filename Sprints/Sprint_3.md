@@ -43,15 +43,15 @@ The application's backed server will be built using Nodejs. Make sure to install
 * Mac Installation: https://jumpcloud.com/blog/how-to-enable-ssh-mac
 
 ---
-### SQL Tables Design
-**Initial Table Design**
+### Initial SQL Tables Design
+
 <img width="626" alt="Screenshot 2023-10-08 at 9 37 25 PM" src="https://github.com/Developer-DUCS/eMission/assets/78003140/9f949e8c-32de-4e38-aee5-a0d2bc0e7e26">
 
 
 **Helpful Resources**
-run the sudo /usr/local/mysql/support-files/mysql.server start 
-mysql@8.0 for work with mysqlworkbench
-* [install mysql guide](https://medium.com/@imamun/installing-a-local-mysql-server-bdfb0af88666)
+- run the sudo /usr/local/mysql/support-files/mysql.server start 
+- mysql@8.0 for work with mysqlworkbench
+- [install mysql guide](https://medium.com/@imamun/installing-a-local-mysql-server-bdfb0af88666)
 
 ---
 ### DevOps Technologies (Docker)
