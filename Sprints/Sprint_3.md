@@ -45,9 +45,13 @@ The application's backed server will be built using Nodejs. Make sure to install
 ---
 ### SQL Tables Design
 **Something**
+<img width="626" alt="Screenshot 2023-10-08 at 9 37 25 PM" src="https://github.com/Developer-DUCS/eMission/assets/78003140/9f949e8c-32de-4e38-aee5-a0d2bc0e7e26">
+Initial Table Design
 
 **Helpful Resources**
-
+run the sudo /usr/local/mysql/support-files/mysql.server start 
+mysql@8.0 for work with mysqlworkbench
+-[install mysql guide](https://medium.com/@imamun/installing-a-local-mysql-server-bdfb0af88666)
 
 ---
 ### DevOps Technologies (Docker)
