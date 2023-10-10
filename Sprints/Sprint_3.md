@@ -77,11 +77,14 @@ The application's backed server will be built using Nodejs. Make sure to install
 
 #### Starting Project Container
 1. Finding Docker Hub Repository
-   -  Lorem ipsum
+   -  Login to Docker Hub and find the project image repository
 2. Pull image from Repository 
-   - Lorem ipsum
+   - Use the command on this page to pull the image to your local machine
 3. Run Docker Image
-   - Lorem ipsum
+   - Use ```Docker run``` to run image as a container.
+
+
+**_Note_**: ensure docker desktop is running before you run your container. Docker will not work otherwise. 
 
 
 **Helpful Resources**
