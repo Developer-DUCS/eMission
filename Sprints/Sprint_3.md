@@ -81,7 +81,8 @@ The application's backed server will be built using Nodejs. Make sure to install
 2. Pull image from Repository 
    - Use the command on this page to pull the image to your local machine
 3. Run Docker Image
-   - Use ```Docker run``` to run image as a container.
+   - Use ```docker run``` to run image as a container.
+     - More specifically use: ```docker run -d -p <local port:app port>``` to ensure your local machine is looking out for the correct port used by the application.
 
 
 **_Note_**: ensure docker desktop is running before you run your container. Docker will not work otherwise. 
@@ -106,4 +107,12 @@ The application's backed server will be built using Nodejs. Make sure to install
 * [Settings Subpages](https://github.com/Developer-DUCS/eMission/wiki/App-Screens-Documentation#settings-page)
 ---
 ### Sprint 3 Retrospective
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+* Continued work on the following application pages (Mileage Input Page, Carbon Report Page, Leaderboard Page, Settings Subpages).
+* Backend work begun.
+  * NodeJS backend/server to run our application on.
+  * Research and implementation of MySQL tables
+  * SSH/MCS Server connection established
+  * Docker Research
+  
+**_Note_**: Backend work is not yet complete. We still need to put the finishing touches on the NodeJS. When this is complete, we can focus on connecting the the MCS server. After this, we can shift our attention onto implementation of the Docker image and Docker Hub Repository
+implementation of the Docker image and Docker Hub Repository
