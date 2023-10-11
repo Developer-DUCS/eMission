@@ -42,25 +42,20 @@ class MyApp extends StatelessWidget {
             ),
         'button-page': (context) => const Layout(
               body: ButtonPage(),
-              pageIndex: 0,
               appBar: false,
               driveButton: false,
             ),
         'challenges': (context) => const Layout(
               body: ChallengePage(),
-              pageIndex: 1,
             ),
         'past_challenges': (context) => const Layout(
               body: PastChallengesPage(),
-              pageIndex: 1,
             ),
         'carbon_report': (context) => const Layout(
               body: CarbonReportPage(),
-              pageIndex: 1,
             ),
         'manual_input': (context) => const Layout(
           body: Manual(),
-          pageIndex: 0,
         )
       },
     );

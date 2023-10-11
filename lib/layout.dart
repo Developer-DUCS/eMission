@@ -6,11 +6,11 @@ class Layout extends StatelessWidget {
   final bool appBar;
   final bool driveButton;
   final bool bottomBar;
-  final int pageIndex;
+  final int? pageIndex;
 
   static const List<String> pages = ['leaderboard', 'home', 'settings'];
 
-  const Layout({super.key, required this.body, this.appBar = true, this.bottomBar = true, this.pageIndex = 1, this.driveButton = true,});
+  const Layout({super.key, required this.body, this.appBar = true, this.bottomBar = true, this.pageIndex, this.driveButton = true,});
   void navigateToButtonPage(BuildContext context){
     Navigator.pushNamed(context, 'button-page');
   }
@@ -71,14 +71,14 @@ class Layout extends StatelessWidget {
       body: body,
       bottomNavigationBar: bottomBar ? BottomNavigationBar(
         onTap: (index) => { Navigator.pushNamed(context, pages[index])},
-        currentIndex: pageIndex,
+        currentIndex: pageIndex ?? 0,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: Colors.green,
         items: [
-          BottomNavigationBarItem(icon: SvgPicture.asset('./assets/images/leaderboard-outline.svg', color: Colors.black54), activeIcon: SvgPicture.asset('./assets/images/leaderboard-outline.svg', color: Colors.green), label: ''),
+          BottomNavigationBarItem(icon: SvgPicture.asset('./assets/images/leaderboard-outline.svg', color: Colors.black54), activeIcon: SvgPicture.asset('./assets/images/leaderboard-outline.svg', color: pageIndex != null ? Colors.green : Colors.black54), label: ''),
           const BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ''),
-          const BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: '')
+          const BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: ''),
         ]
       ) : null,
     );
