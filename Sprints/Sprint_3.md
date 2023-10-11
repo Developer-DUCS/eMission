@@ -1,8 +1,8 @@
 # Sprint 3
 
 ### Sprint 3 Goals
-- [ ] Design/Implement Backend Infrastructure (Nodejs)
-- [ ] Investigate DevOps Technologies (Docker)
+- [X] Design/Implement Backend Infrastructure (Nodejs)
+- [X] Investigate DevOps Technologies (Docker)
 - [X] Investigate Ability to Allow Direct Device Testing
 - [ ] Merge Splash Screen & Login Page
 - [X] Designing SQL Tables (MySQL)
