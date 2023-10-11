@@ -10,7 +10,7 @@
 - [ ] Leaderboard Page
 - [ ] Mileage Input Page
 - [X] Carbon Report Page
-- [ ] Settings Subpages 
+- [X] Settings Subpages 
 - [X] Sprint 3 Midterm Video Presentation
 
 
