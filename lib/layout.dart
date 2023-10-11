@@ -4,12 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Layout extends StatelessWidget {
   final Widget body;
   final bool appBar;
+  final bool driveButton;
   final bool bottomBar;
   final int pageIndex;
 
   static const List<String> pages = ['leaderboard', 'home', 'settings'];
 
-  const Layout({super.key, required this.body, this.appBar = true, this.bottomBar = true, this.pageIndex = 1});
+  const Layout({super.key, required this.body, this.appBar = true, this.bottomBar = true, this.pageIndex = 1, this.driveButton = true,});
   void navigateToButtonPage(BuildContext context){
     Navigator.pushNamed(context, 'button-page');
   }
@@ -18,35 +19,54 @@ class Layout extends StatelessWidget {
     return Scaffold(
       appBar: appBar ? AppBar(title: const Text('eMission'), backgroundColor: Colors.white, foregroundColor: Colors.black54,) : null,
       endDrawer: Drawer(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromRGBO(255, 255, 255, 100),
         child: ListView(
           padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
+          children: [
+            const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.white,
               ),
-              child: Text('Drawer Header'),
+              child: Text('eMission', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 2.0, fontFamily: 'Nunito',),),
             ),
             ListTile(
-              title: Text('Item 1'),
-              textColor: Colors.yellow,
+              title: const Text('Manual Drive Input'),
+              textColor: Colors.black,
+              hoverColor: Colors.amber,
+              onTap: null, // will link to manual drive input page when it is completed
+            ),
+            ListTile(
+              title: const Text('eFriendly Challenges'),
+              textColor: Colors.black,
+              onTap: () { Navigator.pushNamed(context,'challenges'); },
+            ),
+            ListTile(
+              title: Text('Challenge Groups'),
+              textColor: Colors.black,
+              onTap: null, // will link to Challenge Groups Page when it is completed
+            ),
+            ListTile(
+              title: const Text('Reports'),
+              textColor: Colors.black,
+              onTap: () {Navigator.pushNamed(context, 'carbon_report');},
+            ),
+            ListTile(
+              title: const Text('Logout'),
+              textColor: Colors.black,
+              onTap: () { Navigator.pushNamed(context,'login'); }, // will link to login page 
             ),
           ]
         )
       ),
-      floatingActionButton :  FloatingActionButton(
+      floatingActionButton :  driveButton ? FloatingActionButton(
           backgroundColor: Colors.orangeAccent,
-          foregroundColor: Color.fromARGB(255, 98, 91, 91),
-          shape: CircleBorder(),
+          foregroundColor: const Color.fromARGB(255, 98, 91, 91),
+          shape: const CircleBorder(),
           splashColor: Colors.white,
           onPressed: () { Navigator.pushNamed(context,'button-page'); },
-          child: Icon(Icons.directions_car),
+          child: const Icon(Icons.directions_car),
 
-      ),
-
-
-
+      ): null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: body,
       bottomNavigationBar: bottomBar ? BottomNavigationBar(
