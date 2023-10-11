@@ -5,6 +5,7 @@
 - [ ] Complete NodeJS backend
 - [ ] Implement MySQL table connection to application
 - [ ] Establish Docker connection to MCS server.
+- [ ] Research/Design Application Icon
 ---
 
 ### NodeJS Calls and Routes
