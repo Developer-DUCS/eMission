@@ -33,7 +33,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'email',
+                      labelText: 'Email',
                     ),
                   ),
                 ),
@@ -42,7 +42,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'username',
+                      labelText: 'Username',
                     ),
                   ),
                 ),
@@ -51,7 +51,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'display name',
+                      labelText: 'Display name',
                     ),
                   ),
                 ),
@@ -60,7 +60,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'password',
+                      labelText: 'Password',
                     ),
                   ),
                 ),
@@ -69,7 +69,7 @@ class Login extends StatelessWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'confirm password',
+                      labelText: 'Confirm Password',
                     ),
                   ),
                 ),
