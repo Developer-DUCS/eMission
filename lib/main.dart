@@ -1,13 +1,13 @@
 //
+import 'package:flutter/material.dart';
 import 'package:first_flutter_app/layout.dart';
 import 'package:first_flutter_app/login.dart';
 import 'package:first_flutter_app/challenge_page.dart';
 import 'package:first_flutter_app/carbon_report.dart';
-import 'settings.dart';
-import 'home.dart';
-import 'package:flutter/material.dart';
-import 'drive-button.dart';
-import 'manual.dart';
+import 'package:first_flutter_app/settings.dart';
+import 'package:first_flutter_app/home.dart';
+import 'package:first_flutter_app/drive-button.dart';
+import 'package:first_flutter_app/manual.dart';
 
 void main() => runApp(const MyApp());
 
@@ -57,7 +57,11 @@ class MyApp extends StatelessWidget {
         'carbon_report': (context) => const Layout(
               body: CarbonReportPage(),
               pageIndex: 1,
-            )
+            ),
+        'manual_input': (context) => const Layout(
+          body: Manual(),
+          pageIndex: 0,
+        )
       },
     );
   }

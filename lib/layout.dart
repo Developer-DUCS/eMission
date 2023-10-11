@@ -33,7 +33,7 @@ class Layout extends StatelessWidget {
               title: const Text('Manual Drive Input'),
               textColor: Colors.black,
               hoverColor: Colors.amber,
-              onTap: null, // will link to manual drive input page when it is completed
+              onTap: () { Navigator.pushNamed(context, 'manual_input');}, // will link to manual drive input page when it is completed
             ),
             ListTile(
               title: const Text('eFriendly Challenges'),
