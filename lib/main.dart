@@ -8,10 +8,12 @@ import 'home.dart';
 import 'package:flutter/material.dart';
 import 'drive-button.dart';
 import 'manual.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-//
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
+}
 
 /* */
 class MyApp extends StatelessWidget {
@@ -22,16 +24,44 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'eMission',
       initialRoute: 'login',
-      routes: { 
-        'login': (context) => const Layout(body: Login(), appBar: false, bottomBar: false, driveButton: false,),
-        'home': (context) => const Layout(body: Home(), pageIndex: 1,),
-        'leaderboard': (context) => const Layout(body: Settings(), pageIndex: 0,),
-        'settings': (context) => const Layout(body: Settings(), pageIndex: 2, driveButton: false,),
-        'button-page': (context) => const Layout(body: ButtonPage(),pageIndex:0,appBar: false, driveButton: false,),
-        'challenges': (context) => const Layout(body: ChallengePage(), pageIndex: 1,),
-        'past_challenges': (context) => const Layout(body: PastChallengesPage(), pageIndex: 1,),
-        'manual': (context) => const Layout(body: Manual(), pageIndex: 1),
-        'carbon_report': (context) => const Layout(body: CarbonReportPage(), pageIndex: 1,)
+      routes: {
+        'login': (context) => const Layout(
+              body: Login(),
+              appBar: false,
+              bottomBar: false,
+              driveButton: false,
+            ),
+        'home': (context) => const Layout(
+              body: Home(),
+              pageIndex: 1,
+            ),
+        'leaderboard': (context) => const Layout(
+              body: Settings(),
+              pageIndex: 0,
+            ),
+        'settings': (context) => const Layout(
+              body: Settings(),
+              pageIndex: 2,
+              driveButton: false,
+            ),
+        'button-page': (context) => const Layout(
+              body: ButtonPage(),
+              pageIndex: 0,
+              appBar: false,
+              driveButton: false,
+            ),
+        'challenges': (context) => const Layout(
+              body: ChallengePage(),
+              pageIndex: 1,
+            ),
+        'past_challenges': (context) => const Layout(
+              body: PastChallengesPage(),
+              pageIndex: 1,
+            ),
+        'carbon_report': (context) => const Layout(
+              body: CarbonReportPage(),
+              pageIndex: 1,
+            )
       },
     );
   }
