@@ -7,7 +7,8 @@
 - [ ] Establish Docker connection to MCS server.
 - [ ] Design Application Icon
 - [ ] Legal Notes
-- [ ] Redefine Target Market 
+- [ ] Redefine Target Market
+- [ ] Create Account Page 
 ---
 
 ### NodeJS Calls and Routes
