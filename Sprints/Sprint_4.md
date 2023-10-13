@@ -9,7 +9,7 @@
 - [ ] Legal Notes
 - [ ] Redefine Target Market
 - [ ] Build Challenge Groups Page
-- [ ] Build Account Page 
+- [ ] Build Create Account Page 
 ---
 
 ### NodeJS Calls and Routes
