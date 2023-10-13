@@ -2,13 +2,14 @@
 
 ### Sprint Goals
 - [ ] Update Home and Manual UI
-- [ ] Complete NodeJS backend
+- [ ] Restructure NodeJS backend
 - [ ] Implement MySQL table connection to application
-- [ ] Establish Docker connection to MCS server.
+- [ ] Dockerize Flutter Application
 - [ ] Design Application Icon
 - [ ] Legal Notes
 - [ ] Redefine Target Market
-- [ ] Create Account Page 
+- [ ] Build Challenge Groups Page
+- [ ] Build Account Page 
 ---
 
 ### NodeJS Calls and Routes
@@ -27,7 +28,12 @@
   
 ---
 ### Target Market 
-* some other thing
+* Evironmentally conscious millennials with who are concerned about their role in climate change. 
+* Primary users will most likely live in urban and suburban areas and already practice environmentally friendly habits. (Recycling, Vegetarians, Waste Reduction, Biking)
+* The S.E.S (Socio-economic status) of our target market will be middle and upper middle class individuals. People who can afford to make and pursue healthier lifestyle changes.
+* To thrive in this application, the ideal user is competive enough to engage in friendly climate-based challenges.
+* They will also be regular social media users, eager to share their environmental accomplishments with like-minded people.  
+* We plan to reach out to environmental groups like ThinkGreen to test the application.
   
 ---
 ### Sprint Retrospective
