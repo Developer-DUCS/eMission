@@ -28,7 +28,7 @@
   
 ---
 ### Target Market 
-* Evironmentally conscious millennials with who are concerned about their role in climate change. 
+* Evironmentally conscious millennials (& Gen Z) who are concerned about their role in climate change. 
 * Primary users will most likely live in urban and suburban areas and already practice environmentally friendly habits. (Recycling, Vegetarians, Waste Reduction, Biking)
 * The S.E.S (Socio-economic status) of our target market will be middle and upper middle class individuals. People who can afford to make and pursue healthier lifestyle changes.
 * To thrive in this application, the ideal user is competive enough to engage in friendly climate-based challenges.
