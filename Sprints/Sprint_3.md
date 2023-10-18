@@ -82,7 +82,7 @@ The application's backed server will be built using Nodejs. Make sure to install
    - Use the command on this page to pull the image to your local machine
 3. Run Docker Image
    - Use ```docker run``` to run image as a container.
-     - More specifically use: ```docker run --name<new-container-name> -d -p <local port:app port> <image-name>``` to ensure your local machine is looking out for the correct port used by the application.
+     - More specifically use: ```docker run --name <NEW_CONTAINER_NAME> -d -p <LOCAL_PORT:APP_PORT> <IMAGE_NAME>``` to ensure your local machine is looking out for the correct port used by the application.
 
 
 **_Note_**: ensure docker desktop is running before you run your container. Docker will not work otherwise. 
