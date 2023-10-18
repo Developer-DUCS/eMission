@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -72,8 +73,8 @@ class _ButtonPageState extends State<ButtonPage> {
     //final apiService = CalculateApiService();
     //final response = await apiService.calculateCarbonFootprint();
     const make = 'Toyota';
-    final response = await http.get(Uri.parse('/makeId?make=$make'));
-    print(response);
+    final response = await http.get(Uri.http('10.0.2.2:3000', '/makeId', { 'make': make }));
+    print(json.decode(response.body)['id']);
     // ignore: use_build_context_synchronously
     showDialog(
       context: context,
