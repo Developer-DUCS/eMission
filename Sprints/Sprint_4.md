@@ -9,7 +9,8 @@
 - [ ] Legal Notes
 - [ ] Redefine Target Market
 - [ ] Build Challenge Groups Page
-- [ ] Build Create Account Page 
+- [ ] Build Create Account Page
+- [ ] Sprint 4 Review
 ---
 
 ### NodeJS Calls and Routes
