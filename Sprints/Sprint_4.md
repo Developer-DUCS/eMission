@@ -21,7 +21,7 @@
 
 ---
 ### Legal Notes
-* something here
+* [Terms and Conditions](https://github.com/Developer-DUCS/eMission/wiki/Product-Legal-Notes#terms-and-conditions)
   
 ---
 ### Application Icon
