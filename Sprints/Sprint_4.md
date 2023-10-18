@@ -22,7 +22,9 @@
 ---
 ### Legal Notes
 * [Terms and Conditions](https://github.com/Developer-DUCS/eMission/wiki/Product-Legal-Notes#terms-and-conditions)
-  
+
+**_Note_**: These terms and conditions should appear in our application. Preferably right after creating an account where they can accept any terms. 
+
 ---
 ### Application Icon
 * something here aswell
