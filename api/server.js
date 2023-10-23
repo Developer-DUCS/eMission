@@ -1,6 +1,6 @@
 const express = require('express');
+const Database = require( './sql_db_man.js');
 const vehicleMakes = require('./VehicleMakes.json');
-
 const PORT = 3000;
 const app = express();
 let messageJson = {message: 'Hello world'};
@@ -12,6 +12,37 @@ app.use(express.json());
 app.get('/message', (request, response)=>{
     response.send(messageJson);
 });
+
+app.post('/insertUser', (request, response)=>{
+    // insert user
+    console.log("Insertting Users");
+    console.log(request.body);
+    const dbconfig = {
+        host:     "mcs.drury.edu",
+        port:     "3306",
+        user:     "emission",
+        password: "Letmein!eCoders",
+        database: "emission"
+    };
+    const db = new Database(dbconfig);
+    db.connect();
+
+    const userData = request.body;
+    userData.profilePicture = userData.profilePicture === null ? 0 : userData.profilePicture;
+    const insertQuery = "INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)";
+    const values=[userData.email, userData.username, userData.password, 0,0, userData.displayName];
+
+    db.query(insertQuery, values, (err,results)=>{
+        if(err){
+            console.error("Error executing query:", err);
+        }else{
+            console.log("Query results:", results);
+        }
+    })
+    //db.disconnect();
+
+});
+
 
 app.get('/makeId', (req, res) => {
     const { make } = req.query;
