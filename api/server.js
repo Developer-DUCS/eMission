@@ -6,7 +6,7 @@ const app = express();
 let messageJson = {message: 'Hello world'};
 
 const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
-const API_KEY = '5p3VT63zAweQ6X3j8OQriw';
+const API_KEY = '';
 
 app.use(express.json());
 app.get('/message', (request, response)=>{
