@@ -1,58 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_svg/svg.dart';
-import 'dart:convert';
 
-class Login extends StatefulWidget {
+class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
-
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  late TextEditingController emailController;
-  late TextEditingController usernameController;
-  late TextEditingController displayNameController;
-  late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
-
-  @override
-  void initState() {
-    super.initState();
-    emailController = TextEditingController();
-    usernameController = TextEditingController();
-    displayNameController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-  }
-
-  void _submitForm(context) async {
-    print("here");
-    // this is the url for using a Android emulator
-    // Apple emulators use localhost like normal
-    String url = 'http://10.0.2.2:3000/insertUser';
-
-    Map<String, String?> formData = {
-      'email': emailController.text,
-      'username': usernameController.text,
-      'display_name': displayNameController.text,
-      'password': passwordController.text,
-      'confirm_password': confirmPasswordController.text,
-    };
-    print(formData);
-
-    try {
-      var response = await http.post(Uri.parse(url),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(formData));
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      Navigator.pushNamed(context, 'home');
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +46,7 @@ class _LoginState extends State<Login> {
                       foregroundColor:const Color.fromARGB(244, 0, 0, 0),
                       backgroundColor: const Color.fromARGB(244, 244, 248, 6),
                     ),
-                    onPressed: () { _submitForm(context); },
+                    onPressed: () { Navigator.pushNamed(context, 'home'); },
                     child: const Text('Login')
                   ),
                 ),
@@ -118,15 +68,5 @@ class _LoginState extends State<Login> {
         ],
       )))
     );
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    usernameController.dispose();
-    displayNameController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
   }
 }
