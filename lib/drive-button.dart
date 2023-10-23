@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/api/calculate.dart';
-import '/api/lookup_make.dart';
+import 'package:http/http.dart' as http;
 
 class ButtonPage extends StatefulWidget {
   const ButtonPage({Key? key});
@@ -20,7 +19,6 @@ class _ButtonPageState extends State<ButtonPage> {
   Timer? timer;
   int secondsElapsed = 0;
   bool isOverlayVisible = false;
-  MakeLookupService lookUp = MakeLookupService();
 
   void toggleColor() {
     setState(() {
@@ -73,8 +71,8 @@ class _ButtonPageState extends State<ButtonPage> {
   Future<void> showCustomDialog() async {
     //final apiService = CalculateApiService();
     //final response = await apiService.calculateCarbonFootprint();
-    final makeLookupService = MakeLookupService();
-    final response = await makeLookupService.lookupMakeId('Toyota');
+    const make = 'Toyota';
+    final response = await http.get(Uri.parse('/makeId?make=$make'));
     print(response);
     // ignore: use_build_context_synchronously
     showDialog(
