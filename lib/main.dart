@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:first_flutter_app/layout.dart';
 import 'package:first_flutter_app/login.dart';
+import 'package:first_flutter_app/create-account.dart';
 import 'package:first_flutter_app/challenge_page.dart';
 import 'package:first_flutter_app/carbon_report.dart';
 import 'package:first_flutter_app/settings.dart';
@@ -19,8 +20,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'eMission',
-      initialRoute: 'login',
+      initialRoute: 'create-account',
       routes: {
+        'create-account': (context) => const Layout(
+              body: CreateAccount(),
+              appBar: false,
+              bottomBar: false,
+              driveButton: false,
+            ),
         'login': (context) => const Layout(
               body: Login(),
               appBar: false,
