@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class CreateAccount extends StatelessWidget {
+  const CreateAccount({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class Login extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/pexels-robert-so-18127674-2.jpg"),
-          fit: BoxFit.cover,
+          fit: BoxFit.fitHeight,
         ),
       ),
       child: Center( child: SingleChildScrollView( child: Column(
@@ -28,7 +28,7 @@ class Login extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Center(child: Text("Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)),
+                const Center(child: Text("Create Account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)),
                 const SizedBox(height: 4,),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -38,7 +38,25 @@ class Login extends StatelessWidget {
                 const SizedBox(height: 4,),
                 TextFormField(
                   decoration: const InputDecoration(
+                    labelText: 'Username',
+                  ),
+                ),
+                const SizedBox(height: 4,),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Display Name',
+                  ),
+                ),
+                const SizedBox(height: 4,),
+                TextFormField(
+                  decoration: const InputDecoration(
                     labelText: 'Password',
+                  ),
+                ),
+                const SizedBox(height: 4,),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
                   ),
                 ),
                 const SizedBox(height: 8,),
@@ -49,21 +67,21 @@ class Login extends StatelessWidget {
                       backgroundColor: const Color.fromARGB(244, 244, 248, 6),
                     ),
                     onPressed: () { Navigator.pushNamed(context, 'home'); },
-                    child: const Text('Login')
+                    child: const Text('Create')
                   ),
                 ),
                 const SizedBox(height: 4,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    const Text("Already have an account?"),
                     const SizedBox(width: 4,),
                     GestureDetector(
-                      child: const Text("Create One", style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w600),),
-                      onTap: () => Navigator.pushNamed(context, 'create-account'),
+                      child: const Text("Login", style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w600),),
+                      onTap: () => Navigator.pushNamed(context, 'login'),
                     )
                   ],
-                )        
+                )      
               ],
             ),
             // Text Button
