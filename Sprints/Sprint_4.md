@@ -13,8 +13,34 @@
 - [ ] Sprint 4 Review
 ---
 
-### NodeJS Calls and Routes
-* something
+### NodeJS Calls and MySQL Tables
+**MySQL Database**
+* Current table count: 5
+  * Users
+  * Challenges
+  * Cars
+  * Points
+  * AcceptedChallenges
+* Current view Count: 2
+  * pointType - see pointType and pointTypeID, where pointID can be treated as the primary key for earner (userID) and pointType
+  * userpoints - current points calculated for each user, where the Points table is all users and all points earned
+<img src="https://github.com/Developer-DUCS/eMission/assets/78006078/35124b10-8706-471a-b14e-fc0bf3ba1b66" alt="emission_sql" width="400" height="500"/>
+
+
+**API Calls**
+
+* Complete: insert user to the Users table
+  * Work to be done: input verification, password encryption
+* Used sql_db_man.js to create a method to connect, disconnect, and query to the SQL database
+* Proof of concepts stages - using one car manufacturer to limit API calls to lookup make/model IDs
+* /makeID - get makeID from a list of one type of model - currently stored in json format to save on our free monthly API calls
+* /vehicleCarbonReport - get carbon report from vehicleID, distance unit, distance driven
+  * Work to be done: implement using the user's own car information
+  * Create /modelID to get list of models
+ 
+<img src="https://github.com/Developer-DUCS/eMission/assets/78006078/b4c6eef1-c456-4a73-b74a-9821fcd8c368" alt="api_call" width="900" height="200"/>
+
+
 ---
 ### Dockerfile- Images & Containers
 * The application's Dockerfile will be responsible for installing all necessary technologies and dependencies for running a container. The image builds on
@@ -47,7 +73,8 @@ the Ubuntu (version 20.04) image and uses that linux environment to create the p
 
 ---
 ### Application Icon
-* something here aswell
+
+**_Note_**: Design for Application Icon moved to Sprint 5
   
 ---
 ### Target Market 
