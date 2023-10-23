@@ -1,6 +1,7 @@
 # Sprint 5
 
 ### Sprint Goals
+- [ ] Connect App Features to SQL Tables
 - [ ] Research/Begin Unit Testing
 - [ ] Build Challenge Groups Page
 - [ ] Design Application Icon
