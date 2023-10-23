@@ -18,11 +18,11 @@ app.post('/insertUser', (request, response)=>{
     console.log("Insertting Users");
     console.log(request.body);
     const dbconfig = {
-        host:     "mcs.drury.edu",
-        port:     "3306",
-        user:     "emission",
-        password: "Letmein!eCoders",
-        database: "emission"
+        host:     "",
+        port:     "",
+        user:     "",
+        password: "",
+        database: ""
     };
     const db = new Database(dbconfig);
     db.connect();
