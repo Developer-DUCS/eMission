@@ -1,16 +1,16 @@
 # Sprint 4
 
 ### Sprint Goals
-- [ ] Update Home and Manual UI
-- [ ] Restructure NodeJS backend
-- [ ] Implement MySQL table connection to application
-- [ ] Dockerize Flutter Application
+- [X] Update Home and Manual UI
+- [X] Restructure NodeJS backend
+- [X] Implement MySQL table connection to application
+- [X] Dockerize Flutter Application
 - [ ] Design Application Icon
-- [ ] Legal Notes
-- [ ] Redefine Target Market
+- [X] Legal Notes
+- [X] Redefine Target Market
 - [ ] Build Challenge Groups Page
 - [ ] Build Create Account Page
-- [ ] Sprint 4 Review
+- [X] Sprint 4 Review
 ---
 
 ### NodeJS Calls and MySQL Tables
