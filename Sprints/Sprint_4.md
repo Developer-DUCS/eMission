@@ -14,7 +14,8 @@
 ---
 
 ### NodeJS Calls and MySQL Tables
-**MySQL Database**
+
+#### MySQL Database
 * Current table count: 5
   * Users
   * Challenges
@@ -27,7 +28,7 @@
 <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/35124b10-8706-471a-b14e-fc0bf3ba1b66" alt="emission_sql" width="400" height="500"/>
 
 
-**API Calls**
+#### API Calls
 
 * Complete: insert user to the Users table
   * Work to be done: input verification, password encryption
