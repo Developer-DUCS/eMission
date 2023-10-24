@@ -104,6 +104,8 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 5. [Sprint 4](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-goals)
    2. [API Calls & SQL Tables](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#nodejs-calls-and-mysql-tables)
+      1. [MySQL Database](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#mysql-database)
+      2. [API Calls](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#api-calls)
    3. [Dockerfile](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#dockerfile--images--containers)
    4. [Legal Notes](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#legal-notes)
    5. [Target Market](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#target-market)
