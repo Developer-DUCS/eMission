@@ -102,6 +102,13 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    5. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
 5. [Sprint 4](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md)
+   1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-goals)
+   2. [API Calls & SQL Tables](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#nodejs-calls-and-mysql-tables)
+   3. [Dockerfile](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#dockerfile--images--containers)
+   4. [Legal Notes](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#legal-notes)
+   5. [Target Market](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#target-market)
+   6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-retrospective)
+6. [Sprint 5](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md)
 
 
 ## Helpful Links
