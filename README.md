@@ -72,9 +72,9 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 ## Documentation
 For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
-* [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
+[Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 
-<details><summary>Sprint Workflow</summary>
+<details><summary>[Sprint Workflow](https://github.com/Developer-DUCS/eMission/tree/main/Sprints)</summary>
 
 1. [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#sprint-1-goals)
