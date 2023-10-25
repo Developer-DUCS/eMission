@@ -88,4 +88,11 @@ the Ubuntu (version 20.04) image and uses that linux environment to create the p
   
 ---
 ### Sprint Retrospective
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+Sprint 4 picks up where the previous sprint left off with the backend design and implementation. 
+
+* Both the primary API calls and MySQL Tables were created.
+* Dockerfile was created and application was Dockerized
+* Product Legal Notes were created
+* Target Market was redefined
+
+Backend Server connections and API routes will be the focus of Sprint 5, leading us to a Minimum Viable Product that can be tested. Until this is complete, Docker developing will be put on hold. 
