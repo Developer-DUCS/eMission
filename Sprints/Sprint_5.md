@@ -26,7 +26,7 @@
 * /acceptChallenges
 * /login
 
-**_Note_**: Incomplete api calls will be pushed to Sprint 6.
+**_Note_**: Any API calls not completed in this sprint will be pushed to Sprint 6.
 
 ---
 ### Application Icon
