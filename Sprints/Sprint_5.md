@@ -2,10 +2,26 @@
 
 ### Sprint Goals
 - [ ] Connect API Routes & Carbon Interface
+
+      getModelID
+      getVehicleID
+      make call on manual input page or drive button
 - [ ] Make API route for Challenge Page
-- [ ] Make API route for modelID & vehicleID
-- [ ] Make API route for User login Authentication
+
+      /getChallenges on page load
+      /acceptChallenges - needs SQL table update
+      Update Challenge Page Frontend
+      Challenges pulls from SQL table
+- [ ] Make API route for User Authentication
+
+      update login page
+      clear text compare
 - [ ] Password Encryption
+- [ ] Create insert vehicle info page
+
+      /insertCarInfo to SQL table
+      update SQL
+- [ ] Update Manual Input Page
 - [ ] Complete Leaderboard Page
 - [ ] Design Application Icon
 - [ ] Complete Legal Notes
