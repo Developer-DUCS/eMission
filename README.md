@@ -72,8 +72,11 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 ## Documentation
 For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
-1. [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
-2. [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
+* [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
+
+<details><summary>Sprint Workflow</summary>
+
+1. [Sprint 1](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#sprint-1-goals)
    2. [Team Organization](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#team-organization)
       1. [Team Dynamics](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#team-dynamics)
@@ -84,12 +87,12 @@ For an in-depth look at the processes, user stories, and progress thus far, take
       2. [Technologies](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#technology)
       3. [Tools](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#tools)
    4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md#sprint-retrospective)
-3. [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
+2. [Sprint 2](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-2-goals)
    2. [Sprint 2 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-2-screens)
    3. [Additional Roles](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#additional-sprint-2-roles)
    4. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_2.md#sprint-retrospective)
-4. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
+3. [Sprint 3](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md) 
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-goals)
    2. [Sprint 3 Screens](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-screens)
    3. [Backend Infrastructure](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#backend-infrastructure)
@@ -101,7 +104,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
          2. [Deployment Guide](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#starting-project-container)
    5. [Direct-to-Device Testing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#direct-to-device-testing)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_3.md#sprint-3-retrospective)
-5. [Sprint 4](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md)
+4. [Sprint 4](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md)
    1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-goals)
    2. [API Calls & SQL Tables](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#nodejs-calls-and-mysql-tables)
       1. [MySQL Database](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#mysql-database)
@@ -110,7 +113,11 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    4. [Legal Notes](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#legal-notes)
    5. [Target Market](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#target-market)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-retrospective)
-6. [Sprint 5](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md)
+5. [Sprint 5](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md)
+
+</details>
+   
+
 
 
 ## Helpful Links
