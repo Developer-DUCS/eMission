@@ -1,13 +1,32 @@
 # Sprint 5
 
 ### Sprint Goals
-- [ ] Connect App Features to SQL Tables
-- [ ] Research/Begin Unit Testing
-- [ ] Build Challenge Groups Page
+- [ ] Connect API Routes & Carbon Interface
+- [ ] Make API route for Challenge Page
+- [ ] Make API route for modelID & vehicleID
+- [ ] Make API route for User login Authentication
+- [ ] Password Encryption
+- [ ] Complete Leaderboard Page
 - [ ] Design Application Icon
-- [ ] Refine Legal Notes
+- [ ] Complete Legal Notes
+- [ ] Research/Begin Unit Testing
 - [ ] Sprint 5 Review
 ---
+
+### API Connections
+
+#### Completed API Calls
+* something
+* etc
+
+#### Incomplete API Calls
+* something
+* etc
+
+**_Note_**: Incomplete api calls will be pushed to Sprint 6.
+
+---
+### Application Icon
 
 
 ---
