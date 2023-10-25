@@ -16,12 +16,15 @@
 ### API Connections
 
 #### Completed API Calls
-* something
-* etc
+* /getMakeID - completed in Sprint 4
+* /vehicleCarbonReport - takes vehicleID and amount driven info as input, completed in Sprint 4
+* NOTE - error handling may not be implemented yet
 
 #### Incomplete API Calls
-* something
-* etc
+* /getModelID
+* /getChallenges
+* /acceptChallenges
+* /login
 
 **_Note_**: Incomplete api calls will be pushed to Sprint 6.
 
