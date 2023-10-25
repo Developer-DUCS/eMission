@@ -13,7 +13,7 @@
 - [ ] Sprint 5 Review
 ---
 
-### API Connections
+### API Calls
 
 #### Completed API Calls
 * /getMakeID - completed in Sprint 4
