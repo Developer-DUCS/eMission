@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:first_flutter_app/encryption.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -33,13 +34,16 @@ class _CreateAccountState extends State<CreateAccount> {
     // this is the url for using a Android emulator
     // Apple emulators use localhost like normal
     String url = 'http://10.0.2.2:3000/insertUser';
+    
+    // Encrypt the password
+    String encryptedPassword = encryptPassword(confirmPasswordController.text);
 
     Map<String, String?> formData = {
       'email': emailController.text,
       'username': usernameController.text,
       'display_name': displayNameController.text,
-      'password': passwordController.text,
-      'confirm_password': confirmPasswordController.text,
+      'password': encryptedPassword,
+      'confirm_password': encryptedPassword,
     };
     print(formData);
 

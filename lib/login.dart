@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:first_flutter_app/encryption.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+      // Declare TextEditingController variables for email and password
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -29,12 +35,14 @@ class Login extends StatelessWidget {
                 const Center(child: Text("Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)),
                 const SizedBox(height: 4,),
                 TextFormField(
+                  controller: emailController, // Attach the controller to the TextFormField
                   decoration: const InputDecoration(
                     labelText: 'Email',
                   ),
                 ),
                 const SizedBox(height: 4,),
                 TextFormField(
+                  controller: passwordController, // Attach the controller to the TextFormField
                   decoration: const InputDecoration(
                     labelText: 'Password',
                   ),
@@ -46,7 +54,18 @@ class Login extends StatelessWidget {
                       foregroundColor:const Color.fromARGB(244, 0, 0, 0),
                       backgroundColor: const Color.fromARGB(244, 244, 248, 6),
                     ),
-                    onPressed: () { Navigator.pushNamed(context, 'home'); },
+                    onPressed: () { 
+                      // Get the text entered in the TextFormFields using controllers
+                      String email = emailController.text;
+                      String password = passwordController.text;
+                      
+                      // Encrypt the password
+                      String encryptedPassword = encryptPassword(password);
+                      print('Encrypted password: $encryptedPassword');
+
+                      // VALIDATE PASSWORD FROM DB HERE BEFORE LOGIN
+                      Navigator.pushNamed(context, 'home'); 
+                      },
                     child: const Text('Login')
                   ),
                 ),
