@@ -3,27 +3,24 @@ const Database = require( './sql_db_man.js');
 const vehicleMakes = require('./VehicleMakes.json');
 const PORT = 3000;
 const app = express();
-let messageJson = {message: 'Hello world'};
 
 const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
 const API_KEY = '5p3VT63zAweQ6X3j8OQriw';
-
+const dbconfig = {
+    host:     "mcs.drury.edu",
+    port:     "3306",
+    user:     "emission",
+    password: "Letmein!eCoders",
+    database: "emission"
+};
 app.use(express.json());
-app.get('/message', (request, response)=>{
-    response.send(messageJson);
-});
+
 
 app.post('/insertUser', (request, response)=>{
     // insert user
     console.log("Insertting Users");
     console.log(request.body);
-    const dbconfig = {
-        host:     "mcs.drury.edu",
-        port:     "3306",
-        user:     "emission",
-        password: "Letmein!eCoders",
-        database: "emission"
-    };
+    
     const db = new Database(dbconfig);
     db.connect();
 
@@ -42,6 +39,19 @@ app.post('/insertUser', (request, response)=>{
     //db.disconnect();
 
 });
+app.get('/getChallenges', (req,res)=>{
+    const query = "SELECT * from Challenges";
+    db = new Database(dbconfig);
+    db.query(query, (err,results)=>{
+        if(err){
+            console.error("Error executing query:", err);
+        }else{
+            console.log("Query results:", results);
+            res.status(200).json(results);
+        }
+    })
+
+})
 
 
 app.get('/makeId', (req, res) => {

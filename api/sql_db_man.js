@@ -28,6 +28,7 @@ class Database {
     }
 
     query(sql, values, callback) {
+        if(values!=null){
         this.connection.query(sql, values, (err, results, fields) => {
             if (err) {
                 console.log("Error executing query:", err);
@@ -35,8 +36,23 @@ class Database {
             } else {
                 callback(null, results, fields);
             }
-        });
+        
+            });
+        }
+        else{
+            this.connection.query(sql, (err, results) => {
+                if (err) {
+                    console.log("Error executing query:", err);
+                    callback(err, null);
+                } else {
+                    callback(null, results, fields);
+                }
+            
+                });
+            }
+        }
     }
-}
+
+
 
 module.exports = Database;
