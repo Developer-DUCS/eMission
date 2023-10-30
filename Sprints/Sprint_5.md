@@ -24,6 +24,7 @@
 - [ ] Update Manual Input Page
 - [ ] Complete Leaderboard Page
 - [ ] Design Application Icon
+- [ ] Meet with Business/Legal Professor
 - [ ] Complete Legal Notes
 - [ ] Research/Begin Unit Testing
 - [ ] Sprint 5 Review
