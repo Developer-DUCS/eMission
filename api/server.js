@@ -80,13 +80,20 @@ app.post('/authUser', (request, response) => {
             console.error("Error executing query:", error);
             response.status(500).json({msg: "Database Error"});
         } else {
-            if (result[0].email == loginData["email"] && result[0].password == loginData["password"]){
-                console.log("User Authenticated");
-                response.status(200).json({msg: "Authentication Successful"});
-            } else {
-                console.log("Authentication Failed");
+            console.log();
+            if(result.length == 0) {
+                // The email was not present in database
+                console.log("Email was not recognized!");
                 response.status(401).json({msg: "Authentication Failed"});
-            }  
+            } else {
+                if (result[0].email == loginData["email"] && result[0].password == loginData["password"]){
+                    console.log("User Authenticated");
+                    response.status(200).json({msg: "Authentication Successful"});
+                } else {
+                    console.log("Authentication Failed");
+                    response.status(401).json({msg: "Authentication Failed"});
+                }  
+            }
         }
     });
 });
