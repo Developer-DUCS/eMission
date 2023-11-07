@@ -12,12 +12,18 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  // TextEditingControllers are objects used to retrieve the input values
+  // of the TextFieldForms.
   late TextEditingController emailController;
   late TextEditingController usernameController;
   late TextEditingController displayNameController;
   late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
+  late TextEditingController confirmPasswordController; 
+  // The form key is used to validate the form.
+  final _formKey = GlobalKey<FormState>();
 
+
+  // Constructor responsible for initiating the state of the Widget.
   @override
   void initState() {
     super.initState();
@@ -28,10 +34,12 @@ class _CreateAccountState extends State<CreateAccount> {
     confirmPasswordController = TextEditingController();
   }
 
+  
+  // void method responisble for creating an http request to the server.
+  // this request will insert the user's login information.
   void _submitForm(context) async {
     print("here");
-    // this is the url for using a Android emulator
-    // Apple emulators use localhost like normal
+    // android emulator url
     String url = 'http://10.0.2.2:3000/insertUser';
 
     Map<String, String?> formData = {
@@ -54,7 +62,8 @@ class _CreateAccountState extends State<CreateAccount> {
       print('Error: $error');
     }
   }
-
+  
+  // build goes here
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,52 +89,85 @@ class _CreateAccountState extends State<CreateAccount> {
               children: <Widget>[
                 const Center(child: Text("Create Account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)),
                 const SizedBox(height: 4,),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: emailController,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (value){
+                          bool isEmailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!);
+                          if(!isEmailValid) {
+                            return 'Please enter a valid email';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 4,),
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: const InputDecoration(labelText: 'Username'),
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 4,),
+                      TextFormField(
+                        controller: displayNameController,
+                        decoration: const InputDecoration(labelText: 'Display Name'),
+                      ),
+                      const SizedBox(height: 4,),
+                      TextFormField(
+                        controller: passwordController,
+                        decoration: const InputDecoration(labelText: 'Password'),
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 4,),
+                      TextFormField(
+                        controller: confirmPasswordController,
+                        decoration: const InputDecoration(labelText: 'Confirm Password'),
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Please enter some text';
+                          }
+                          if(value != passwordController.text){
+                            return "Passwords have to match";
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 8,),
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor:const Color.fromARGB(244, 0, 0, 0),
+                            backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                          ),
+                          onPressed: () { 
+                            if(_formKey.currentState!.validate()){
+                              _submitForm(context);
+                            }
+                          },
+                          child: const Text('Create')
+                        ),
+                      ),
+                      const SizedBox(height: 4,),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 4,),
-                TextFormField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                  ),
-                ),
-                const SizedBox(height: 4,),
-                TextFormField(
-                  controller: displayNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Display Name',
-                  ),
-                ),
-                const SizedBox(height: 4,),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                  ),
-                ),
-                const SizedBox(height: 4,),
-                TextFormField(
-                  controller: confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                  ),
-                ),
-                const SizedBox(height: 8,),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor:const Color.fromARGB(244, 0, 0, 0),
-                      backgroundColor: const Color.fromARGB(244, 244, 248, 6),
-                    ),
-                    onPressed: () { _submitForm(context); },
-                    child: const Text('Create')
-                  ),
-                ),
-                const SizedBox(height: 4,),
+                ), 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
