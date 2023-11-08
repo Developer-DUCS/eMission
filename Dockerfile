@@ -19,11 +19,14 @@ ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/$
 ENV FLUTTER_ROOT="/opt/flutter"
 ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/platforms:$FLUTTER_ROOT/bin:$GRADLE_USER_HOME/bin:$PATH"
 ENV CHROME_BIN=/usr/bin/google-chrome
+ENV NODE_VERSION=18.18.0
+
 
 
 # Confirming TimeZone
 ENV TZ=America/Chicago
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 
 # 
 RUN apt update && apt install -y curl git unzip xz-utils zip libglu1-mesa openjdk-8-jdk wget
@@ -52,15 +55,17 @@ RUN apt-get update \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 
-RUN yes "y" | apt install clang \
-  && yes "y" | apt install cmake \
-  && yes "y" | apt install ninja-build \
-  && yes "y" | apt install pkg-config \
-  && yes "y" | apt install libgtk-3-dev
+RUN apt-get update \
+  && yes "y" | apt-get install clang \
+  && yes "y" | apt-get install cmake \
+  && yes "y" | apt-get install ninja-build \
+  && yes "y" | apt-get install pkg-config \
+  && yes "y" | apt-get install libgtk-3-dev
+
 
 
 # Install Chrome WebDriver
-RUN yes "y" | apt install python3-pip
+RUN yes "y" | apt-get install python3-pip
 RUN pip3 install chromedriver_autoinstaller
 RUN CHROMEDRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
     mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
@@ -77,9 +82,6 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
     apt-get -yqq update && \
     apt-get -yqq install google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
-
-
-
 
 
 # Install Gradle.
@@ -106,7 +108,8 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
 
 
 
-
+# Create anotehr image layer on top of base image to install npm requirements
+#FROM node:12.13.0-alpine
 WORKDIR /home/user
 
 
@@ -123,8 +126,24 @@ RUN yes "yes" | flutter doctor --android-licenses \
 
 
 
-# Clone Project Repository & Run project
-RUN git clone -b task-dockerize-application https://github.com/Developer-DUCS/eMission.git
+
+## Clone Project Repository & Run project
+## If you choose to clone the project from github, then you'll have to comment out the COPY command
+## on line 138. 
+# WORKDIR /home/user/eMission
+# RUN git clone -b development https://github.com/Developer-DUCS/eMission.git
+
+
+
+
+# TODO: 
+## Research EXPOSE and docker ports
+## Figure out how to run both the flutter app and the node server
+# Creating Node Image
+
 WORKDIR /home/user/eMission
-#COPY . /home/user/eMission
+COPY . /home/user/eMission
+#research expose and port binding
+EXPOSE 3000
+# RUN cd api && npm start
 CMD [ "flutter", "run", "-d", "chrome" ]
