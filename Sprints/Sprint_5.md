@@ -35,13 +35,14 @@
 #### Completed API Calls
 * /getMakeID - completed in Sprint 4
 * /vehicleCarbonReport - takes vehicleID and amount driven info as input, completed in Sprint 4
+* /authUser - authenticates users trying to login to the application, completed in Sprint 5
 * NOTE - error handling may not be implemented yet
 
 #### Incomplete API Calls
 * /getModelID
 * /getChallenges
 * /acceptChallenges
-* /login
+
 
 **_Note_**: Any API calls not completed in this sprint will be pushed to Sprint 6.
 
