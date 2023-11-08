@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:first_flutter_app/encryption.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-
-
 
 
 class Login extends StatefulWidget {
@@ -41,10 +39,13 @@ class _LoginState extends State<Login> {
     // android emulator url
     String url = 'http://10.0.2.2:3000/authUser';
 
+    // Encrypt the password
+    String encryptedPassword = encryptPassword(passwordController.text);
+    
     // User's input data
     var formData = {
       'email': emailController.text,
-      'password': passwordController.text
+      'password': encryptedPassword
     };
 
     // http request here
@@ -71,6 +72,11 @@ class _LoginState extends State<Login> {
   // build goes here
   @override
   Widget build(BuildContext context) {
+
+      // Declare TextEditingController variables for email and password
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
