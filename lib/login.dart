@@ -23,18 +23,21 @@ class _LoginState extends State<Login> {
   // The form key is used to validate the form.
   final _formKey = GlobalKey<FormState>();
 
+  // status code variable that is returned from _submitForm()
+  int? code;
+
   // Constructor responsible for initiating the state of the Widget.
   @override
   void initState(){
     super.initState();
     emailController = TextEditingController();
-    passwordController = TextEditingController(); 
+    passwordController = TextEditingController();
   }
 
 
   // void method responisble for creating an http request to the server.
   // this request will authenticate the user's login information.
-  void _submitForm(context) async {
+  Future<int> _submitForm(context) async {
     // android emulator url
     String url = 'http://10.0.2.2:3000/authUser';
 
@@ -48,16 +51,19 @@ class _LoginState extends State<Login> {
     var res = await http.post(Uri.parse(url),
                               headers: {'Content-Type': 'application/json'}, 
                               body: json.encode(formData));
+
+    
+    // status code variable
+    var resCode = res.statusCode;
+
     // verify the request code
-    if(res.statusCode==200){
+    if(resCode==200){
       Navigator.pushNamed(context, 'home');
-    } else if (res.statusCode == 401) {
-      // send error/alert onto the application 
-      // alert should say password or email is not recognized
-      print('User information is not recognized');
+      return resCode;
+    } else if (resCode == 401) {
+      return resCode;
     } else {
-      // error/alert should assess the network/connection issues
-      print('A network error occurred');
+      return resCode;
     }
   } 
   
@@ -98,7 +104,7 @@ class _LoginState extends State<Login> {
                             validator: (value) {
                               if(value == null || value.isEmpty) {
                                 return 'Please enter some text';
-                              }
+                              } 
                               return null;
                             },
                             controller: emailController,
@@ -110,8 +116,13 @@ class _LoginState extends State<Login> {
                           TextFormField(
                             validator: (value) {
                               if(value == null || value.isEmpty) {
+                                code = null;
                                 return 'Please enter some text';
+                              } else if(code==401){
+                                code = null;
+                                return 'The username and/or password are not correct.';
                               }
+                              code = null;
                               return null;
                             },
                             controller: passwordController,
@@ -129,7 +140,9 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () { 
                                 if(_formKey.currentState!.validate()){
-                                  _submitForm(context);
+                                  _submitForm(context).then((value) {
+                                    code = value;
+                                  });
                                 }
                               },
                               child: const Text('Login')
