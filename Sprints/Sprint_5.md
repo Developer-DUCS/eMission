@@ -1,7 +1,7 @@
 # Sprint 5
 
 ### Sprint Goals
-- [ ] Connect API Routes & Carbon Interface
+- [X] Connect API Routes & Carbon Interface
 
       getModelID
       getVehicleID
@@ -12,11 +12,11 @@
       /acceptChallenges - needs SQL table update
       Update Challenge Page Frontend
       Challenges pulls from SQL table
-- [ ] Make API route for User Authentication
+- [X] Make API route for User Authentication
 
       update login page
       clear text compare
-- [ ] Password Encryption
+- [X] Password Encryption
 - [ ] Create insert vehicle info page
 
       /insertCarInfo to SQL table
@@ -24,7 +24,7 @@
 - [ ] Update Manual Input Page
 - [ ] Complete Leaderboard Page
 - [ ] Design Application Icon
-- [ ] Meet with Business/Legal Professor
+- [X] Meet with Business/Legal Professor
 - [ ] Complete Legal Notes
 - [ ] Research/Begin Unit Testing
 - [ ] Sprint 5 Review
@@ -36,13 +36,10 @@
 * /getMakeID - completed in Sprint 4
 * /vehicleCarbonReport - takes vehicleID and amount driven info as input, completed in Sprint 4
 * /authUser - authenticates users trying to login to the application, completed in Sprint 5
-* NOTE - error handling may not be implemented yet
-
-#### Incomplete API Calls
 * /getModelID
 * /getChallenges
 * /acceptChallenges
-
+* NOTE - error handling may not be implemented yet
 
 **_Note_**: Any API calls not completed in this sprint will be pushed to Sprint 6.
 
@@ -53,6 +50,17 @@
 
 ---
 ### Password Encryption Progress
+
+
+
+---
+### Challenge Page UI Update
+
+
+--- 
+### Vehicle ID Retrieval
+
+
 
 
 ---
