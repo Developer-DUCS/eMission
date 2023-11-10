@@ -50,7 +50,19 @@
 
 ---
 ### Password Encryption Progress
+* Using Crypto flutter package
+  * [crypto dart package](https://pub.dev/packages/crypto)
+* Updates every 6-12 months
 
+**Supports the following hashing algorithms**
+* SHA-1
+* SHA-224
+* SHA-256
+* SHA-384
+* SHA-512
+* SHA-512/224
+* HD5
+* HMAC (i.e. HMAC-MD5, HMAC-SHA1, HMAC-SHA256)
 
 
 ---
