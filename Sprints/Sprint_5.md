@@ -27,7 +27,7 @@
 - [X] Meet with Business/Legal Professor
 - [ ] Complete Legal Notes
 - [ ] Research/Begin Unit Testing
-- [ ] Sprint 5 Review
+- [X] Sprint 5 Review
 ---
 
 ### API Calls
@@ -42,10 +42,6 @@
 * NOTE - error handling may not be implemented yet
 
 **_Note_**: Any API calls not completed in this sprint will be pushed to Sprint 6.
-
----
-### Application Icon
-
 
 
 ---
