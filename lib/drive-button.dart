@@ -72,7 +72,7 @@ class _ButtonPageState extends State<ButtonPage> {
     //final apiService = CalculateApiService();
     //final response = await apiService.calculateCarbonFootprint();
     const make = 'Toyota';
-    final response = await http.get(Uri.parse('/makeId?make=$make'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:3000/makeId?make=$make'));
     print(response);
     // ignore: use_build_context_synchronously
     showDialog(
@@ -92,6 +92,7 @@ class _ButtonPageState extends State<ButtonPage> {
               onPressed: () {
                 closeOverlay();
                 Navigator.of(context).pop();
+                Navigator.pushNamed(context,'carbon_report');
               },
               child: Text('Close'),
             ),

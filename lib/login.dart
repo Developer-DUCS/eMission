@@ -21,6 +21,8 @@ class _LoginState extends State<Login> {
   // The form key is used to validate the form.
   final _formKey = GlobalKey<FormState>();
 
+  // 
+
   // status code variable that is returned from _submitForm()
   int? code;
 
@@ -33,7 +35,7 @@ class _LoginState extends State<Login> {
   }
 
 
-  // void method responisble for creating an http request to the server.
+  // int method responisble for creating an http request to the server.
   // this request will authenticate the user's login information.
   Future<int> _submitForm(context) async {
     // android emulator url
@@ -45,15 +47,14 @@ class _LoginState extends State<Login> {
     // User's input data
     var formData = {
       'email': emailController.text,
-      'password': encryptedPassword
+      'password': encryptedPassword,
     };
 
     // http request here
     var res = await http.post(Uri.parse(url),
                               headers: {'Content-Type': 'application/json'}, 
                               body: json.encode(formData));
-
-    
+  
     // status code variable
     var resCode = res.statusCode;
 
@@ -72,11 +73,6 @@ class _LoginState extends State<Login> {
   // build goes here
   @override
   Widget build(BuildContext context) {
-
-      // Declare TextEditingController variables for email and password
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -189,8 +185,3 @@ class _LoginState extends State<Login> {
   }
 
 }
-  
-
-
-
-

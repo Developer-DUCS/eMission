@@ -71,6 +71,7 @@ app.post('/authUser', (request, response) => {
     // 
     //
     const loginData = request.body;
+    console.log(`Login Form Input: ${loginData}`);
     const query = "SELECT email, password FROM emission.Users WHERE email = ?";
 
     // 
@@ -80,7 +81,7 @@ app.post('/authUser', (request, response) => {
             console.error("Error executing query:", error);
             response.status(500).json({msg: "Database Error"});
         } else {
-            console.log();
+            console.log(`SQL DB Output: ${result}`);
             if(result.length == 0) {
                 // The email was not present in database
                 console.log("Email was not recognized!");
