@@ -73,9 +73,8 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
 
-      // Declare TextEditingController variables for email and password
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+    // Declare TextEditingController variables for email and password
+    
 
     return Container(
       decoration: const BoxDecoration(
