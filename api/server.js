@@ -45,13 +45,12 @@ app.post('/insertUser', (request, response)=>{
             console.log("user successfully created");
             response.status(200).json({msg: "account created"});
         }
-
     })
-    db.disconnect();
 
-    });
-    //db.disconnect();
+
+    db.disconnect();
 });
+
 
 
 app.post('/authUser', (request, response) => {
