@@ -19,7 +19,7 @@ class Home extends StatelessWidget {
                     ),
                   height: MediaQuery.of(context).size.height / 4, // 1/4 of the screen height
                   child: Padding(
-                    padding: EdgeInsets.all(25.5),
+                    padding: EdgeInsets.all(10),
                     child: Row(
                       children: <Widget>[
                         profilePic(),

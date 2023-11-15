@@ -17,7 +17,7 @@ const dbconfig = {
 app.use(express.json());
 app.post('/insertUser', (request, response)=>{
     // insert user
-    console.log("Insertting Users");
+    console.log("Inserting Users");
     console.log(request.body);
     
     const db = new Database(dbconfig);
@@ -28,15 +28,75 @@ app.post('/insertUser', (request, response)=>{
     const insertQuery = "INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)";
     const values=[userData.email, userData.username, userData.password, 0,0, userData.displayName];
 
-    db.query(insertQuery, values, (err,results)=>{
-        if(err){
-            console.error("Error executing query:", err);
-        }else{
-            console.log("Query results:", results);
+    //
+    db.query(insertQuery, values, (error, results) => {
+        console.log("Query results:", results);
+        if(error){
+            // error with insertQuery
+            console.error("Error executing insertQuery", error);
+            if (error.errno == 1062){
+                // user already exists
+                response.status(401).json({msg: "user already exists"});
+            } else {
+                response.status(500).json({msg: "insertQuery Error"});
+            }
+        } else {
+            // User successfully created 
+            console.log("user successfully created");
+            response.status(200).json({msg: "account created"});
         }
+
     })
     db.disconnect();
 
+    });
+    //db.disconnect();
+});
+
+
+app.post('/authUser', (request, response) => {
+    //authenticate user
+    console.log("authenticating user...");
+    // 
+    const dbconfig = {
+        host: "mcs.drury.edu",
+        port: "3306",
+        user: "emission",
+        password: "Letmein!eCoders",
+        database: "emission"
+    }
+    const db = new Database(dbconfig);
+    db.connect();
+
+
+    // 
+    //
+    const loginData = request.body;
+    const query = "SELECT email, password FROM emission.Users WHERE email = ?";
+
+    // 
+    //
+    db.query(query, loginData.email, (error, result) => {
+        if(error){
+            console.error("Error executing query:", error);
+            response.status(500).json({msg: "Database Error"});
+        } else {
+            console.log();
+            if(result.length == 0) {
+                // The email was not present in database
+                console.log("Email was not recognized!");
+                response.status(401).json({msg: "Authentication Failed"});
+            } else {
+                if (result[0].email == loginData["email"] && result[0].password == loginData["password"]){
+                    console.log("User Authenticated");
+                    response.status(200).json({msg: "Authentication Successful"});
+                } else {
+                    console.log("Authentication Failed");
+                    response.status(401).json({msg: "Authentication Failed"});
+                }  
+            }
+        }
+    });
 });
 
 
