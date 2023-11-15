@@ -108,7 +108,7 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
     
     db.query(query, [id], (err, results) => {
         console.log("Query entered");
-        db.disconnect(); 
+        db.disconnect(); // Disconnect from the database after the query
 
         if (err) {
             console.error("Error executing query:", err);
@@ -162,7 +162,7 @@ app.post('/acceptNewChallenges', async (req, res) => {
                 if (existingRow.length > 0) {
                     responseMessages.push({ status: "Challenge already accepted", challengeData: existingRow[0] });
                 } else {
-=                    const insertValues = [userID, challengeData.challengeID, formattedDate, 0, null];
+                    const insertValues = [userID, challengeData.challengeID, formattedDate, 0, null];
                     await queryPromise(db, insertQuery, insertValues);
 
 
