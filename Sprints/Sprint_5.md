@@ -45,7 +45,7 @@
 
 
 ---
-### Password Encryption Progress
+### Password Encryption
 * Using Crypto flutter package
   * [crypto dart package](https://pub.dev/packages/crypto)
 * Updates every 6-12 months
