@@ -1,7 +1,11 @@
 # Sprint 6
 
 ### Sprint Goals
-- [X] something
+- [ ] Vehicle to SQL Database
+- [ ] Local Storage (UserID) + Vehicle Info
+- [ ] Test Server Routes
+- [ ] Manual UI Update + Manual Calculation 
+- [ ] Connect points SQL tables
 ---
 
 
