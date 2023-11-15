@@ -72,10 +72,6 @@ class _LoginState extends State<Login> {
   // build goes here
   @override
   Widget build(BuildContext context) {
-
-    // Declare TextEditingController variables for email and password
-    
-
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
