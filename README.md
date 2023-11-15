@@ -114,6 +114,14 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    5. [Target Market](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#target-market)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_4.md#sprint-retrospective)
 5. [Sprint 5](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md)
+  1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#sprint-goals)
+  2. [Completed API Calls](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#api-calls)
+  3. [Password Encryption](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#password-encryption)
+  4. [Challenge Page UI Update](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#challenge-page-ui-update)
+  5. [Vehicle Management](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#vehicle-management)
+  6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#sprint-retrospective)
+7. [Sprint 6]()
+
 
 </details>
    
