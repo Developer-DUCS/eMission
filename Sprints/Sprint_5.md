@@ -6,7 +6,7 @@
       getModelID
       getVehicleID
       make call on manual input page or drive button
-- [ ] Make API route for Challenge Page
+- [X] Make API route for Challenge Page
 
       /getChallenges on page load
       /acceptChallenges - needs SQL table update
@@ -17,7 +17,7 @@
       update login page
       clear text compare
 - [X] Password Encryption
-- [ ] Create insert vehicle info page
+- [X] Create insert vehicle info page
 
       /insertCarInfo to SQL table
       update SQL
@@ -63,16 +63,27 @@
 
 ---
 ### Challenge Page UI Update
+* Challenge Page now displays challenges that we put in the database
+  * User can select a challenge to add it to their current challenges
+* Past Challenge Page is now My Challenges
+  * Selecting the challenge will complete the challenge
+ 
+see page documentation
+* [Updated Challenge Page]()
+
+https://github.com/Developer-DUCS/eMission/assets/78006078/584e58a7-e894-4907-8f52-023bccd24eee
 
 
 --- 
-### Vehicle ID Retrieval
+### Vehicle Management
+* Page for managing a users vehicles
+* UI is complete, needs to be connected with backend
+* Next is to implement deleting and editing vehicles
 
-
+see page documentation
+* [Vehicle Management]()
 
 
 ---
 ### Sprint Retrospective
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+This sprint saw the completion of multiple routes and api calls that flesh out the functionality of the application. These calls include  ```/vehicleCarbonReport```, ```/authUser```, ```/getChallenges``` , just to name a few. In this sprint the challenge page and vehicle input pages were changed to accomodate the backend/database connection. We also implemented a password encryption system to secure our app traffic a little more. 
