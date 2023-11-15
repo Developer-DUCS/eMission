@@ -49,21 +49,21 @@ class MyApp extends StatelessWidget {
             ),
         'button-page': (context) => const Layout(
               body: ButtonPage(),
-              appBar: false,
+              appBar: true,
               driveButton: false,
             ),
-        'challenges': (context) => const Layout(
+        'challenges': (context) => Layout(
               body: ChallengePage(),
             ),
-        'past_challenges': (context) => const Layout(
+        'past_challenges': (context) => Layout(
               body: PastChallengesPage(),
             ),
         'carbon_report': (context) => const Layout(
               body: CarbonReportPage(),
             ),
         'manual_input': (context) => const Layout(
-          body: Manual(),
-        )
+              body: Manual(),
+            )
       },
     );
   }
