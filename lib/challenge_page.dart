@@ -217,7 +217,7 @@ class _ChallengePageState extends State<ChallengePage> {
       String jsonBody = jsonEncode(list);
 
       var response = await http.post(
-        Uri.parse("http://10.0.2.2:3000/acceptChallenges"),
+        Uri.parse("http://10.0.2.2:3000/acceptNewChallenges"),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -226,8 +226,27 @@ class _ChallengePageState extends State<ChallengePage> {
 
       if (response.statusCode == 200) {
         print('Challenges accepted successfully');
-        _showDialog(
-            context, "Sucess", "You've succesfully accepted the challenge.");
+        List<dynamic> responseMessages = json.decode(response.body);
+
+        List<String> challengeSummaries = [];
+
+        for (var message in responseMessages) {
+          var name = message['challengeData']['name'];
+          var dateFinished = message['challengeData']['dateFinished'];
+          var status = message['status'];
+
+          if (name == null) {
+            name = "";
+          }
+
+          if (dateFinished != null) {
+            status = "You have already completed that challenge.";
+          }
+          challengeSummaries.add('${name}  ${status}');
+        }
+
+        // Show a single dialog box with the summary of all challenges
+        _showDialog(context, "Update", challengeSummaries.join('\n'));
       } else {
         print('Failed to accept challenges');
         _showDialog(
@@ -273,7 +292,6 @@ class _ChallengePageState extends State<ChallengePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<Challenge> challengeList = snapshot.data!;
-                  // change to check
                   List<Challenge> filteredChallenges = challengeList
                       .where((challenge) =>
                           !selectedChallenges.contains(challenge))

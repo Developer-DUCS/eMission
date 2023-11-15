@@ -15,8 +15,6 @@ const dbconfig = {
     database: "emission"
 };
 app.use(express.json());
-
-
 app.post('/insertUser', (request, response)=>{
     // insert user
     console.log("Insertting Users");
@@ -40,8 +38,6 @@ app.post('/insertUser', (request, response)=>{
     db.disconnect();
 
 });
-
-
 
 
 // eventually update this so that it doesn't display ones that a user has already accepted
@@ -88,7 +84,6 @@ app.get('/getUserChallenges', async (req, res) => {
     const id = 1;
     const db = new Database(dbconfig);
     db.connect();
-    //const query = "SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID=? and dateFinished=null ORDER BY CASE WHEN dateAccepted IS NOT NULL THEN 0 ELSE 1 END, dateAccepted DESC;";
     query = "SELECT * from AcceptedChallenges where userID = ?";
     db.query(query, [id], (err, results) => {
         db.disconnect(); // Disconnect from the database after the query
@@ -113,7 +108,7 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
     
     db.query(query, [id], (err, results) => {
         console.log("Query entered");
-        db.disconnect(); // Disconnect from the database after the query
+        db.disconnect(); 
 
         if (err) {
             console.error("Error executing query:", err);
@@ -126,46 +121,71 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
         }
     });
 });
-/* app.post('/acceptChallenges', async (req, res) => {
-    console.log("Accepted Challenges called");
+
+app.post('/acceptNewChallenges', async (req, res) => {
+    console.log("Accept Challenges called");
     console.log(req.body);
+
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
-    const query = "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
+
+    const selectQuery = "SELECT * FROM AcceptedChallenges WHERE userID = ? AND challengeID = ?";
+    const insertQuery = "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
+
     const challengeDataList = req.body;
-    const userID = 1;
+    const userID = 1; // Replace with actual userID from the request or authentication
+
+    const queryPromise = (db, queryString, values) => {
+        return new Promise((resolve, reject) => {
+            db.query(queryString, values, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    };
 
     try {
         const db = new Database(dbconfig);
         await db.connect();
 
-        for (var challengeData of challengeDataList) {
-            const values = [userID, challengeData.challengeID, formattedDate, 0, null];
+        const responseMessages = [];
 
-            await new Promise((resolve, reject) => {
-                db.query(query, values, (err, results) => {
-                    if (err) {
-                        console.error("Error executing query:", err);
-                        reject(err);
-                        res.status(500).json({ error: err });
-                    } else {
-                        console.log("Query results:", results);
-                        //const acceptedChallenges = results.map(result => parseInt(result.challengeID, 10));
-                        //console.log(acceptedChallenges);
-                        //resolve(acceptedChallenges);
-                    }
-                });
-            });
+        for (const challengeData of challengeDataList) {
+            // Check if a row exists
+            const selectValues = [userID, challengeData.challengeID];
+            try {
+                const existingRow = await queryPromise(db, selectQuery, selectValues);
+
+                if (existingRow.length > 0) {
+                    responseMessages.push({ status: "Challenge already accepted", challengeData: existingRow[0] });
+                } else {
+=                    const insertValues = [userID, challengeData.challengeID, formattedDate, 0, null];
+                    await queryPromise(db, insertQuery, insertValues);
+
+
+                    responseMessages.push({ status: "Challenge accepted successfully", challengeData: challengeData });
+                }
+            } catch (err) {
+                console.error("Error executing queries:", err);
+                res.status(500).send("Internal Server Error");
+                return; 
+            }
         }
 
         db.disconnect();
-        res.status(200).send("Challenges accepted successfully!");
+
+        // Send the response with the array of status messages
+        res.status(200).json(responseMessages);
     } catch (err) {
-        console.error("Error executing query:", err);
+        console.error("Error connecting to the database:", err);
         res.status(500).send("Internal Server Error");
     }
 });
- */
+
+// not in use: deletes rows before inserting them
 app.post('/acceptChallenges', async (req, res) => {
     console.log("Complete Challenges called");
     console.log(req.body);
@@ -220,47 +240,6 @@ app.post('/acceptChallenges', async (req, res) => {
     }
 });
 
-/* app.post('/completeChallenges', async (req, res) => {
-    console.log("Complete Challenges called");
-    console.log(req.body);
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    // for now it's just inserting a new row instead of updating.
-    const query = "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
-    const challengeDataList = req.body;
-    const userID = 1;
-
-    try {
-        const db = new Database(dbconfig);
-        await db.connect();
-
-        for (var challengeData of challengeDataList) {
-            const values = [userID, challengeData.challengeID, formattedDate, 0, formattedDate];
-
-            await new Promise((resolve, reject) => {
-                db.query(query, values, (err, results) => {
-                    if (err) {
-                        console.error("Error executing query:", err);
-                        reject(err);
-                        res.status(500).json({ error: err });
-                    } else {
-                        console.log("Query results:", results);
-                        //const acceptedChallenges = results.map(result => parseInt(result.challengeID, 10));
-                        //console.log(acceptedChallenges);
-                        //resolve(acceptedChallenges);
-                    }
-                });
-            });
-        }
-
-        db.disconnect();
-        res.status(200).send("Challenges accepted successfully!");
-    } catch (err) {
-        console.error("Error executing query:", err);
-        res.status(500).send("Internal Server Error");
-    }
-});
- */
 app.post('/completeChallenges', async (req, res) => {
     console.log("Complete Challenges called");
     console.log(req.body);
@@ -301,70 +280,6 @@ app.post('/completeChallenges', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
-/* 
-app.post('/acceptChallenges', async (req, res) => {
-    console.log("Accepted Challenges called");
-    console.log(req.body);
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    const query = "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
-    const challengeDataList = req.body;
-    const userID = 1;
-
-    
-        const db = new Database(dbconfig);
-        await db.connect();
-
-        /* const query2 = "SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID=?";
-        const results = await new Promise((resolve, reject) => {
-            db.query(query2, userID, (err, results) => {
-                if (err) {
-                    console.error("Error executing query:", err);
-                    reject(err);
-                } else {
-                    console.log("Query results:", results);
-                    const acceptedChallenges = results.map(result => parseInt(result.challengeID, 10));
-                    console.log(acceptedChallenges);
-                    resolve(acceptedChallenges);
-                }
-            });
-        });
-    
-        //db.disconnect();
-
-        for (var challengeData of challengeDataList) {
-            console.log(results);
-            if (!results.includes(challengeData.challengeID)) {
-                const values = [userID, challengeData.challengeID, formattedDate, 0, null]; 
-                for(var challengeData of challengeDataList){
-                const values = [userID, challengeData.challengeID, formattedDate, 0, null];
-                db.query(query, values, (err, results) => {
-                    if (err) {
-                        console.error("Error executing query:", err);
-                        reject(err);
-                        res.status(500).json({ error: err });
-                    } else {
-                        console.log("Query results:", results);
-                        //res.status(200).send("Challenges accepted successfully!");
-                        const acceptedChallenges = results.map(result => parseInt(result.challengeID, 10));
-                        console.log(acceptedChallenges);
-                        resolve(acceptedChallenges);
-                    }
-                });
-            }
-            db.disconnect();
-             } else {
-                console.log("Challenge already accepted by the user:", challengeData.challengeID);
-            }
-        }
-
-        db.disconnect();
-        res.status(200).send("Challenges accepted successfully!"); 
-    
-});*/
-
-
 
 app.get('/makeId', (req, res) => {
     const { make } = req.query;
