@@ -4,10 +4,15 @@
 - [ ] Vehicle to SQL Database
 - [ ] Local Storage (UserID) + Vehicle Info
 - [ ] Test Server Routes
-- [ ] Manual UI Update + Manual Calculation 
+- [ ] Manual UI Update + Manual API Calculation 
 - [ ] Connect points SQL tables
 ---
+### Local Storage Proccesses
+* Something 
 
+---
+### Unit Test Details
+* Something else 
 
 ---
 ### Sprint Retrospective
