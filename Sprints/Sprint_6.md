@@ -6,6 +6,9 @@
 - [ ] Test Server Routes
 - [ ] Manual UI Update + Manual API Calculation 
 - [ ] Connect points SQL tables
+- [ ] Complete Leaderboard Page
+- [ ] Design Application Icon
+
 ---
 ### Local Storage Proccesses
 * Something 
