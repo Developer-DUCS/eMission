@@ -188,3 +188,112 @@ describe('Test /insertUser', () => {
   // place for more insert user tests  
   
   });
+
+  describe('Test /authUser', () => {
+    console.log(Database);
+    let connectStub;
+    let queryStub;
+    let disconnectStub;
+  
+    beforeEach(() => {
+      connectStub = sinon.stub(Database.prototype, 'connect');
+      queryStub = sinon.stub(Database.prototype, 'query');
+      disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+    });
+  
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('user is succesfully authenticated.', (done)=>{
+
+        const validLoginData = {
+          email: 'test@example.com',
+          password: 'password123'
+        };
+    
+        const queryResult = [
+          { email: 'test@example.com', password: 'password123' }
+        ];
+    
+        queryStub.callsArgWith(2, null, queryResult);
+    
+        chai.request(app)
+          .post('/authUser')
+          .send(validLoginData)
+          .end((err, res) => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.deep.equal({ msg: 'Authentication Successful' });
+    
+            sinon.assert.calledWith(
+              queryStub,
+              'SELECT email, password FROM emission.Users WHERE email = ?',
+              validLoginData.email
+            );
+    
+            done();
+          });
+
+
+
+    });
+
+    it('should return an "Authentication Failed" message for invalid credentials', (done) => {
+        const invalidLoginData = {
+          email: 'test@example.com',
+          password: 'wrongpassword'
+        };
+
+        const queryResult = [
+          { email: 'test@example.com', password: 'password123' }
+        ];
+
+
+        queryStub.callsArgWith(2, null, queryResult);
+
+        chai.request(app)
+          .post('/authUser')
+          .send(invalidLoginData)
+          .end((err, res) => {
+            console.log("Error request results:", res.body); 
+            expect(res).to.have.status(401);
+            expect(res.body).to.deep.equal({ msg: 'Authentication Failed' });
+
+            sinon.assert.calledWith(
+              queryStub,
+              'SELECT email, password FROM emission.Users WHERE email = ?',
+              invalidLoginData.email
+            );
+
+            done();
+          });
+      });
+
+      it('should return an "Server Error" message for invalid credentials', (done) => {
+        const invalidLoginData = {
+          email: 'test@example.com',
+          password: 'wrongpassword'
+        };
+
+        queryStub.callsArgWith(2, null, []);
+
+        chai.request(app)
+          .post('/authUser')
+          .send(invalidLoginData)
+          .end((err, res) => {
+            console.log("Error request results:", res.body); 
+            expect(res).to.have.status(500);
+
+            sinon.assert.calledWith(
+              queryStub,
+              'SELECT email, password FROM emission.Users WHERE email = ?',
+              invalidLoginData.email
+            );
+
+            done();
+          });
+      });
+  
+
+
+  });
