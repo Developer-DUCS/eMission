@@ -1,5 +1,5 @@
 const express = require('express');
-const Database = require( './sql_db_man.js');
+const { Database } = require('./sql_db_man');
 const vehicleMakes = require('./VehicleMakes.json');
 const PORT = 3000;
 const app = express();
@@ -386,3 +386,5 @@ app.get('/vehicleCarbonReport', (req, res) => {
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);
 });
+
+module.exports=app;

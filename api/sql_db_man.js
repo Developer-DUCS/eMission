@@ -55,4 +55,4 @@ class Database {
 
 
 
-module.exports = Database;
+module.exports = {Database};
