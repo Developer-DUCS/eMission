@@ -158,21 +158,23 @@ app.get('/getUserChallenges', async (req, res) => {
         }
     });
 });
-app.get('/getCurrentUserChallenges', async (req, res) => {
+app.post('/getCurrentUserChallenges', async (req, res) => {
     console.log("Request to get current userChallenges");
     const body = req.body;
-    const id = 1;
+    const id = req.body.userID;
     const db = new Database(dbconfig);
     db.connect();
-    const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
-    
-    db.query(query, [id], (err, results) => {
+    const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = ? AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
+    if(id == null || isNaN(id)){
+        return res.status(400).json({"error":"Incorrect userID format"});
+    }
+    db.query(query, [id,id], (err, results) => {
         console.log("Query entered");
         db.disconnect(); // Disconnect from the database after the query
 
         if (err) {
             console.error("Error executing query:", err);
-            res.status(500).json({ error: err });
+            res.status(500).json({"error":"Database error"});
             console.log("error :(")
         } else {
             console.log("Query results:", results);

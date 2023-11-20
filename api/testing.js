@@ -269,7 +269,7 @@ describe('Test /insertUser', () => {
           });
       });
 
-      it('should return an "Server Error" message for invalid credentials', (done) => {
+      it('should return an "Server Error" message for query not returning with any data', (done) => {
         const invalidLoginData = {
           email: 'test@example.com',
           password: 'wrongpassword'
@@ -297,3 +297,67 @@ describe('Test /insertUser', () => {
 
 
   });
+
+
+describe('getCurrentUserChallenges API', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should return user challenges successfully', (done) => {
+    const expectedResult = [{
+      "challengeID": 3,
+      "points": 30,
+      "description": "Enjoy nature by taking a walk outside.",
+      "length": "10",
+      "name": "Enjoy Mother Nature",
+      "MAX(b.dateAccepted)": "2023-11-14T06:00:00.000Z",
+      "MAX(b.daysInProgress)": "0",
+      "MAX(b.dateFinished)": null
+    }];
+  
+    queryStub.callsArgWith(2, null, expectedResult);
+  
+    chai.request(app)
+      .post('/getCurrentUserChallenges')
+      .send({ "userID": 1 })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.deep.equal({ results: expectedResult });
+  
+      
+  
+        done();
+      });
+  });
+  
+
+   it('should handle incorrect userID format and return a 400 status', (done) => {
+  
+    const invalidUserId = 'invalid'; 
+
+      queryStub.callsArgWith(2, new Error('Incorrect userID format'), null);
+
+      chai.request(app)
+        .post('/getCurrentUserChallenges')
+        .send({ userID: invalidUserId }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.deep.equal({ error: 'Incorrect userID format' });
+
+          
+
+          done();
+          });
+        }); 
+      });

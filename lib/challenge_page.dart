@@ -586,7 +586,21 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     String url = 'http://10.0.2.2:3000/getCurrentUserChallenges';
     List<UserChallenge> challenges = [];
 
-    var response = await http.get(Uri.parse(url));
+    // Create a Map to represent the request body
+    Map<String, dynamic> requestBody = {
+      'userID': 1, // Replace with the actual user ID
+    };
+
+    // Encode the request body to JSON
+    String requestBodyJson = jsonEncode(requestBody);
+
+    // Make a POST request with the request body
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBodyJson,
+    );
+
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     print(response.statusCode);
