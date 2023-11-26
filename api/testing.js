@@ -449,3 +449,37 @@ describe('getCurrentUserChallenges API', () => {
 
           });
       }); 
+
+      describe('Test /makeId',  () => {
+
+        it('user successfully gets makeId', (done)=>{
+            chai.request(app)
+            .get('/makeId')
+            .query({make: 'Ferrari'})
+            .end((err, res)=>{
+              expect(res).to.have.status(200);
+              expect(res.body).to.have.property('id');
+              done();
+            })
+        });
+        it('returns an error for missing make parameter', (done) => {
+          chai.request(app)
+              .get('/makeId')
+              .end((err, res) => {
+                  expect(res).to.have.status(400);
+                  expect(res.body).to.have.property('error', 'Must provide make of vehicle.');
+                  done();
+              });
+      });
+  
+      it('returns an error for a non-existent make', (done) => {
+          chai.request(app)
+              .get('/makeId')
+              .query({ make: 'NonExistentMake' })
+              .end((err, res) => {
+                  expect(res).to.have.status(404);
+                  expect(res.body).to.have.property('error', 'A car with that make could not be found.');
+                  done();
+              });
+      });
+      });
