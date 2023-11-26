@@ -305,6 +305,11 @@ app.post('/acceptChallenges', async (req, res) => {
 app.post('/completeChallenges', async (req, res) => {
     console.log("Complete Challenges called");
     console.log(req.body);
+
+    // input validation added
+    if (!Array.isArray(req.body)) {
+        return res.status(400).json({ error: 'Invalid input data' });
+    }
     
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
@@ -328,7 +333,7 @@ app.post('/completeChallenges', async (req, res) => {
                         res.status(500).json({ error: err });
                     } else {
                         console.log("Query results:", results);
-                        // Handle results if needed
+                        // could handle results here                        
                         resolve();
                     }
                 });

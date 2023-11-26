@@ -7,7 +7,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const chaiHttp=require('chai-http');
 const app = require('./server.js');
-
+const request = require('supertest');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
@@ -315,16 +315,16 @@ describe('getCurrentUserChallenges API', () => {
   });
 
   it('should return user challenges successfully', (done) => {
-    const expectedResult = [{
-      "challengeID": 3,
-      "points": 30,
-      "description": "Enjoy nature by taking a walk outside.",
-      "length": "10",
-      "name": "Enjoy Mother Nature",
-      "MAX(b.dateAccepted)": "2023-11-14T06:00:00.000Z",
-      "MAX(b.daysInProgress)": "0",
-      "MAX(b.dateFinished)": null
-    }];
+    const expectedResult ={
+      fieldCount: 0,
+      affectedRows: 1,
+      insertId: 0,
+      serverStatus: 2,
+      warningCount: 0,
+      message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+      protocol41: true,
+      changedRows: 1
+    }
   
     queryStub.callsArgWith(2, null, expectedResult);
   
@@ -361,3 +361,91 @@ describe('getCurrentUserChallenges API', () => {
           });
         }); 
       });
+
+      describe('Test /completeChallenges', async () => {
+        console.log(Database);
+        let connectStub;
+        let queryStub;
+        let disconnectStub;
+      
+        beforeEach(() => {
+          connectStub = sinon.stub(Database.prototype, 'connect');
+          queryStub = sinon.stub(Database.prototype, 'query');
+          disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+        });
+      
+        afterEach(() => {
+          sinon.restore();
+        });
+    
+        it('user successfully completes challenges.',  (done)=>{
+          connectStub.callsFake();
+          var expectedResult = {
+            fieldCount: 0,
+            affectedRows: 1,
+            insertId: 0,
+            serverStatus: 2,
+            warningCount: 0,
+            message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+            protocol41: true,
+            changedRows: 1
+          };
+          queryStub.callsArgWith(2, null, expectedResult);
+          const response = request(app)
+            .post('/completeChallenges')
+            .send([
+              { "challengeID": 3, "userID": 1, "daysInProgress": "0" }
+          ])
+            .end((err, res) => {
+              try{
+                expect(res).to.have.status(200);
+                done();
+              }catch(error){
+                console.error(error);
+                done(error);
+              }
+            });
+          });
+
+            it('user insuccessfully completes challenges.',  (done)=>{
+              connectStub.callsFake();
+              
+              queryStub.callsArgWith(2, new Error(), null);
+              const response = request(app)
+                .post('/completeChallenges')
+                .send([
+                  { "challengeID": 3, "userID": 1, "daysInProgress": "0" }
+              ])
+                .end((err, res) => {
+                  try{
+                    expect(res).to.have.status(500);
+                    done();
+                  }catch(error){
+                    console.error(error);
+                    done(error);
+                  }
+                  
+                });
+
+        });
+
+        it('user enters wrong input data.',  (done)=>{
+          //connectStub.callsFake();
+          
+          //queryStub.callsArgWith(2, new Error(), null);
+          const response = request(app)
+            .post('/completeChallenges')
+            .send()
+            .end((err, res) => {
+              try{
+                expect(res).to.have.status(400);
+                done();
+              }catch(error){
+                console.error(error);
+                done(error);
+              }
+              
+            });
+
+          });
+      }); 

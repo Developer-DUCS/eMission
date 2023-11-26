@@ -531,6 +531,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
         list.add(challenge.toAcceptedJson());
       }
       String jsonBody = jsonEncode(list);
+      print('Json Body $jsonBody');
 
       // Make a POST request with the JSON body
       var response = await http.post(
