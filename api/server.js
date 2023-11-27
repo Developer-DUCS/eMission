@@ -139,25 +139,8 @@ app.get('/getChallengesByID', (req,res)=>{
     db.disconnect();
 });
 
-app.get('/getUserChallenges', async (req, res) => {
-    const body = req.body;
-    const id = 1;
-    const db = new Database(dbconfig);
-    db.connect();
-    query = "SELECT * from AcceptedChallenges where userID = ?";
-    db.query(query, [id], (err, results) => {
-        db.disconnect(); // Disconnect from the database after the query
+// removed /getUserChallenges
 
-        if (err) {
-            console.error("Error executing query:", err);
-            res.status(500).json({ error: err });
-        } else {
-            console.log("Query results:", results);
-            //const challengeIDs = results.map(result => result.challengeID);
-            res.status(200).json(results);
-        }
-    });
-});
 app.post('/getCurrentUserChallenges', async (req, res) => {
     console.log("Request to get current userChallenges");
     const body = req.body;
@@ -195,7 +178,7 @@ app.post('/acceptNewChallenges', async (req, res) => {
     const insertQuery = "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
     const challengeDataList = req.body;
-    const userID = 1; // Replace with actual userID from the request or authentication
+    const userID = 1; 
 
     const queryPromise = (db, queryString, values) => {
         return new Promise((resolve, reject) => {
@@ -212,39 +195,37 @@ app.post('/acceptNewChallenges', async (req, res) => {
     try {
         const db = new Database(dbconfig);
         await db.connect();
-
+    
         const responseMessages = [];
-
+    
         for (const challengeData of challengeDataList) {
-            // Check if a row exists
             const selectValues = [userID, challengeData.challengeID];
             try {
                 const existingRow = await queryPromise(db, selectQuery, selectValues);
-
+    
                 if (existingRow.length > 0) {
                     responseMessages.push({ status: "Challenge already accepted", challengeData: existingRow[0] });
                 } else {
                     const insertValues = [userID, challengeData.challengeID, formattedDate, 0, null];
                     await queryPromise(db, insertQuery, insertValues);
-
-
+    
                     responseMessages.push({ status: "Challenge accepted successfully", challengeData: challengeData });
                 }
             } catch (err) {
                 console.error("Error executing queries:", err);
                 res.status(500).send("Internal Server Error");
-                return; 
+                return;
             }
         }
-
-        db.disconnect();
-
-        // Send the response with the array of status messages
-        res.status(200).json(responseMessages);
+    
+        db.disconnect();  
+    
+        res.status(200).json(responseMessages); 
     } catch (err) {
         console.error("Error connecting to the database:", err);
         res.status(500).send("Internal Server Error");
     }
+    
 });
 
 // not in use: deletes rows before inserting them
@@ -285,7 +266,6 @@ app.post('/acceptChallenges', async (req, res) => {
                                 res.status(500).json({ error: insertErr });
                             } else {
                                 console.log("Insert query results:", insertResults);
-                                // Handle results if needed
                                 resolve();
                             }
                         });
@@ -362,33 +342,35 @@ app.get('/makeId', (req, res) => {
 
 app.get('/vehicleCarbonReport', (req, res) => {
     const { vehicleId, distance } = req.query;
-
-    if (!vehicleId) return res.status(400).json({ error: 'Must provide vehicled id.' });
+  
+    if (!vehicleId) return res.status(400).json({ error: 'Must provide vehicle id.' });
     if (!distance) return res.status(400).json({ error: 'Must provide distance.' });
-
+  
     fetch({
-        url: API_URL,
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${API_KEY}`,
-            'Content-Type': 'application/json',
-        },
-        body: {
-            "type": "vehicle",
-            "distance_unit": "mi",
-            "distance_value": distance,
-            "vehicle_model_id": vehicleId,
-        }
+      url: API_URL,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: {
+        "type": "vehicle",
+        "distance_unit": "mi",
+        "distance_value": distance,
+        "vehicle_model_id": vehicleId,
+      }
     })
-    .then(apiRes => {
-        if (res.ok) {
-            res.json(apiRes.json());
+      .then(apiRes => {
+        if (apiRes.ok) {
+          return apiRes.json(); 
         } else {
-            res.status(500).json({ error: 'Server error.' })
+          res.status(500).json({ error: 'Server error.' });
         }
-    })
-    .catch(err => res.status(500).json({ error: err }));
-})
+      })
+      .then(data => res.json(data)) // added line to send the data
+      .catch(err => res.status(500).json({ error: err }));
+  });
+  
 
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);

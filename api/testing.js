@@ -8,8 +8,11 @@ const sinon = require('sinon');
 const chaiHttp=require('chai-http');
 const app = require('./server.js');
 const request = require('supertest');
+const fetch = require('node-fetch');
 const expect = chai.expect;
 chai.use(chaiHttp);
+const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
+const API_KEY = '5p3VT63zAweQ6X3j8OQriw';
 
 const dbconfig = {
     host:     "mcs.drury.edu",
@@ -18,9 +21,9 @@ const dbconfig = {
     password: "Letmein!eCoders",
     database: "emission"
 };
+//jest.mock('node-fetch');
 
 describe('Test /insertUser', () => {
-    console.log(Database);
     let connectStub;
     let queryStub;
     let disconnectStub;
@@ -58,7 +61,6 @@ describe('Test /insertUser', () => {
         "password":"MyNewPassword",
         "displayName":"Jane Doe"
       }
-      console.log(userData.email);
   
       chai.request(app)
         .post('/insertUser')
@@ -126,7 +128,6 @@ describe('Test /insertUser', () => {
             .post('/insertUser')
             .send(userData)
             .end((err, res) => {
-              console.log("Second request results:", res.body);
               expect(res).to.have.status(401); 
               expect(res.body).to.deep.equal({ msg: 'user already exists' }); 
     
@@ -164,7 +165,6 @@ describe('Test /insertUser', () => {
         .post('/insertUser')
         .send(userData)
         .end((err, res) => {
-          console.log("Error request results:", res.body);
           expect(res).to.have.status(500);
           expect(res.body).to.deep.equal({ msg: 'insertQuery Error' }); 
     
@@ -190,7 +190,6 @@ describe('Test /insertUser', () => {
   });
 
   describe('Test /authUser', () => {
-    console.log(Database);
     let connectStub;
     let queryStub;
     let disconnectStub;
@@ -255,7 +254,6 @@ describe('Test /insertUser', () => {
           .post('/authUser')
           .send(invalidLoginData)
           .end((err, res) => {
-            console.log("Error request results:", res.body); 
             expect(res).to.have.status(401);
             expect(res.body).to.deep.equal({ msg: 'Authentication Failed' });
 
@@ -281,7 +279,6 @@ describe('Test /insertUser', () => {
           .post('/authUser')
           .send(invalidLoginData)
           .end((err, res) => {
-            console.log("Error request results:", res.body); 
             expect(res).to.have.status(500);
 
             sinon.assert.calledWith(
@@ -363,7 +360,6 @@ describe('getCurrentUserChallenges API', () => {
       });
 
       describe('Test /completeChallenges', async () => {
-        console.log(Database);
         let connectStub;
         let queryStub;
         let disconnectStub;
@@ -483,3 +479,184 @@ describe('getCurrentUserChallenges API', () => {
               });
       });
       });
+
+    describe('Test /vehicleCarbonReport',()=>{
+      
+
+      it('should return vehicle carbon report successfully', async () => {
+        const mockApiResponse = {
+          ok: true,
+          json: () => ({ result: '240 units' }),
+        };
+    
+         const fetchStub = sinon.stub(global, 'fetch');
+        fetchStub.resolves(mockApiResponse);
+    
+        const response = await chai.request(app)
+          .get('/vehicleCarbonReport')
+          .query({ vehicleId: '123', distance: '100' });
+    
+        expect(response).to.have.status(200);
+        expect(response.body).to.deep.equal({ result: '240 units' });
+    
+        fetchStub.restore();
+      });
+
+      it('should return vehicle carbon report unsuccessfully', async () => {
+        const mockApiResponse = {
+          ok: false,
+        };
+    
+         const fetchStub = sinon.stub(global, 'fetch');
+        fetchStub.resolves(mockApiResponse);
+    
+        const response = await chai.request(app)
+          .get('/vehicleCarbonReport')
+          .query({ vehicleId: '123', distance: '100' });
+    
+        expect(response).to.have.status(500);
+        expect(response.body).to.have.property('error');
+        expect(response.body).to.deep.equal({error:'Server error.'});
+        //expect(response.body).to.deep.equal({ result: '240 units' });
+    
+        fetchStub.restore();
+      });
+      it('should return 400 if vehicleId is missing', async () => {
+        const response = await chai.request(app)
+            .get('/vehicleCarbonReport')
+            .query({ distance: '100' });
+
+        expect(response).to.have.status(400);
+        expect(response.body).to.deep.equal({ error: 'Must provide vehicle id.' });
+    });
+
+    it('should return 400 if distance is missing', async () => {
+        const response = await chai.request(app)
+            .get('/vehicleCarbonReport')
+            .query({ vehicleId: '123' });
+
+        expect(response).to.have.status(400);
+        expect(response.body).to.deep.equal({ error: 'Must provide distance.' });
+    });
+
+
+    });
+
+
+    describe('Test /getChallenges', () => {
+      let connectStub;
+      let queryStub;
+      let disconnectStub;
+    
+      beforeEach(() => {
+        connectStub = sinon.stub(Database.prototype, 'connect');
+        queryStub = sinon.stub(Database.prototype, 'query');
+        disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+      });
+    
+      afterEach(() => {
+        sinon.restore();
+      });
+
+      it('should return challenges successfully', (done) => {
+        const mockResults = [
+          {
+            challengeID: 1,
+            points: 20,
+            description: 'Use reusable coffee mugs at your local coffee shop.',
+            length: '7',
+            expirationDate: null,
+            name: 'ReUse Coffee Cups'
+          }
+        ];
+    
+        queryStub.yields(null, mockResults);
+    
+        chai.request(app)
+          .get('/getChallenges')
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body).to.deep.equal({ results: mockResults });
+    
+            expect(connectStub.calledOnce).to.be.true;
+            expect(queryStub.calledOnce).to.be.true;
+            expect(disconnectStub.calledOnce).to.be.true;
+    
+            done(); 
+          });
+      });
+
+      it('should handle database error', (done) => {
+        const errorMessage = 'Database error';
+        queryStub.yields(new Error(errorMessage), null);
+    
+        chai.request(app)
+          .get('/getChallenges')
+          .end((err, res) => {
+            expect(res.status).to.equal(500);
+            expect(res.body).to.deep.equal({ error: 'Error getting challenges.' });
+    
+            expect(connectStub.calledOnce).to.be.true;
+            expect(queryStub.calledOnce).to.be.true;
+            expect(disconnectStub.calledOnce).to.be.true;
+    
+            done();
+          });
+      });
+    
+    
+
+    });
+
+    /* this unit test is not working right now
+      describe('Test /acceptNewChallenges', async () => {
+        let connectStub;
+        let queryStub;
+        let disconnectStub;
+    
+        beforeEach(() => {
+            connectStub = sinon.stub(Database.prototype, 'connect');
+            queryStub = sinon.stub(Database.prototype, 'query');
+            disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+        });
+    
+        afterEach(() => {
+            sinon.restore();
+        });
+    
+        it('accepts new challenges successfully', async () => {
+            connectStub.callsFake();
+            queryStub.onFirstCall().resolves([]);
+          queryStub.onSecondCall().resolves({
+              fieldCount: 0,
+              affectedRows: 1,
+              insertId: 1,
+              serverStatus: 2,
+              warningCount: 0,
+              message: '',
+              protocol41: true,
+              changedRows: 0
+          });
+    
+            try {
+                const res = await chai.request(app)
+                    .post('/acceptNewChallenges')
+                    .send([
+                        { "challengeID": 1 },
+                        { "challengeID": 2 }
+                    ]);
+    
+                expect(res).to.have.status(200);
+    
+                console.log("test complete");
+            } catch (error) {
+                console.log("Error");
+                console.log(error);
+                throw error; 
+    
+            } finally {
+                sinon.restore();
+            }
+        });
+    }).timeout(5000);
+     */
