@@ -1,4 +1,5 @@
 //
+import 'package:first_flutter_app/vehicles.dart';
 import 'package:flutter/material.dart';
 import 'package:first_flutter_app/layout.dart';
 import 'package:first_flutter_app/login.dart';
@@ -63,7 +64,10 @@ class MyApp extends StatelessWidget {
             ),
         'manual_input': (context) => const Layout(
               body: Manual(),
-            )
+            ),
+        'vehicles': (context) => const Layout(
+              body: Vehicles(),
+            ),
       },
     );
   }
