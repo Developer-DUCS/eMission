@@ -74,7 +74,7 @@ class _CreateAccountState extends State<CreateAccount> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/pexels-robert-so-18127674-2.jpg"),
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.cover,
         ),
       ),
       child: Center( child: SingleChildScrollView( child: Column(
