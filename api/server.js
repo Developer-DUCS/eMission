@@ -71,8 +71,7 @@ app.post('/authUser', (request, response) => {
     // 
     //
     const loginData = request.body;
-    console.log(`Login Form Input: ${loginData}`);
-    const query = "SELECT email, password FROM emission.Users WHERE email = ?";
+    const query = "SELECT userID, email, userName, password FROM emission.Users WHERE email = ?";
 
     // 
     //
@@ -81,17 +80,16 @@ app.post('/authUser', (request, response) => {
             console.error("Error executing query:", error);
             response.status(500).json({msg: "Database Error"});
         } else {
-            console.log(`SQL DB Output: ${result}`);
             if(result.length == 0) {
                 // The email was not present in database
                 console.log("Email was not recognized!");
-                response.status(401).json({msg: "Authentication Failed"});
+                response.status(401).json({msg: "Email not Found!"});
             } else {
                 if (result[0].email == loginData["email"] && result[0].password == loginData["password"]){
                     console.log("User Authenticated");
-                    response.status(200).json({msg: "Authentication Successful"});
+                    response.status(200).send(result[0]);
                 } else {
-                    console.log("Authentication Failed");
+                    console.log(`Authentication Failed: ${loginData.email}`);
                     response.status(401).json({msg: "Authentication Failed"});
                 }  
             }

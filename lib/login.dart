@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:first_flutter_app/encryption.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -19,9 +20,7 @@ class _LoginState extends State<Login> {
   late TextEditingController passwordController;
 
   // The form key is used to validate the form.
-  final _formKey = GlobalKey<FormState>();
-
-  // 
+  final _formKey = GlobalKey<FormState>(); 
 
   // status code variable that is returned from _submitForm()
   int? code;
@@ -35,8 +34,9 @@ class _LoginState extends State<Login> {
   }
 
 
-  // int method responisble for creating an http request to the server.
-  // this request will authenticate the user's login information.
+  // Future<int> method responisble for creating an http request to the server.
+  // this request will authenticate the user's login information, storing response data
+  // and returning the response statuse code.
   Future<int> _submitForm(context) async {
     // android emulator url
     String url = 'http://10.0.2.2:3000/authUser';
@@ -54,14 +54,19 @@ class _LoginState extends State<Login> {
     var res = await http.post(Uri.parse(url),
                               headers: {'Content-Type': 'application/json'}, 
                               body: json.encode(formData));
-  
-    // status code variable
+
+    // store the responses status code and username
     var resCode = res.statusCode;
+    var responseBody = res.body;
+    debugPrint(responseBody);
+    var response = Map<String, dynamic>.from(json.decode(responseBody));
+    debugPrint(response["userName"]);
 
     // verify the request code
     if(resCode==200){
-      Navigator.pushNamed(context, 'home');
-      return resCode;
+      saveUserInfo(response); // store username
+      Navigator.pushNamed(context, 'home'); // push to home page
+      return resCode; // return status code for form validation
     } else if (resCode == 401) {
       return resCode;
     } else {
@@ -69,7 +74,6 @@ class _LoginState extends State<Login> {
     }
   } 
   
-
   // build goes here
   @override
   Widget build(BuildContext context) {
@@ -173,6 +177,14 @@ class _LoginState extends State<Login> {
         )
       )
     );
+  }
+
+  // 
+  Future<void> saveUserInfo(info) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt("userID", info["userID"]);
+    pref.setString("email", info["email"]);
+    pref.setString("userName", info["userName"]);
   }
 
 
