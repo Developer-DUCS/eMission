@@ -431,16 +431,10 @@ app.get("/models", (req, res) => {
 
   fetch({
     url: `${API_URL}/vehicle_make/${makeId}/vehicle_models`,
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
-    },
-    body: {
-      type: "vehicle",
-      distance_unit: "mi",
-      distance_value: distance,
-      vehicle_model_id: vehicleId,
     },
   })
     .then((apiRes) => {
