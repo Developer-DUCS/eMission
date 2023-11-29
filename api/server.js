@@ -1,8 +1,7 @@
-
 const express = require('express');
-const { Database } = require('./sql_db_man');
+//const { Database } = require('./sql_db_man');
 const vehicleMakes = require('./VehicleMakes.json');
-//const Database = require("./sql_db_man.js");
+const Database = require("./sql_db_man.js");
 const PORT = 3000;
 const app = express();
 const axios = require("axios");
@@ -546,7 +545,6 @@ app.post("/vehicles", (req, res) => {
   );
 });
 
-
 app.post('/completeChallenges', async (req, res) => {
     console.log("Complete Challenges called");
     console.log(req.body);
@@ -584,13 +582,11 @@ app.post('/completeChallenges', async (req, res) => {
         res.status(200).send("Challenges completed successfully!");
     } catch (err) {
         console.error("Error executing query:", err);
-        res.status(500).send("Internal Server Error");
+        res.status(400).send("Error with input");
     }
 });
 
-
 const deleteVehicleSql = "DELETE FROM Cars WHERE carID = ?;";
-
 
 app.delete("/vehicles", (req, res) => {
   const id = parseInt(req.query.id);
@@ -603,7 +599,6 @@ app.delete("/vehicles", (req, res) => {
     }
   });
 });
-
 
 app.get('/vehicleCarbonReport', (req, res) => {
     const { vehicleId, distance } = req.query;
