@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+
+
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+class _HomeState extends State<Home> {
+  // 
+  String? userInfo;
+
+
+  @override
+  void initState(){
+    super.initState();
+    getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,23 +31,23 @@ class Home extends StatelessWidget {
                 
                 Container(
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(202, 217, 150, 1),
+                      color: const Color.fromRGBO(202, 217, 150, 1),
                       border: Border.all(color: Colors.black, width: 2.0), // Set the border color and width
                     ),
                   height: MediaQuery.of(context).size.height / 4, // 1/4 of the screen height
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       children: <Widget>[
                         profilePic(),
-                        Expanded(
+                        const Expanded(
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Column(
                               children: <Widget>[
-                                const Text("Your Rank: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                                const Text("Eco Friendly", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                                const Text("Tier X ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                Text("Your Rank: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                                Text("Eco Friendly", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                                Text("Tier X ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                               ]
                             )
                           )
@@ -42,13 +59,12 @@ class Home extends StatelessWidget {
 
                 Expanded(
                   child: Container(
-                    color: Color.fromRGBO(124, 184, 22, 1),
+                    color: const Color.fromRGBO(124, 184, 22, 1),
                     child: Center(
                       child: progressBar(),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -56,7 +72,7 @@ class Home extends StatelessWidget {
       ),
     );
   }
-
+  // 
   Widget profilePic() {
     return Container(
       child: Column(
@@ -64,23 +80,33 @@ class Home extends StatelessWidget {
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.grey.shade200,
-            child: CircleAvatar(
+            child: const CircleAvatar(
               radius: 45,
               backgroundImage: AssetImage('assets/images/pexels-robert-so-18127674-2.jpg'),
             ),
           ),
-          const Text("Your Name", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+          Container(
+            child: userInfo == null ? const Text("Your Name", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),) : Text(userInfo!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24))
+          ),
         ]
       ),
     );
   }
-
+  //
   Widget progressBar() {
     return Container(
-      child: LinearProgressIndicator(
+      child: const LinearProgressIndicator(
         value: 0.4,
       ),
     );
+  }
+  //
+  void getUserInfo() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    userInfo = pref.getString("userName");
+    setState(() {
+      
+    });
   }
 
 }
