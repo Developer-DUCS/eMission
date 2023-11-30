@@ -31,10 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
-
   dropdown_button2: ^2.3.9
 
+
+
   crypto: ^3.0.3
+
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -46,6 +46,11 @@ class Layout extends StatelessWidget {
               onTap: null, // will link to Challenge Groups Page when it is completed
             ),
             ListTile(
+              title: const Text('Vehicles'),
+              textColor: Colors.black,
+              onTap: () {Navigator.pushNamed(context, 'vehicles');},
+            ),
+            ListTile(
               title: const Text('Reports'),
               textColor: Colors.black,
               onTap: () {Navigator.pushNamed(context, 'carbon_report');},

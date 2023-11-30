@@ -28,15 +28,31 @@ class Database {
     }
 
     query(sql, values, callback) {
-        this.connection.query(sql, values, (err, results, fields) => {
-            if (err) {
-                console.log("Error executing query:", err);
-                callback(err, null);
-            } else {
-                callback(null, results, fields);
-            }
-        });
+        if (values != null) {
+            this.connection.query(sql, values, (err, results, fields) => {
+                if (err) {
+                    console.error("Error executing query:", err);
+                    callback(err, null);
+                } else {
+                    console.log("Query results:", results);
+                    callback(null, results, fields);
+                }
+            });
+        } else {
+            this.connection.query(sql, (err, results, fields) => {
+                if (err) {
+                    console.error("Error executing query:", err);
+                    callback(err, null);
+                } else {
+                    console.log("Query results:", results);
+                    callback(null, results, fields);
+                }
+            });
+        }
     }
-}
+    
+    }
+
+
 
 module.exports = Database;
