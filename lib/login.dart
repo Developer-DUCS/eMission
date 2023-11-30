@@ -55,21 +55,23 @@ class _LoginState extends State<Login> {
                               headers: {'Content-Type': 'application/json'}, 
                               body: json.encode(formData));
 
-    // store the responses status code and username
+    // store the responses status code and body
     var resCode = res.statusCode;
     var responseBody = res.body;
-    debugPrint(responseBody);
     var response = Map<String, dynamic>.from(json.decode(responseBody));
-    debugPrint(response["userName"]);
 
     // verify the request code
     if(resCode==200){
-      saveUserInfo(response); // store username
+      saveUserID(response); // store userID
       Navigator.pushNamed(context, 'home'); // push to home page
-      return resCode; // return status code for form validation
+
+      // return status code for form validation 
+      return resCode;
     } else if (resCode == 401) {
+      // return status code for form validation 
       return resCode;
     } else {
+      // return status code for form validation 
       return resCode;
     }
   } 
@@ -179,16 +181,13 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // 
-  Future<void> saveUserInfo(info) async {
+  // method responsible for storing the user's ID number locally
+  Future<void> saveUserID(info) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setInt("userID", info["userID"]);
-    pref.setString("email", info["email"]);
-    pref.setString("userName", info["userName"]);
   }
 
-
-  // 
+  
   @override
   void dispose(){
     emailController.dispose();
