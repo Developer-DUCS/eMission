@@ -36,27 +36,25 @@ app.post('/insertUser', (request, response)=>{
 
     //
     db.query(insertQuery, values, (error, results) => {
-        console.log("Query results:", results);
-        if(error){
-            // error with insertQuery
-            console.error("Error executing insertQuery", error);
-            if (error.errno == 1062){
-                // user already exists
-                response.status(401).json({msg: "user already exists"});
-            } else {
-                response.status(500).json({msg: "insertQuery Error"});
-            }
-        } else {
-            // User successfully created 
-            console.log("user successfully created");
-            response.status(200).json({msg: "account created"});
-        }
-
-    })
+      console.log("Query results:", results);
+      if(error){
+          // error with insertQuery
+          console.error("Error executing insertQuery", error);
+          if (error.errno == 1062){
+              // user already exists
+              response.status(401).json({msg: "user already exists"});
+          } else {
+              response.status(500).json({msg: "insertQuery Error"});
+          }
+      } else {
+          // User successfully created 
+          console.log("user successfully created");
+          response.status(200).json({msg: "account created"});
+      }
+  });
     db.disconnect();
+});
 
-    });
-    //db.disconnect();
 app.post("/authUser", (request, response) => {
   //authenticate user
   console.log("authenticating user...");
@@ -83,7 +81,6 @@ app.post("/authUser", (request, response) => {
       console.error("Error executing query:", error);
       response.status(500).json({ msg: "Database Error" });
     } else {
-      console.log(result);
       if (result.length == 0) {
         // The email was not present in database
         console.log("Email was not recognized!");
@@ -102,6 +99,7 @@ app.post("/authUser", (request, response) => {
       }
     }
   });
+  db.disconnect();
 });
 
 // eventually update this so that it doesn't display ones that a user has already accepted
@@ -163,27 +161,29 @@ app.get("/getUserChallenges", async (req, res) => {
     }
   });
 });
+
+
 app.get('/getCurrentUserChallenges', async (req, res) => {
-    console.log("Request to get current userChallenges");
-    const body = req.body;
-    const id = 1;
-    const db = new Database(dbconfig);
-    db.connect();
-    const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
-    
-    db.query(query, [id], (err, results) => {
-        console.log("Query entered");
-        db.disconnect(); // Disconnect from the database after the query
-        if (err) {
-            console.error("Error executing query:", err);
-            res.status(500).json({ error: err });
-            console.log("error :(")
-        } else {
-            console.log("Query results:", results);
-            //const challengeIDs = results.map(result => result.challengeID);
-            return res.status(200).json({results});
-        }
-    });
+  console.log("Request to get current userChallenges");
+  const body = req.body;
+  const id = 1;
+  const db = new Database(dbconfig);
+  db.connect();
+  const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
+  
+  db.query(query, [id], (err, results) => {
+      console.log("Query entered");
+      db.disconnect(); // Disconnect from the database after the query
+      if (err) {
+          console.error("Error executing query:", err);
+          res.status(500).json({ error: err });
+          console.log("error :(")
+      } else {
+          console.log("Query results:", results);
+          //const challengeIDs = results.map(result => result.challengeID);
+          return res.status(200).json({results});
+      }
+  });
 });
 
 app.post("/acceptNewChallenges", async (req, res) => {
