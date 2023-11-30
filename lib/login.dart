@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:first_flutter_app/encryption.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Login extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginState extends State<Login> {
   late TextEditingController passwordController;
 
   // The form key is used to validate the form.
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); 
 
   // status code variable that is returned from _submitForm()
   int? code;
@@ -33,8 +34,9 @@ class _LoginState extends State<Login> {
   }
 
 
-  // void method responisble for creating an http request to the server.
-  // this request will authenticate the user's login information.
+  // Future<int> method responisble for creating an http request to the server.
+  // this request will authenticate the user's login information, storing response data
+  // and returning the response statuse code.
   Future<int> _submitForm(context) async {
     // android emulator url
     String url = 'http://10.0.2.2:3000/authUser';
@@ -45,7 +47,7 @@ class _LoginState extends State<Login> {
     // User's input data
     var formData = {
       'email': emailController.text,
-      'password': encryptedPassword
+      'password': encryptedPassword,
     };
 
     // http request here
@@ -53,29 +55,30 @@ class _LoginState extends State<Login> {
                               headers: {'Content-Type': 'application/json'}, 
                               body: json.encode(formData));
 
-    
-    // status code variable
+    // store the responses status code and body
     var resCode = res.statusCode;
+    var responseBody = res.body;
+    var response = Map<String, dynamic>.from(json.decode(responseBody));
 
     // verify the request code
     if(resCode==200){
-      Navigator.pushNamed(context, 'home');
+      saveUserID(response); // store userID
+      Navigator.pushNamed(context, 'home'); // push to home page
+
+      // return status code for form validation 
       return resCode;
     } else if (resCode == 401) {
+      // return status code for form validation 
       return resCode;
     } else {
+      // return status code for form validation 
       return resCode;
     }
   } 
   
-
   // build goes here
   @override
   Widget build(BuildContext context) {
-
-    // Declare TextEditingController variables for email and password
-    
-
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -178,8 +181,13 @@ class _LoginState extends State<Login> {
     );
   }
 
+  // method responsible for storing the user's ID number locally
+  Future<void> saveUserID(info) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt("userID", info["userID"]);
+  }
 
-  // 
+  
   @override
   void dispose(){
     emailController.dispose();
@@ -188,8 +196,3 @@ class _LoginState extends State<Login> {
   }
 
 }
-  
-
-
-
-

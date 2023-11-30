@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:first_flutter_app/encryption.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -39,13 +41,13 @@ class _CreateAccountState extends State<CreateAccount> {
   // void method responisble for creating an http request to the server.
   // this request will insert the user's login information.
   void _submitForm(context) async {
-    print("here");
     // android emulator url
     String url = 'http://10.0.2.2:3000/insertUser';
     
     // Encrypt the password
     String encryptedPassword = encryptPassword(confirmPasswordController.text);
 
+    // User's input data
     Map<String, String?> formData = {
       'email': emailController.text,
       'username': usernameController.text,
@@ -53,17 +55,17 @@ class _CreateAccountState extends State<CreateAccount> {
       'password': encryptedPassword,
       'confirm_password': encryptedPassword,
     };
-    print(formData);
 
     try {
+      // http request here
       var response = await http.post(Uri.parse(url),
           headers: {'Content-Type': 'application/json'},
           body: json.encode(formData));
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      Navigator.pushNamed(context, 'home');
+      debugPrint('Response status: ${response.statusCode}');
+      saveUserInfo(formData); // store user info 
+      Navigator.pushNamed(context, 'home'); // push to home page
     } catch (error) {
-      print('Error: $error');
+      debugPrint('Error: $error');
     }
   }
   
@@ -192,6 +194,13 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  // method responsible for storing the user's email and username data locally
+  Future<void> saveUserInfo(info) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("email", info["email"]);
+    pref.setString("userName", info["username"]);
+  }
+  
 
   @override
   void dispose() {
@@ -202,4 +211,5 @@ class _CreateAccountState extends State<CreateAccount> {
     confirmPasswordController.dispose();
     super.dispose();
   }
+  
 }

@@ -74,8 +74,7 @@ app.post("/authUser", (request, response) => {
   //
   //
   const loginData = request.body;
-  console.log(loginData);
-  const query = "SELECT email, password FROM emission.Users WHERE email = ?";
+  const query = "SELECT userID, email, password FROM emission.Users WHERE email = ?";
 
   //
   //
@@ -87,7 +86,7 @@ app.post("/authUser", (request, response) => {
       console.log(result);
       if (result.length == 0) {
         // The email was not present in database
-        console.log(`${result[0].email} was not recognized!`);
+        console.log("Email was not recognized!");
         response.status(401).json({ msg: "Authentication Failed" });
       } else {
         if (
@@ -95,9 +94,9 @@ app.post("/authUser", (request, response) => {
           result[0].password == loginData["password"]
         ) {
           console.log("User Authenticated");
-          response.status(200).json({ msg: "Authentication Successful" });
+          response.status(200).send(result[0]);
         } else {
-          console.log("Authentication Failed");
+          console.log(`Authentication Failed: ${loginData.email}`);
           response.status(401).json({ msg: "Authentication Failed" });
         }
       }
@@ -175,7 +174,6 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
     db.query(query, [id], (err, results) => {
         console.log("Query entered");
         db.disconnect(); // Disconnect from the database after the query
-
         if (err) {
             console.error("Error executing query:", err);
             res.status(500).json({ error: err });
