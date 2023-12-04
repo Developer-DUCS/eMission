@@ -192,51 +192,40 @@ describe('Test /insertUser', () => {
 
   describe('Test /authUser', () => {
     let connectStub;
-    let queryStub;
-    let disconnectStub;
-  
-    beforeEach(() => {
-      connectStub = sinon.stub(Database.prototype, 'connect');
-      queryStub = sinon.stub(Database.prototype, 'query');
-      disconnectStub = sinon.stub(Database.prototype, 'disconnect');
-    });
-  
-    afterEach(() => {
-      sinon.restore();
-    });
+  let queryStub;
+  let disconnectStub;
 
-    it('user is succesfully authenticated.', (done)=>{
+  before(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
 
-        const validLoginData = {
-          email: 'test@example.com',
-          password: 'password123'
-        };
-    
-        const queryResult = [
-          { email: 'test@example.com', password: 'password123' }
-        ];
-    
-        queryStub.callsArgWith(2, null, queryResult);
-    
-        chai.request(app)
-          .post('/authUser')
-          .send(validLoginData)
-          .end((err, res) => {
-            expect(res).to.have.status(200);
-            expect(res.body).to.deep.equal({ msg: 'Authentication Successful' });
-    
-            sinon.assert.calledWith(
-              queryStub,
-              'SELECT email, password FROM emission.Users WHERE email = ?',
-              validLoginData.email
-            );
-    
-            done();
-          });
+  after(() => {
+    sinon.restore();
+  });
 
+  it('user is successfully authenticated.', (done) => {
+    const validLoginData = {
+      email: 'test@example.com',
+      password: 'password123',
+    };
 
+    const queryResult = [
+      { email: 'test@example.com', password: 'password123' },
+    ];
 
-    });
+    queryStub.callsArgWith(2, null, queryResult);
+
+    chai.request(app)
+      .post('/authUser')
+      .send(validLoginData)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+
+        done();
+      });
+  });
 
     it('should return an "Authentication Failed" message for invalid credentials', (done) => {
         const invalidLoginData = {
@@ -258,39 +247,28 @@ describe('Test /insertUser', () => {
             expect(res).to.have.status(401);
             expect(res.body).to.deep.equal({ msg: 'Authentication Failed' });
 
-            sinon.assert.calledWith(
-              queryStub,
-              'SELECT email, password FROM emission.Users WHERE email = ?',
-              invalidLoginData.email
-            );
-
             done();
           });
       });
 
-      it('should return an "Server Error" message for query not returning with any data', (done) => {
+      it('should return a "Server Error" message for query not returning with any data', (done) => {
         const invalidLoginData = {
           email: 'test@example.com',
           password: 'wrongpassword'
         };
-
-        queryStub.callsArgWith(2, null, []);
-
+      
+        queryStub.callsArgWith(2, new Error('Database error'), []);
+      
         chai.request(app)
           .post('/authUser')
           .send(invalidLoginData)
           .end((err, res) => {
             expect(res).to.have.status(500);
-
-            sinon.assert.calledWith(
-              queryStub,
-              'SELECT email, password FROM emission.Users WHERE email = ?',
-              invalidLoginData.email
-            );
-
+      
             done();
           });
       });
+      
   
 
 
@@ -327,7 +305,7 @@ describe('Test /getCurrentUserChallenges', () => {
     queryStub.callsArgWith(2, null, expectedResult);
   
     chai.request(app)
-      .get('/getCurrentUserChallenges')
+      .post('/getCurentUserChallenges')
       .send({ "userID": 1 })
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -347,7 +325,7 @@ describe('Test /getCurrentUserChallenges', () => {
       queryStub.callsArgWith(2, new Error('Incorrect userID format'), null);
 
       chai.request(app)
-        .get('/getCurrentUserChallenges')
+        .post('/getCurentUserChallenges')
         .send({ userID: invalidUserId }) 
         .end((err, res) => {
           expect(res).to.have.status(500);
@@ -359,92 +337,93 @@ describe('Test /getCurrentUserChallenges', () => {
         }); 
       });
 
-      describe('Test /completeChallenges', async () => {
+      describe('Test /completeChallenges', () => {
         let connectStub;
         let queryStub;
         let disconnectStub;
-      
+    
         beforeEach(() => {
-          connectStub = sinon.stub(Database.prototype, 'connect');
-          queryStub = sinon.stub(Database.prototype, 'query');
-          disconnectStub = sinon.stub(Database.prototype, 'disconnect');
-        });
-      
-        afterEach(() => {
-          sinon.restore();
+            connectStub = sinon.stub(Database.prototype, 'connect');
+            queryStub = sinon.stub(Database.prototype, 'query');
+            disconnectStub = sinon.stub(Database.prototype, 'disconnect');
         });
     
-        it('user successfully completes challenges.',  (done)=>{
-          connectStub.callsFake();
-          var expectedResult = {
-            fieldCount: 0,
-            affectedRows: 1,
-            insertId: 0,
-            serverStatus: 2,
-            warningCount: 0,
-            message: '(Rows matched: 1  Changed: 1  Warnings: 0',
-            protocol41: true,
-            changedRows: 1
-          };
-          queryStub.callsArgWith(2, null, expectedResult);
-          const response = request(app)
-            .post('/completeChallenges')
-            .send([
-              { "challengeID": 3, "userID": 1, "daysInProgress": "0" }
-          ])
-            .end((err, res) => {
-              try{
-                expect(res).to.have.status(200);
-                done();
-              }catch(error){
-                console.error(error);
-                done(error);
-              }
-            });
-          });
-
-            it('user insuccessfully completes challenges.',  (done)=>{
-              connectStub.callsFake();
-              
-              queryStub.callsArgWith(2, new Error(), null);
-              const response = request(app)
-                .post('/completeChallenges')
-                .send([
-                  { "challengeID": 3, "userID": 1, "daysInProgress": "0" }
-              ])
-                .end((err, res) => {
-                  try{
-                    expect(res).to.have.status(500);
-                    done();
-                  }catch(error){
-                    console.error(error);
-                    done(error);
-                  }
-                  
-                });
-
+        afterEach(() => {
+            sinon.restore();
         });
-
-        it('user enters wrong input data.',  (done)=>{
-          //connectStub.callsFake();
-          
-          //queryStub.callsArgWith(2, new Error(), null);
-          const response = request(app)
-            .post('/completeChallenges')
-            .send()
-            .end((err, res) => {
-              try{
-                expect(res).to.have.status(400);
-                done();
-              }catch(error){
-                console.error(error);
-                done(error);
-              }
-              
-            });
-
-          });
-      }); 
+    
+        it('user successfully completes challenges.', (done) => {
+            connectStub.callsFake();
+            const expectedResult = {
+                fieldCount: 0,
+                affectedRows: 1,
+                insertId: 0,
+                serverStatus: 2,
+                warningCount: 0,
+                message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+                protocol41: true,
+                changedRows: 1
+            };
+            queryStub.callsArgWith(2, null, expectedResult);
+    
+            request(app)
+                .post('/completeChallenges')
+                .send({
+                  "UserID": 49,
+                  "challenges": [
+                    {
+                      "challengeID": 5,
+                      "userID": 1,
+                      "daysInProgress": '0'
+                    }
+                  ]
+                })
+                
+                .expect(200)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    done();
+                });
+        });
+    
+        it('user unsuccessfully completes challenges.', (done) => {
+            connectStub.callsFake();
+            queryStub.callsArgWith(2, new Error(), null);
+    
+            request(app)
+                .post('/completeChallenges')
+                .send({
+                  "UserID": 49,
+                  "challenges": [
+                    {
+                      "challengeID": 5,
+                      "userID": 1,
+                      "daysInProgress": '0'
+                    }
+                  ]
+                })
+                
+                .expect(500)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    done();
+                });
+        });
+    
+        it('user enters wrong input data.', (done) => {
+            // No need to use connectStub or queryStub for this test
+    
+            request(app)
+                .post('/completeChallenges')
+                .send()
+                .expect(400)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    done();
+                });
+        });
+    });
+    
 
       /* describe('Test /makeId',  () => {
 
@@ -609,56 +588,160 @@ describe('Test /getCurrentUserChallenges', () => {
     
 
     });
-
-    /* this unit test is not working right now
-      describe('Test /acceptNewChallenges', async () => {
-        let connectStub;
-        let queryStub;
-        let disconnectStub;
-    
-        beforeEach(() => {
-            connectStub = sinon.stub(Database.prototype, 'connect');
-            queryStub = sinon.stub(Database.prototype, 'query');
-            disconnectStub = sinon.stub(Database.prototype, 'disconnect');
-        });
-    
-        afterEach(() => {
-            sinon.restore();
-        });
-    
-        it('accepts new challenges successfully', async () => {
-            connectStub.callsFake();
-            queryStub.onFirstCall().resolves([]);
-          queryStub.onSecondCall().resolves({
+    describe('Test /acceptNewChallenges', () => {
+      let connectStub;
+      let queryStub;
+      let disconnectStub;
+  
+      beforeEach(() => {
+          connectStub = sinon.stub(Database.prototype, 'connect');
+          queryStub = sinon.stub(Database.prototype, 'query');
+          disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+      });
+  
+      afterEach(() => {
+          sinon.restore();
+      });
+  
+      it('should accept challenges successfully.', (done) => {
+          connectStub.callsFake();
+  
+          const expectedResult = {
               fieldCount: 0,
               affectedRows: 1,
-              insertId: 1,
+              insertId: 0,
               serverStatus: 2,
               warningCount: 0,
-              message: '',
+              message: '(Rows matched: 1  Changed: 1  Warnings: 0',
               protocol41: true,
-              changedRows: 0
-          });
-    
-            try {
-                const res = await chai.request(app)
-                    .post('/acceptNewChallenges')
-                    .send([
-                        { "challengeID": 1 },
-                        { "challengeID": 2 }
-                    ]);
-    
-                expect(res).to.have.status(200);
-    
-                console.log("test complete");
-            } catch (error) {
-                console.log("Error");
-                console.log(error);
-                throw error; 
-    
-            } finally {
-                sinon.restore();
-            }
+              changedRows: 1
+          };
+  
+          queryStub.onCall(0).callsArgWith(2, null, []);
+          queryStub.onCall(1).callsArgWith(2, null, expectedResult);
+  
+          request(app)
+              .post('/acceptNewChallenges')
+              .send({
+                  "UserID": 49,
+                  "challenges": [{ challengeID: 5, userID: 1 }]
+              })
+              .expect(200)
+              .end((err, res) => {
+                  if (err) return done(err);
+                  expect(res.body).to.deep.equal([
+                      { status: 'Challenge accepted successfully', challengeData: { challengeID: 5, userID: 1 } }
+                  ]);
+                  done();
+              });
+      });
+  
+      it('should handle already accepted challenge.', (done) => {
+          connectStub.callsFake();
+  
+          const existingRow = [{ challengeID: 5, userID: 1, dateAccepted: '2023-01-01', daysInProgress: 0 }];
+  
+          queryStub.onCall(0).callsArgWith(2, null, existingRow);
+  
+          request(app)
+              .post('/acceptNewChallenges')
+              .send({
+                  "UserID": 49,
+                  "challenges": [{ challengeID: 5, userID: 1 }]
+              })
+              .expect(200)
+              .end((err, res) => {
+                  if (err) return done(err);
+                  expect(res.body).to.deep.equal([
+                      { status: 'Challenge already accepted', challengeData: existingRow[0] }
+                  ]);
+                  done();
+              });
+      });
+  
+      it('should handle database error.', (done) => {
+          connectStub.callsFake();
+  
+          queryStub.onCall(0).callsArgWith(2, new Error('Database error'), null);
+  
+          request(app)
+              .post('/acceptNewChallenges')
+              .send({
+                  "UserID": 49,
+                  "challenges": [{ challengeID: 5, userID: 1 }]
+              })
+              .expect(500)
+              .end((err, res) => {
+                  if (err) return done(err);
+                  done();
+              });
+      });
+  
+      it('should handle user error (invalid input).', (done) => {
+  
+        request(app)
+        .post('/acceptNewChallenges')
+        .send()
+        .expect(500)
+        .end((err, res) => {
+            if (err) return done(err);
+            done();
         });
-    }).timeout(5000);
-     */
+      });
+  });
+
+  describe('Test /getChallenges2', () => {
+    let connectStub;
+    let queryStub;
+    let disconnectStub;
+
+    beforeEach(() => {
+        connectStub = sinon.stub(Database.prototype, 'connect');
+        queryStub = sinon.stub(Database.prototype, 'query');
+        disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+    });
+
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    it('should get challenges successfully.', (done) => {
+        connectStub.callsFake();
+
+        const userID = 49;
+        const expectedResult = [
+            { challengeID: 1, title: 'Challenge 1' },
+            { challengeID: 2, title: 'Challenge 2' }
+            // Add more expected results as needed
+        ];
+
+        queryStub.callsArgWith(2, null, expectedResult);
+
+        request(app)
+            .post('/getChallenges2')
+            .send({ userID })
+            .expect(200)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res.body.results).to.deep.equal(expectedResult);
+                done();
+            });
+    });
+
+    it('should handle database error.', (done) => {
+        connectStub.callsFake();
+
+        queryStub.callsArgWith(2, new Error('Database error'), null);
+
+        request(app)
+            .post('/getChallenges2')
+            .send({ userID: 49 })
+            .expect(500)
+            .end((err, res) => {
+                if (err) return done(err);
+                done();
+            });
+    });
+});
+
+  

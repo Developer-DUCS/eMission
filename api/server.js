@@ -98,8 +98,9 @@ app.post("/authUser", (request, response) => {
         }
       }
     }
+    db.disconnect();
   });
-  db.disconnect();
+  
 });
 
 // eventually update this so that it doesn't display ones that a user has already accepted
@@ -121,6 +122,34 @@ app.get("/getChallenges", (req, res) => {
   });
   db.disconnect();
 });
+app.post("/getChallenges2", (req, res) => {
+  console.log("Get challenge called");
+
+  const userID = req.body.userID;
+
+  const query = `
+    SELECT * FROM Challenges
+    WHERE challengeID NOT IN (
+        SELECT DISTINCT challengeID FROM AcceptedChallenges
+        WHERE userID = ?
+      )`;
+
+  const db = new Database(dbconfig);
+  db.connect();
+
+  db.query(query, [userID], (err, results) => {
+    db.disconnect(); 
+
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Error getting challenges." });
+    } else {
+      console.log("Query results:", results);
+      return res.status(200).json({ results });
+    }
+  });
+});
+
 
 app.get("/getChallengesByID", (req, res) => {
   console.log("Get challenge by ID called");
@@ -142,7 +171,7 @@ app.get("/getChallengesByID", (req, res) => {
   db.disconnect();
 });
 
-app.get("/getUserChallenges", async (req, res) => {
+/* app.get("/getUserChallenges", async (req, res) => {
   const body = req.body;
   const id = 1;
   const db = new Database(dbconfig);
@@ -160,18 +189,19 @@ app.get("/getUserChallenges", async (req, res) => {
       res.status(200).json(results);
     }
   });
-});
+}); */
 
 
-app.get('/getCurrentUserChallenges', async (req, res) => {
-  console.log("Request to get current userChallenges");
+app.post('/getCurentUserChallenges', async (req, res) => {
+  console.log("Request to get current userChallenges update");
   const body = req.body;
-  const id = 1;
+  const id = body.userID;
+  console.log(id);
   const db = new Database(dbconfig);
   db.connect();
-  const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
-  
-  db.query(query, [id], (err, results) => {
+  const query = "SELECT a.challengeID, a.points, a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = ? AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
+
+  db.query(query, [id, id], (err, results) => {
       console.log("Query entered");
       db.disconnect(); // Disconnect from the database after the query
       if (err) {
@@ -187,84 +217,92 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
 });
 
 app.post("/acceptNewChallenges", async (req, res) => {
-  console.log("Accept Challenges called");
-  console.log(req.body);
+  
+    console.log("Accept Challenges called");
+    const { UserID, challenges } = req.body;
+    
+    console.log('UserID:', UserID);
+    console.log('Challenges:', challenges);
 
-  const today = new Date();
-  const formattedDate = today.toISOString().split("T")[0];
+    const today = new Date();
+    const formattedDate = today.toISOString().split("T")[0];
 
-  const selectQuery =
-    "SELECT * FROM AcceptedChallenges WHERE userID = ? AND challengeID = ?";
-  const insertQuery =
-    "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
+    const selectQuery =
+      "SELECT * FROM AcceptedChallenges WHERE userID = ? AND challengeID = ?";
+    const insertQuery =
+      "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
-  const challengeDataList = req.body;
-  const userID = 1; // Replace with actual userID from the request or authentication
+    const challengeDataList = challenges;
+    const userID = UserID; // Replace with actual userID from the request or authentication
 
-  const queryPromise = (db, queryString, values) => {
-    return new Promise((resolve, reject) => {
-      db.query(queryString, values, (err, results) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results);
-        }
+    const queryPromise = (db, queryString, values) => {
+      return new Promise((resolve, reject) => {
+        db.query(queryString, values, (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        });
       });
-    });
-  };
+    };
+    
 
-  try {
-    const db = new Database(dbconfig);
-    await db.connect();
+    try {
+      const db = new Database(dbconfig);
+      await db.connect();
 
-    const responseMessages = [];
+      const responseMessages = [];
 
-    for (const challengeData of challengeDataList) {
-      // Check if a row exists
-      const selectValues = [userID, challengeData.challengeID];
-      try {
-        const existingRow = await queryPromise(db, selectQuery, selectValues);
+      for (const challengeData of challengeDataList) {
+        // Check if a row exists
+        const selectValues = [userID, challengeData.challengeID];
+        try {
+          const existingRow = await queryPromise(db, selectQuery, selectValues);
 
-        if (existingRow.length > 0) {
-          responseMessages.push({
-            status: "Challenge already accepted",
-            challengeData: existingRow[0],
-          });
-        } else {
-          const insertValues = [
-            userID,
-            challengeData.challengeID,
-            formattedDate,
-            0,
-            null,
-          ];
-          await queryPromise(db, insertQuery, insertValues);
-          responseMessages.push({
-            status: "Challenge accepted successfully",
-            challengeData: challengeData,
-          });
+          if (existingRow.length > 0) {
+            responseMessages.push({
+              status: "Challenge already accepted",
+              challengeData: existingRow[0],
+            });
+          } else {
+            const insertValues = [
+              userID,
+              challengeData.challengeID,
+              formattedDate,
+              0,
+              null,
+            ];
+            await queryPromise(db, insertQuery, insertValues);
+            responseMessages.push({
+              status: "Challenge accepted successfully",
+              challengeData: challengeData,
+            });
+          }
+        } catch (err) {
+          console.error("Error executing queries:", err);
+          res.status(500).send("Internal Server Error");
+          return;
         }
-      } catch (err) {
-        console.error("Error executing queries:", err);
-        res.status(500).send("Internal Server Error");
-        return;
       }
+
+      db.disconnect();
+
+      // Send the response with the array of status messages
+      res.status(200).json(responseMessages);
+    } catch (err) {
+      console.error("Error connecting to the database:", err);
+      res.status(500).send("Internal Server Error");
     }
-
-    db.disconnect();
-
-    // Send the response with the array of status messages
-    res.status(200).json(responseMessages);
-  } catch (err) {
-    console.error("Error connecting to the database:", err);
-    res.status(500).send("Internal Server Error");
-  }
+  
+  
 });
-
+/* 
 // not in use: deletes rows before inserting them
 app.post("/acceptChallenges", async (req, res) => {
   console.log("Complete Challenges called");
   console.log(req.body);
+  const { UserID, challenges } = req.body;
 
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -274,8 +312,8 @@ app.post("/acceptChallenges", async (req, res) => {
   const insertQuery =
     "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
-  const challengeDataList = req.body;
-  const userID = 1;
+  const challengeDataList = challenges.toList();
+  const userID = UserID;
 
   try {
     const db = new Database(dbconfig);
@@ -322,10 +360,10 @@ app.post("/acceptChallenges", async (req, res) => {
     console.error("Error executing queries:", err);
     res.status(500).send("Internal Server Error");
   }
-});
+}); */
 
 // removed /getUserChallenges
-
+/* 
 app.get('/getCurrentUserChallenges', async (req, res) => {
     console.log("Request to get current userChallenges");
     const body = req.body;
@@ -348,7 +386,7 @@ app.get('/getCurrentUserChallenges', async (req, res) => {
             return res.status(200).json({results});
         }
     });
-});
+}); */
 
 app.get("/makes", (req, res) => {
   res.json(vehicleMakes);
@@ -546,14 +584,15 @@ app.post("/vehicles", (req, res) => {
 app.post('/completeChallenges', async (req, res) => {
     console.log("Complete Challenges called");
     console.log(req.body);
-    
+  
+    const { UserID, challenges } = req.body;
+
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
     
     const query = "UPDATE AcceptedChallenges SET dateFinished = ? WHERE userID = ? AND challengeID = ?";
-    const challengeDataList = req.body;
-    const userID = 1;
-
+    const challengeDataList = challenges;
+    const userID = UserID;
     try {
         const db = new Database(dbconfig);
         await db.connect();

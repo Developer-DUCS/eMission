@@ -116,12 +116,19 @@ class UserChallenge {
 
 Future<List<Challenge>> _getChallenges() async {
   print("here");
+  var userID = await getUserID();
+  var jsonBody = jsonEncode({"userID": userID});
   // this is the url for using a Android emulator
   // Apple emulators use localhost like normal
-  String url = 'http://10.0.2.2:3000/getChallenges';
   List<Challenge> challenges = [];
 
-  var response = await http.get(Uri.parse(url));
+  var response = await http.post(
+    Uri.parse("http://10.0.2.2:3000/getChallenges2"),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonBody,
+  );
   print('Response status: ${response.statusCode}');
   print('Response body: ${response.body}');
   print(response.statusCode);
@@ -136,13 +143,20 @@ Future<List<Challenge>> _getChallenges() async {
           points: challenge['points'],
           description: challenge['description'],
           length: challenge['length'],
-          expirationDate: challenge['expirationDate']);
+          expirationDate: null);
       challenges.add(thisOne);
     }
     return challenges;
   } else {
     throw Exception("Failed to load post");
   }
+}
+
+Future<dynamic> getUserID() async {
+  final SharedPreferences pref = await SharedPreferences.getInstance();
+  pref.getInt("userID");
+  print(pref.getInt("userID"));
+  return pref.getInt("userID");
 }
 
 /*
@@ -168,6 +182,7 @@ class _ChallengePageState extends State<ChallengePage> {
   void initState() {
     super.initState();
     challenges = _getChallenges();
+    getUserID();
   }
 
   void addCheckbox(CheckboxExample checkbox) {
@@ -201,8 +216,10 @@ class _ChallengePageState extends State<ChallengePage> {
     );
   }
 
-  void _acceptChallenges(BuildContext context) async {
+/*   void _acceptChallenges(BuildContext context) async {
     try {
+      var userID = getUserID();
+      print(userID);
       var list = [];
       List<Challenge> challengeList =
           await challenges; // Wait for the Future to complete
@@ -210,11 +227,21 @@ class _ChallengePageState extends State<ChallengePage> {
           challengeList.where((challenge) => challenge.isSelected).toList();
       print(selectedChallenges);
       print('Selected Challenges: $selectedChallenges');
-      String url = "http://10.0.2.2:3000/acceptChallenges";
+      var url = "http://10.0.2.2:3000/acceptChallenges";
+
+      // change to adding a list of challengeIDs
       for (Challenge challenge in selectedChallenges) {
-        list.add(challenge.toJson());
+        list.add(challenge.challengeID);
       }
-      String jsonBody = jsonEncode(list);
+
+      var requestBody = {
+        "UserID": userID,
+        "challenges": list,
+      };
+      print(requestBody);
+
+      String jsonBody = jsonEncode(requestBody);
+      print(jsonBody);
 
       var response = await http.post(
         Uri.parse("http://10.0.2.2:3000/acceptNewChallenges"),
@@ -261,6 +288,74 @@ class _ChallengePageState extends State<ChallengePage> {
           challenge.isSelected = false;
         }
       }); */
+  } */
+  void _acceptChallenges(BuildContext context) async {
+    try {
+      var userID = await getUserID(); // Wait for the Future to complete
+      print(userID);
+      var list = [];
+      List<Challenge> challengeList =
+          await challenges; // Wait for the Future to complete
+      selectedChallenges =
+          challengeList.where((challenge) => challenge.isSelected).toList();
+      print(selectedChallenges);
+      print('Selected Challenges: $selectedChallenges');
+      var url = "http://10.0.2.2:3000/acceptChallenges";
+
+      // change to adding a list of challengeIDs
+      for (Challenge challenge in selectedChallenges) {
+        list.add(challenge.toJson());
+      }
+
+      var requestBody = {
+        "UserID": userID,
+        "challenges": list,
+      };
+      print(requestBody);
+
+      String jsonBody = jsonEncode(requestBody);
+      print(jsonBody);
+
+      var response = await http.post(
+        Uri.parse("http://10.0.2.2:3000/acceptNewChallenges"),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonBody,
+      );
+
+      if (response.statusCode == 200) {
+        print('Challenges accepted successfully');
+        List<dynamic> responseMessages = json.decode(response.body);
+
+        List<String> challengeSummaries = [];
+
+        for (var message in responseMessages) {
+          var name = message['challengeData']['name'];
+          var dateFinished = message['challengeData']['dateFinished'];
+          var status = "accepted";
+
+          if (name == null) {
+            name = "";
+          }
+
+          if (dateFinished != null) {
+            status = "You have already completed that challenge.";
+          }
+          challengeSummaries.add('${name}  ${status}');
+        }
+
+        // Show a single dialog box with the summary of all challenges
+        _showDialog(context, "Update", challengeSummaries.join('\n'));
+      } else {
+        print('Failed to accept challenges');
+        _showDialog(
+            context, "Error", "Something went wrong, please try again later.");
+      }
+    } catch (e) {
+      print('Error accepting challenges: $e');
+      _showDialog(context, "Error", e.toString());
+    }
   }
 
   /* Future<void> _loadChallenges() async {
@@ -286,7 +381,7 @@ class _ChallengePageState extends State<ChallengePage> {
             ),
           ),
           SizedBox(
-            height: 300,
+            height: 400,
             child: FutureBuilder<List<Challenge>>(
               future: challenges,
               builder: (context, snapshot) {
@@ -301,70 +396,74 @@ class _ChallengePageState extends State<ChallengePage> {
                     trackVisibility: true,
                     showTrackOnHover: true,
                     thickness: 5,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: filteredChallenges.length,
-                      itemBuilder: (context, index) {
-                        Challenge challenge = filteredChallenges[index];
-                        CheckboxExample myCheck =
-                            CheckboxExample(challenge: challenge);
-                        addCheckbox(myCheck);
-                        return ListTile(
-                          title: Text(challenge.name),
-                          subtitle:
-                              Text(snapshot.data![index].points.toString()),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.info),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      var expirationDate =
-                                          snapshot.data![index].expirationDate;
-                                      String expirationDateText =
-                                          (expirationDate != null)
-                                              ? expirationDate.toString()
-                                              : 'Never';
-                                      return AlertDialog(
-                                        title: Text('Challenge Description'),
-                                        content: Container(
-                                          width: 200,
-                                          height: 200,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(snapshot
-                                                  .data![index].description),
-                                              SizedBox(height: 5),
-                                              Text(
-                                                  'Expires: $expirationDateText'),
-                                            ],
+                    child: Container(
+                      color: const Color.fromRGBO(160, 197, 89, 100),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: filteredChallenges.length,
+                        itemBuilder: (context, index) {
+                          Challenge challenge = filteredChallenges[index];
+                          CheckboxExample myCheck =
+                              CheckboxExample(challenge: challenge);
+                          addCheckbox(myCheck);
+                          return ListTile(
+                            focusColor: Colors.white,
+                            title: Text(challenge.name),
+                            subtitle:
+                                Text(snapshot.data![index].points.toString()),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.info),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        var expirationDate = snapshot
+                                            .data![index].expirationDate;
+                                        String expirationDateText =
+                                            (expirationDate != null)
+                                                ? expirationDate.toString()
+                                                : 'Never';
+                                        return AlertDialog(
+                                          title: Text('Challenge Description'),
+                                          content: Container(
+                                            width: 200,
+                                            height: 200,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(snapshot
+                                                    .data![index].description),
+                                                SizedBox(height: 5),
+                                                Text(
+                                                    'Expires: $expirationDateText'),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('Close'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              myCheck,
-                            ],
-                          ),
-                        );
-                      },
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: Text('Close'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                myCheck,
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   );
                 } else if (snapshot.hasError) {
@@ -521,6 +620,8 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
   void _acceptUserChallenges(BuildContext context) async {
     print("updating user challenges");
     try {
+      var userID = await getUserID();
+      print(userID);
       var list = [];
       List<UserChallenge> challengeList = await userChallenges;
       selectedChallenges =
@@ -530,7 +631,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
       for (UserChallenge challenge in selectedChallenges) {
         list.add(challenge.toAcceptedJson());
       }
-      String jsonBody = jsonEncode(list);
+      var jsonBody = jsonEncode({"UserID": userID, "challenges": list});
 
       // Make a POST request with the JSON body
       var response = await http.post(
@@ -542,8 +643,8 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
       );
 
       if (response.statusCode == 200) {
-        print('Challenges accepted successfully');
-        _showDialog(context, 'Success', 'Challenges accepted successfully');
+        print('Challenges completed successfully');
+        _showDialog(context, 'Success', 'Challenges completed successfully');
       } else {
         print('Failed to accept challenges');
         _showDialog(context, 'Error', 'Failed to update challenges');
@@ -581,12 +682,22 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
 
   Future<List<UserChallenge>> _getUserChallenges() async {
     print("here");
-    // this is the url for using a Android emulator
-    // Apple emulators use localhost like normal
-    String url = 'http://10.0.2.2:3000/getCurrentUserChallenges';
+    var userID = await getUserID();
+    print(userID);
     List<UserChallenge> challenges = [];
 
-    var response = await http.get(Uri.parse(url));
+    // Update the URL to include the userID as a query parameter
+    String url = 'http://10.0.2.2:3000/getCurentUserChallenges';
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Include the userID as a query parameter
+      body: jsonEncode({'userID': userID.toString()}),
+    );
+
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     print(response.statusCode);
@@ -659,7 +770,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
             ),
           ),
           SizedBox(
-            height: 300,
+            height: 400,
             child: FutureBuilder<List<UserChallenge>>(
               future: userChallenges,
               builder: (context, snapshot) {
@@ -676,72 +787,75 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
                   //        !selectedChallenges.contains(challenge))
                   //    .toList();
 
-                  return Scrollbar(
-                    trackVisibility: true,
-                    showTrackOnHover: true,
-                    thickness: 5,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: challenges.length,
-                      itemBuilder: (context, index) {
-                        UserChallenge challenge = challenges[index];
-                        CheckboxExample2 myCheck =
-                            CheckboxExample2(challenge: challenge);
-                        addCheckbox2(myCheck);
-                        return ListTile(
-                          title: Text(challenge.name),
-                          subtitle:
-                              Text(snapshot.data![index].points.toString()),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.info),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Challenge Description'),
-                                        content: Container(
-                                          width: 200,
-                                          height: 200,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(snapshot
-                                                  .data![index].description),
+                  return Container(
+                    color: Colors.grey[300],
+                    child: Scrollbar(
+                      trackVisibility: true,
+                      showTrackOnHover: true,
+                      thickness: 5,
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: challenges.length,
+                        itemBuilder: (context, index) {
+                          UserChallenge challenge = challenges[index];
+                          CheckboxExample2 myCheck =
+                              CheckboxExample2(challenge: challenge);
+                          addCheckbox2(myCheck);
+                          return ListTile(
+                            title: Text(challenge.name),
+                            subtitle:
+                                Text(snapshot.data![index].points.toString()),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.info),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Challenge Description'),
+                                          content: Container(
+                                            width: 200,
+                                            height: 200,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(snapshot
+                                                    .data![index].description),
 
-                                              //SizedBox(height: 16),
-                                              //(
-                                              ///   'Expires: $expirationDateText')
+                                                //SizedBox(height: 16),
+                                                //(
+                                                ///   'Expires: $expirationDateText')
 
-                                              //Text(snapshot
-                                              //    .data![index].daysInProgress),
-                                            ],
+                                                //Text(snapshot
+                                                //    .data![index].daysInProgress),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('Close'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              myCheck,
-                            ],
-                          ),
-                        );
-                      },
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: Text('Close'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                myCheck,
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   );
                 } else if (snapshot.hasError) {
