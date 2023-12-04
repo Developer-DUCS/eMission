@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="600px"
+   height="600px"
+   viewBox="0 0 600 600"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="drivingcar_forsplash.svg"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   inkscape:export-filename="/Users/jalipurcell/Downloads/carcar.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview931"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.2618804"
+     inkscape:cx="370.47886"
+     inkscape:cy="343.53495"
+     inkscape:window-width="1792"
+     inkscape:window-height="1067"
+     inkscape:window-x="405"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:snap-page="false"
+     inkscape:snap-text-baseline="false"
+     inkscape:snap-grids="false" />
+  <defs
+     id="defs926">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient9256">
+      <stop
+         style="stop-color:#cccccc;stop-opacity:1"
+         offset="0"
+         id="stop9252" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="1"
+         id="stop9254" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient8054"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop8052" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9256"
+       id="linearGradient9258"
+       x1="31.401402"
+       y1="296.10748"
+       x2="16.843653"
+       y2="277.31635"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.9;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 463.53893,263.82237 c 5.67586,41.93085 14.00985,48.67713 -26.06558,56.88792 -20.11402,54.22628 -91.35396,24.74027 -88.28622,15.60498 l -167.47137,27.80154 c -10.35789,27.30672 -60.99696,33.20338 -80.66917,9.21179 -51.366533,5.74066 -34.724152,-16.49067 -41.257006,-57.44465 23.447832,-18.84137 59.042096,-24.90699 96.616506,-33.36668 l 46.58246,-32.09602 c 48.98091,-29.17547 93.56689,-32.66663 148.40536,-34.70142 l 49.76101,13.22938 c 37.90845,1.32826 46.31588,3.37574 62.38401,34.87316 z"
+       id="path5009"
+       sodipodi:nodetypes="ccccccccccc"
+       inkscape:export-filename="/Users/jalipurcell/Downloads/carcar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+       x="395.62463"
+       y="351.57468"
+       id="text819"
+       inkscape:export-filename="/Users/jalipurcell/Downloads/option2.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan817"
+         x="395.62463"
+         y="351.57468" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:0.95;font-family:sans-serif;letter-spacing:-0.00175935px;white-space:pre;inline-size:88.0386;fill:url(#linearGradient9258);fill-opacity:1;stroke:none"
+       x="11.107842"
+       y="303.08539"
+       id="text31967"
+       transform="matrix(-4.4436423,1.3558496,0.51922724,3.3681432,446.16146,-745.30184)"
+       inkscape:export-filename="/Users/jalipurcell/Downloads/carcar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="11.107842"
+         y="303.08539"
+         id="tspan887"><tspan
+           style="font-family:'Social Monster';-inkscape-font-specification:'Social Monster'"
+           id="tspan885">e</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+       x="648.22186"
+       y="812.45923"
+       id="text2624"><tspan
+         sodipodi:role="line"
+         id="tspan2622"
+         x="648.22186"
+         y="812.45923">a</tspan></text>
+  </g>
+</svg>

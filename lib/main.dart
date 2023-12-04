@@ -1,9 +1,41 @@
 //
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:async';
 
 //
 void main() => runApp(const MyApp());
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Simulate waiting for 3 seconds then navigate to main screen
+    Timer(const Duration(seconds: 20), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const MyApp(), // Replace MainScreen with your main app screen
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Image.asset('assets/images/splash.png'), // Use your splash image
+      ),
+    );
+  }
+}
 
 
 /* */
