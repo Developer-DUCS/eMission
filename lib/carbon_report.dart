@@ -1,27 +1,22 @@
 /// carbon_report.dart
-/// 
+///
 /// This is a page on the eMission flutter application that constructs the CarbonReportPage Widget.
-/// The carbon_report page is responsible for displaying user's carbon footprint information --drive length in miles, 
+/// The carbon_report page is responsible for displaying user's carbon footprint information --drive length in miles,
 /// the car make and model, the estimated carbon emission score and a short message --following a drive.
-/// 
-/// This page will allow users to screenshot their report and share it with other user's or members of 
-/// the challenge group. 
-/// 
-/// Created: Sept 28, 2023 
+///
+/// This page will allow users to screenshot their report and share it with other user's or members of
+/// the challenge group.
+///
+/// Created: Sept 28, 2023
 /// Author: Chris Warren
-
-
-
 
 // import statements
 import 'package:flutter/material.dart';
 
-
-
 /*
     Initializes ChallengePage Class and returns a container of the pages various Widgets
 */
-class CarbonReportPage extends StatelessWidget{
+class CarbonReportPage extends StatelessWidget {
   const CarbonReportPage({super.key});
 
   @override
@@ -31,13 +26,13 @@ class CarbonReportPage extends StatelessWidget{
       color: const Color.fromRGBO(124, 184, 22, 1),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:<Widget> [
+        children: <Widget>[
           Container(
             padding: const EdgeInsets.fromLTRB(40, 40, 40, 40),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color.fromRGBO(206, 213, 92, 100)),
+              border:
+                  Border.all(color: const Color.fromRGBO(206, 213, 92, 100)),
               color: const Color.fromRGBO(160, 197, 89, 100),
-
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,7 +52,7 @@ class CarbonReportPage extends StatelessWidget{
                 Container(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: const Text(
-                    "2016 Chevorlet Trax",
+                    "Your Car Here",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -69,7 +64,7 @@ class CarbonReportPage extends StatelessWidget{
                 Container(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: const Text(
-                    "20 total miles",
+                    "[#] total miles",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -126,19 +121,24 @@ class CarbonReportPage extends StatelessWidget{
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   OutlinedButton(
-                    style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(227, 167, 27, 100)),
-                    foregroundColor: MaterialStatePropertyAll(Colors.white),
-                    overlayColor: MaterialStatePropertyAll(Color.fromRGBO(139, 141, 43, 100)),
-                    shadowColor: MaterialStatePropertyAll(Colors.black),
-                    ),
-                    onPressed: ( ) { null; },
-                    child: const Align(alignment: Alignment.center, child: Text("Save To Photos"))
-                  ),
-                ], 
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Color.fromRGBO(227, 167, 27, 100)),
+                        foregroundColor: MaterialStatePropertyAll(Colors.white),
+                        overlayColor: MaterialStatePropertyAll(
+                            Color.fromRGBO(139, 141, 43, 100)),
+                        shadowColor: MaterialStatePropertyAll(Colors.black),
+                      ),
+                      onPressed: () {
+                        null;
+                      },
+                      child: const Align(
+                          alignment: Alignment.center,
+                          child: Text("Save To Photos"))),
+                ],
               ),
             ),
-          ), 
+          ),
         ],
       ),
     );
