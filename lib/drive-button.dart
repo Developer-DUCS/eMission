@@ -24,7 +24,7 @@ class _ButtonPageState extends State<ButtonPage> {
     setState(() {
       isGreen = !isGreen; // Toggle the color state
       if (isGreen) {
-        buttonText = "Drive time";
+        buttonText = "Drive in Progress";
         startTimer();
       } else {
         buttonText = "Press to start drive";
@@ -72,7 +72,8 @@ class _ButtonPageState extends State<ButtonPage> {
     //final apiService = CalculateApiService();
     //final response = await apiService.calculateCarbonFootprint();
     const make = 'Toyota';
-    final response = await http.get(Uri.parse('http://10.0.2.2:3000/makeId?make=$make'));
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:3000/makeId?make=$make'));
     print(response);
     // ignore: use_build_context_synchronously
     showDialog(
@@ -84,15 +85,17 @@ class _ButtonPageState extends State<ButtonPage> {
             style: GoogleFonts.nunito(),
           ),
           content: Text(
+              "This Drive button is still in a demo format. We thank you for your patience in our development process."),
+          /* content: Text(
             'API Response: $response',
             style: GoogleFonts.nunito(),
-          ),
+          ), */
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 closeOverlay();
                 Navigator.of(context).pop();
-                Navigator.pushNamed(context,'carbon_report');
+                Navigator.pushNamed(context, 'carbon_report');
               },
               child: Text('Close'),
             ),

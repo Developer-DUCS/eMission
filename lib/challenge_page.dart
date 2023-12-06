@@ -154,6 +154,8 @@ Future<List<Challenge>> _getChallenges() async {
 
 Future<dynamic> getUserID() async {
   final SharedPreferences pref = await SharedPreferences.getInstance();
+  print(pref.getInt("userID"));
+  print("^ Pref");
   pref.getInt("userID");
   print(pref.getInt("userID"));
   return pref.getInt("userID");
@@ -367,6 +369,7 @@ class _ChallengePageState extends State<ChallengePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(16.0),
       color: const Color.fromRGBO(255, 168, 48, 100),
@@ -376,12 +379,15 @@ class _ChallengePageState extends State<ChallengePage> {
           ToggleButton(isPastPage: false),
           Center(
             child: Text(
-              "Challenge yourself with any of the following eFriendly challenges",
+              "Select the challenges you'd like to try.",
               textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+              ),
             ),
           ),
           SizedBox(
-            height: 400,
+            height: screenHeight * .5,
             child: FutureBuilder<List<Challenge>>(
               future: challenges,
               builder: (context, snapshot) {
@@ -554,29 +560,47 @@ class _ChallengePageState extends State<ChallengePage> {
 class ToggleButton extends StatelessWidget {
   final bool isPastPage;
 
-  const ToggleButton({super.key, required this.isPastPage});
+  const ToggleButton({Key? key, required this.isPastPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    double paddingFactor = screenWidth * .07;
+    double fontSizeFactor = screenWidth * .04;
+
     return CupertinoSegmentedControl<String>(
-      padding: const EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(paddingFactor),
       borderColor: Colors.black,
       children: {
         'Past': Container(
           color: isPastPage
               ? const Color.fromRGBO(160, 197, 89, 100)
               : Colors.grey[300],
-          padding: const EdgeInsets.fromLTRB(7, 5, 8, 5.5),
-          child: const Text("My Challenges",
-              style: TextStyle(fontFamily: 'Nunito', color: Colors.black)),
+          padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
+          child: Text(
+            "My Challenges",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              color: Colors.black,
+              fontSize: fontSizeFactor,
+            ),
+          ),
         ),
         'Current': Container(
-            color: isPastPage
-                ? Colors.grey[300]
-                : const Color.fromRGBO(160, 197, 89, 100),
-            padding: const EdgeInsets.fromLTRB(1, 5, 1.3, 5.8),
-            child: const Text("New Challenges",
-                style: TextStyle(fontFamily: 'Nunito', color: Colors.black))),
+          color: isPastPage
+              ? Colors.grey[300]
+              : const Color.fromRGBO(160, 197, 89, 100),
+          padding: EdgeInsets.fromLTRB(1, 5, 1.3, 5.8),
+          child: Text(
+            "New Challenges",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              color: Colors.black,
+              fontSize: fontSizeFactor,
+            ),
+          ),
+        ),
       },
       onValueChanged: (String value) {
         if (value == 'Past') {
@@ -626,10 +650,16 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
       List<UserChallenge> challengeList = await userChallenges;
       selectedChallenges =
           challengeList.where((challenge) => challenge.isSelected).toList();
+
       print(selectedChallenges);
       print('Selected Challenges: $selectedChallenges');
       for (UserChallenge challenge in selectedChallenges) {
         list.add(challenge.toAcceptedJson());
+      }
+      print(list.length);
+      if (list.length == 0) {
+        //_showDialog(context, 'Error', 'No Challenges Selected.');
+        throw ("No challenges selected to complete.");
       }
       var jsonBody = jsonEncode({"UserID": userID, "challenges": list});
 
@@ -756,6 +786,8 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.all(16.0),
       color: Color.fromRGBO(124, 184, 22, 100),
@@ -765,12 +797,15 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
           ToggleButton(isPastPage: true),
           Center(
             child: Text(
-              "Here is all the challenges you have currently accepted. Check them off as you complete them.",
+              "Your Current Challenges: ",
               textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+              ),
             ),
           ),
           SizedBox(
-            height: 400,
+            height: screenHeight * .5,
             child: FutureBuilder<List<UserChallenge>>(
               future: userChallenges,
               builder: (context, snapshot) {
@@ -788,6 +823,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
                   //    .toList();
 
                   return Container(
+                    padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
                     color: Colors.grey[300],
                     child: Scrollbar(
                       trackVisibility: true,
