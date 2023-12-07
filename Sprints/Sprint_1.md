@@ -112,9 +112,9 @@ We will make new branches for each Task in the project board. These task branche
 ### Tools
 *Team Organization*
 * Github Repository & Project Board
-  * lorem ipsum
+  * Github and the Project Board will be used to organize teams progress and processes. The repository will be the primary tool for development, which includes programming, creating and reviewing pull requests, and managing branches. The repository will link to the wiki which includes all necessary documentation. The Project Board will be used for creating issues/tasks for team members and keeping track of what's being done. The board will also be where members of the development team can interact and help each other on specific tasks.
 * Discord
-  * Lorem Ipsum
+  * Discord is the teams communication tool of choice. Our Research & Development Server can be accessed by all members of the development team allowing for open communication about and surrounding the project. 
 
   
 *Code Editor*
