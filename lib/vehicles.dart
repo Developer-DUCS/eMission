@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Vehicles extends StatefulWidget {
   const Vehicles({super.key});
@@ -20,10 +22,11 @@ class VehiclesState extends State<Vehicles> {
     fetchVehicles();
   }
 
-  void fetchVehicles() {
-    var owner = '1'; //get user from local storage
+  void fetchVehicles() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     http
-        .get(Uri.parse('http://10.0.2.2:3000/vehicles?owner=${owner}'))
+        .get(Uri.parse(
+            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
         .then((res) {
       setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
@@ -165,6 +168,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
   Map<String, dynamic> selectedMake = {};
   Map<String, dynamic> selectedModel = {};
   Map<String, dynamic> selectedYear = {};
+  TextEditingController vehicleMileageController = TextEditingController();
 
   AddVehicleDialogState({required this.vehicle});
 
@@ -173,6 +177,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
     super.initState();
 
     vehicleNameController.addListener(() => setState(() {}));
+    vehicleMileageController.addListener(() => setState(() {}));
 
     isEdit = vehicle.isNotEmpty;
 
@@ -183,6 +188,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
       if (isEdit) {
         setState(() {
           vehicleNameController.text = vehicle['carName'];
+          vehicleMileageController.text = vehicle['currentMileage'];
           handleSelectedMake(vehicleMakes.firstWhere(
                   (e) => e['data']['attributes']['name'] == vehicle['make']))
               .then((_) => handleSelectedModel(vehicleModels.firstWhere((e) =>
@@ -242,18 +248,20 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
     return completer.future;
   }
 
-  void addVehicle(BuildContext context) {
+  void addVehicle(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     http
         .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=false'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
-              'owner': '1', //replace with user from local storage
+              'owner': pref.getInt('userID'),
               'name': vehicleNameController.text,
               'make': selectedMake['data']['attributes']['name'],
               'model': selectedModel['data']['attributes']['name'],
               'year': selectedYear['data']['attributes']['year'].toString(),
               'makeId': selectedMake['data']['id'],
-              'modelId': selectedYear['data']['id']
+              'modelId': selectedYear['data']['id'],
+              'mileage': vehicleMileageController.text
             }))
         .then((res) {
       Navigator.pop(context);
@@ -265,13 +273,14 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
         .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=true'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
-              'id': vehicle['carID'], //replace with user from local storage
+              'id': vehicle['carID'],
               'name': vehicleNameController.text,
               'make': selectedMake['data']['attributes']['name'],
               'model': selectedModel['data']['attributes']['name'],
               'year': selectedYear['data']['attributes']['year'].toString(),
               'makeId': selectedMake['data']['id'],
-              'modelId': selectedYear['data']['id']
+              'modelId': selectedYear['data']['id'],
+              'mileage': vehicleMileageController.text
             }))
         .then((res) {
       Navigator.pop(context);
@@ -514,6 +523,17 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
         const SizedBox(
           height: 20,
         ),
+        TextFormField(
+          controller: vehicleMileageController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: const InputDecoration(
+            labelText: 'Mileage',
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -529,7 +549,8 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
                 onPressed: vehicleNameController.text.isEmpty ||
                         selectedMake.isEmpty ||
                         selectedModel.isEmpty ||
-                        selectedYear.isEmpty
+                        selectedYear.isEmpty ||
+                        vehicleMileageController.text.isEmpty
                     ? null
                     : () => isEdit ? editVehicle(context) : addVehicle(context),
                 style: ElevatedButton.styleFrom(
