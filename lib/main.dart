@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
               pageIndex: 1,
             ),
         'leaderboard': (context) => const Layout(
-              body: Leaderboard(players: [],),
+              body: Leaderboard(),
               pageIndex: 0,
             ),
         'settings': (context) => const Layout(
