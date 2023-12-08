@@ -239,7 +239,12 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
           .where((element) =>
               element['data']['attributes']['name'] ==
               selectedModel['data']['attributes']['name'])
+          .map((e) => allModels.firstWhere((element) =>
+              element['data']['attributes']['year'] ==
+              e['data']['attributes']['year']))
+          .toSet()
           .toList();
+
       Future.microtask(() {
         completer.complete();
       });
