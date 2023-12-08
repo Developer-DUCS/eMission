@@ -168,6 +168,7 @@ app.get("/getUserChallenges", async (req, res) => {
     }
   });
 });
+
 app.get("/getCurrentUserChallenges", async (req, res) => {
   console.log("Request to get current userChallenges");
   const body = req.body;
@@ -524,36 +525,101 @@ app.delete("/vehicles", (req, res) => {
   });
 });
 
+// Submits vehicle ID and miles driven to Carbon Report API
 app.get("/vehicleCarbonReport", (req, res) => {
   const { vehicleId, distance } = req.query;
 
+  // Ensure modelID and trip distance were sent
   if (!vehicleId)
     return res.status(400).json({ error: "Must provide vehicled id." });
   if (!distance)
     return res.status(400).json({ error: "Must provide distance." });
 
-  fetch({
-    url: `${API_URL}/estimates`,
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: {
+  // Prep data for sending ot Carbon Interface
+  const requestData = {
       type: "vehicle",
       distance_unit: "mi",
       distance_value: distance,
-      vehicle_model_id: vehicleId,
+      vehicle_model_id: vehicleId
+  }
+
+  const jsonData = JSON.stringify(requestData)
+
+  // Send request to Carbon Interface
+  fetch("https://www.carboninterface.com/api/v1/estimates", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
     },
+    body: jsonData
   })
-    .then((apiRes) => {
-      if (res.ok) {
-        res.json(apiRes.json());
+    .then((res) => res.json())
+    .then(data => {
+      // If we get data back, send it to user
+      if (data) {
+        res.status(200).json({data: data})
       } else {
         res.status(500).json({ error: "Server error." });
       }
     })
     .catch((err) => res.status(500).json({ error: err }));
+});
+
+// Calculates difference between submitted miles and currently saved miles
+app.post("/updateDistance", (req, res) => {
+  // Database Credentials
+  const dbconfig = {
+    host: "mcs.drury.edu",
+    port: "3306",
+    user: "emission",
+    password: "Letmein!eCoders",
+    database: "emission",
+  };
+  // Connect to database
+  const db = new Database(dbconfig);
+  db.connect();
+
+  // Unpacking sent data
+  const distance = req.body.distance;
+  const userCredentials = req.body.userID;
+  const submittedVehicle = req.body.vehicle;
+
+  // Query to fetch saved milage
+  const query = 'select currentMileage from emission.Cars where owner = ? and carID = ?;' 
+
+  db.query(query, [userCredentials, submittedVehicle], (error, result) => {
+    // Catch Errors
+    if (error) {
+      //console.error("Error executing query:", error);
+      response.status(500).json({ msg: "Database Error" });
+    } 
+    else {
+      // Save old mileage
+      const currentMilage = result[0]['currentMileage']
+      const travelDist = distance - currentMilage;
+
+      // Check if submitted mileage is greater than the saved mileage. 
+      // If not, send back an error.
+      if (currentMilage >= distance){
+        res.status(500).json({msg: 'Submitted Mileage must be greater than old mileage'});
+      }
+      else{
+        // Query to update saved mileage to submitted mileage
+        const updateQuery = 'UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;'
+        db.query(updateQuery, [distance, userCredentials, submittedVehicle], (error, result) => {
+          // Catch Errors
+          if (error) {
+            //console.error("Error executing query:", error);
+            response.status(500).json({ msg: "Database Error" });
+          } else {
+            // After update, return travelled distance
+            res.status(200).json({data: travelDist});
+          }
+        });
+      }
+    }
+  });
 });
 
 app.listen(PORT, () => {

@@ -21,9 +21,9 @@ class VehiclesState extends State<Vehicles> {
   }
 
   void fetchVehicles() {
-    var owner = '1'; //get user from local storage
+    var owner = '44'; //get user from local storage
     http
-        .get(Uri.parse('http://10.0.2.2:3000/vehicles?owner=${owner}'))
+        .get(Uri.parse('http://localhost:3000/vehicles?owner=${owner}'))
         .then((res) {
       setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
@@ -35,7 +35,7 @@ class VehiclesState extends State<Vehicles> {
 
   void deleteVehicle(int id) {
     http
-        .delete(Uri.parse('http://10.0.2.2:3000/vehicles?id=${id}'))
+        .delete(Uri.parse('http://localhost:3000/vehicles?id=${id}'))
         .then((value) => fetchVehicles());
   }
 
@@ -176,7 +176,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
     isEdit = vehicle.isNotEmpty;
 
-    http.get(Uri.parse('http://10.0.2.2:3000/makes')).then((res) {
+    http.get(Uri.parse('http://localhost:3000/makes')).then((res) {
       vehicleMakes = List<dynamic>.from(json.decode(res.body))
           .map((item) => Map<String, dynamic>.from(item))
           .toList();
@@ -202,7 +202,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
     http
         .get(Uri.parse(
-            'http://10.0.2.2:3000/models?makeId=${make['data']['id']}'))
+            'http://localhost:3000/models?makeId=${make['data']['id']}'))
         .then((res) {
       setState(() {
         selectedMake = make;
@@ -244,10 +244,10 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
   void addVehicle(BuildContext context) {
     http
-        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=false'),
+        .post(Uri.parse('http://localhost:3000/vehicles?isEdit=false'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
-              'owner': '1', //replace with user from local storage
+              'owner': '44', //replace with user from local storage
               'name': vehicleNameController.text,
               'make': selectedMake['data']['attributes']['name'],
               'model': selectedModel['data']['attributes']['name'],
@@ -262,7 +262,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
   void editVehicle(BuildContext context) {
     http
-        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=true'),
+        .post(Uri.parse('http://localhost:3000/vehicles?isEdit=true'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
               'id': vehicle['carID'], //replace with user from local storage
