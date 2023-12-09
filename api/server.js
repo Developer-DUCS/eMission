@@ -85,7 +85,8 @@ app.post("/authUser", (request, response) => {
 
   const loginData = request.body;
   const query =
-    "SELECT userID, email, password, displayName FROM emission.Users WHERE email = ?";
+
+    "SELECT userID, email, userName, displayName, password FROM emission.Users WHERE email = ?";
 
   db.query(query, loginData.email, (error, result) => {
     if (error) {
@@ -109,7 +110,43 @@ app.post("/authUser", (request, response) => {
         }
       }
     }
-    //db.disconnect();
+    db.disconnect();
+  });
+});
+
+const updateUserSql =
+  "UPDATE Users SET userName = ?, displayName = ? WHERE userID = ?;";
+
+app.patch("/user", (req, res) => {
+  const values = [req.body.username, req.body.displayName, req.body.id];
+
+  db.query(updateUserSql, values, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error updating information." });
+    } else {
+      res.status(200).send();
+    }
+  });
+});
+
+const updatePasswordSql =
+  "UPDATE Users SET password = ? WHERE userID = ? AND password = ?;";
+
+app.patch("/password", (req, res) => {
+  const values = [req.body.newPassword, req.body.id, req.body.oldPassword];
+
+  console.log("request recieved");
+
+  db.query(updatePasswordSql, values, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error updating information." });
+    } else {
+      if (results.changedRows == 1) {
+        res.status(200).send();
+      } else {
+        res.status(401).send();
+      }
+    }
   });
 });
 
@@ -157,7 +194,6 @@ app.post("/getEarnedPoints", (req, res) => {
       console.error("Error executing query:", err);
       return res.status(500).json({ error: "Error getting sum." });
     } else {
-      
       console.log("Query results:", results);
       return res.status(200).json({ results });
     }
@@ -172,6 +208,7 @@ app.get("/getChallengesByID", (req, res) => {
   console.log(body);
   const id = [body.id];
   const db = new Database(dbconfig);
+
   db.query(query, id, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -313,8 +350,6 @@ app.get("/models", (req, res) => {
     .catch(console.log); //, (err) => res.status(500).json({ error: err }));
 });
 
-
-
 const getVehicleSql =
   "SELECT make, model, year, carID, carName, modelID, currentMileage FROM Cars WHERE owner = ?;";
 
@@ -427,37 +462,108 @@ app.delete("/vehicles", (req, res) => {
   });
 });
 
+// Submits vehicle ID and miles driven to Carbon Report API
 app.get("/vehicleCarbonReport", (req, res) => {
   const { vehicleId, distance } = req.query;
 
+  // Ensure modelID and trip distance were sent
   if (!vehicleId)
     return res.status(400).json({ error: "Must provide vehicle id." });
   if (!distance)
     return res.status(400).json({ error: "Must provide distance." });
 
-  fetch({
-    url: API_URL,
+  // Prep data for sending ot Carbon Interface
+  const requestData = {
+    type: "vehicle",
+    distance_unit: "mi",
+    distance_value: distance,
+    vehicle_model_id: vehicleId,
+  };
+
+  const jsonData = JSON.stringify(requestData);
+
+  // Send request to Carbon Interface
+  fetch("https://www.carboninterface.com/api/v1/estimates", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: {
-      type: "vehicle",
-      distance_unit: "mi",
-      distance_value: distance,
-      vehicle_model_id: vehicleId,
-    },
+    body: jsonData,
   })
-    .then((apiRes) => {
-      if (apiRes.ok) {
-        return apiRes.json();
+    .then((res) => res.json())
+    .then((data) => {
+      // If we get data back, send it to user
+      if (data) {
+        res.status(200).json({ data: data });
       } else {
         res.status(500).json({ error: "Server error." });
       }
     })
     .then((data) => res.json(data)) // added line to send the data
     .catch((err) => res.status(500).json({ error: err }));
+});
+
+// Calculates difference between submitted miles and currently saved miles
+app.post("/updateDistance", (req, res) => {
+  // Database Credentials
+  const dbconfig = {
+    host: "mcs.drury.edu",
+    port: "3306",
+    user: "emission",
+    password: "Letmein!eCoders",
+    database: "emission",
+  };
+  // Connect to database
+  const db = new Database(dbconfig);
+  db.connect();
+
+  // Unpacking sent data
+  const distance = req.body.distance;
+  const userCredentials = req.body.userID;
+  const submittedVehicle = req.body.vehicle;
+
+  // Query to fetch saved milage
+  const query =
+    "select currentMileage from emission.Cars where owner = ? and carID = ?;";
+
+  db.query(query, [userCredentials, submittedVehicle], (error, result) => {
+    // Catch Errors
+    if (error) {
+      //console.error("Error executing query:", error);
+      response.status(500).json({ msg: "Database Error" });
+    } else {
+      // Save old mileage
+      const currentMilage = result[0]["currentMileage"];
+      const travelDist = distance - currentMilage;
+
+      // Check if submitted mileage is greater than the saved mileage.
+      // If not, send back an error.
+      if (currentMilage >= distance) {
+        res
+          .status(500)
+          .json({ msg: "Submitted Mileage must be greater than old mileage" });
+      } else {
+        // Query to update saved mileage to submitted mileage
+        const updateQuery =
+          "UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;";
+        db.query(
+          updateQuery,
+          [distance, userCredentials, submittedVehicle],
+          (error, result) => {
+            // Catch Errors
+            if (error) {
+              //console.error("Error executing query:", error);
+              response.status(500).json({ msg: "Database Error" });
+            } else {
+              // After update, return travelled distance
+              res.status(200).json({ data: travelDist });
+            }
+          }
+        );
+      }
+    }
+  });
 });
 
 app.listen(PORT, () => {

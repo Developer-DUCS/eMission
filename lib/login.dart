@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
   // and returning the response statuse code.
   Future<int> _submitForm(context) async {
     // android emulator url
-    String url = 'http://10.0.2.2:3000/authUser';
+    String url = 'http://localhost:3000/authUser';
 
     // Encrypt the password
     String encryptedPassword = encryptPassword(passwordController.text);
@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
 
     // verify the request code
     if (resCode == 200) {
-      saveUserID(response); // store userID
+      saveUserInfo(response); // store info
       Navigator.pushNamed(context, 'home'); // push to home page
 
       // return status code for form validation
@@ -187,15 +187,13 @@ class _LoginState extends State<Login> {
   }
 
   // method responsible for storing the user's ID number locally
-  Future<void> saveUserID(info) async {
-    try {
-      final SharedPreferences pref = await SharedPreferences.getInstance();
-      print(pref);
-      pref.setInt("userID", info["userID"]);
-      pref.setString("userName", info["displayName"]);
-    } catch (error) {
-      print("Error saving userID: $error");
-    }
+
+  Future<void> saveUserInfo(info) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt("userID", info["userID"]);
+    pref.setString("email", info["email"]);
+    pref.setString("userName", info["userName"]);
+    pref.setString("displayName", info["displayName"] ?? '');
   }
 
   @override

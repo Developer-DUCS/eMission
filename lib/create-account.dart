@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:first_flutter_app/encryption.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -60,7 +59,7 @@ class _CreateAccountState extends State<CreateAccount> {
           body: json.encode(formData));
       debugPrint('Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
-        Navigator.pushNamed(context, 'login');
+        Navigator.pushNamed(context, 'login');  
       } else {
         if (response.statusCode == 401) {
           Flushbar(
