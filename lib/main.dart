@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'eMission',
-      initialRoute: 'home',
+      initialRoute: 'create-account',
       routes: {
         'create-account': (context) => const Layout(
               body: CreateAccount(),
@@ -40,8 +40,7 @@ class MyApp extends StatelessWidget {
               body: Home(),
               pageIndex: 1,
             ),
-        'leaderboard': (context) => const Layout(
-              
+        'leaderboard': (context) => const Layout(     
               body: Leaderboard(),
               pageIndex: 0,
             ),

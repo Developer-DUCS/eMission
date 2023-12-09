@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
   // and returning the response statuse code.
   Future<int> _submitForm(context) async {
     // android emulator url
-    String url = 'http://localhost:3000/authUser';
+    String url = 'http://10.0.2.2:3000/authUser';
 
     // Encrypt the password
     String encryptedPassword = encryptPassword(passwordController.text);
