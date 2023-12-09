@@ -1,3 +1,14 @@
+/*
+*     testing.js
+*
+*       Meant for unit testing routes found in server.js
+*       Includes classes for mocking a connection to the mysql db.
+*       To run the tests, navigate to the /api folder by performing
+*        cd /api
+*       Then run
+*         npm test
+*/
+
 const express = require('express');
 const Database  = require('./sql_db_man');
 const vehicleMakes = require('./VehicleMakes.json');
@@ -186,14 +197,13 @@ describe('Test /insertUser', () => {
     });
     
     
-  // place for more insert user tests  
   
   });
 
   describe('Test /authUser', () => {
     let connectStub;
-  let queryStub;
-  let disconnectStub;
+    let queryStub;
+    let disconnectStub;
 
   before(() => {
     connectStub = sinon.stub(Database.prototype, 'connect');
@@ -496,7 +506,6 @@ describe('Test /getCurrentUserChallenges', () => {
         expect(response).to.have.status(500);
         expect(response.body).to.have.property('error');
         expect(response.body).to.deep.equal({error:'Server error.'});
-        //expect(response.body).to.deep.equal({ result: '240 units' });
     
         fetchStub.restore();
       });
@@ -521,7 +530,7 @@ describe('Test /getCurrentUserChallenges', () => {
 
     });
 
-
+/* 
     describe('Test /getChallenges', () => {
       let connectStub;
       let queryStub;
@@ -587,7 +596,7 @@ describe('Test /getCurrentUserChallenges', () => {
     
     
 
-    });
+    }); */
     describe('Test /acceptNewChallenges', () => {
       let connectStub;
       let queryStub;

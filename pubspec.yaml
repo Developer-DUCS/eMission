@@ -104,9 +104,10 @@ flutter:
     - assets/images/pexels-robert-so-18127674-2.jpg
     - assets/images/drawing_new.svg
     - assets/images/eMission_logo.svg
-    - assets/images/leaderboard-outline.svg 
+    - assets/images/leaderboard-outline.svg  
+    - assets/images/plant.png  
+    - assets/images/plant.jpg
     - assets/images/stock-photo.jpg   
-    - assets/images/leaderboard-outline.svg
 
   # custom fonts
   fonts:
