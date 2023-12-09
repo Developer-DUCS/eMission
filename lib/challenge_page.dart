@@ -629,6 +629,8 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     );
   }
 
+// User Challenge - a challenge in acceptedChallenges
+// short for user Accepted Challege
   Future<List<UserChallenge>> _getUserChallenges() async {
     print("here");
     var userID = await getUserID();
@@ -636,7 +638,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     List<UserChallenge> challenges = [];
 
     // Update the URL to include the userID as a query parameter
-    String url = 'http://10.0.2.2:3000/getCurentUserChallenges';
+    String url = 'http://10.0.2.2:3000/getCurrentUserChallenges';
 
     var response = await http.post(
       Uri.parse(url),
@@ -730,17 +732,6 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<UserChallenge> challenges = snapshot.data!;
-
-                  //    .where((challenge) =>
-                  //        !selectedChallenges.contains(challenge))
-                  //    .toList();
-                  //List<Challenge> challengeList = snapshot.data!;
-                  // change to check
-                  //List<Challenge> filteredChallenges = challengeList
-                  //    .where((challenge) =>
-                  //        !selectedChallenges.contains(challenge))
-                  //    .toList();
-
                   return Container(
                     padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
                     color: Colors.grey[300],
@@ -928,140 +919,3 @@ class _CheckboxExampleState2 extends State<CheckboxExample2> {
         });
   }
 }
-
-/* 
-    The ChallengesTable Widget class returns a Table Widget to the application's Challenges Page. 
-    This table has 5 columns and lists the current challenges that the user can attempt alongside the number of points
-    the challenge is worth. 
-*/
-/* class ChallengesTable extends StatelessWidget {
-  const ChallengesTable({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-        border: const TableBorder(
-            horizontalInside: BorderSide(
-                width: 1, color: Colors.blue, style: BorderStyle.solid)),
-        columnWidths: const <int, TableColumnWidth>{
-          0: FixedColumnWidth(45),
-          1: FixedColumnWidth(95),
-          2: FixedColumnWidth(95),
-          3: FixedColumnWidth(95),
-          4: FixedColumnWidth(90),
-        },
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: const <TableRow>[
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                child: CheckboxExample(),
-              ),
-              TableCell(
-                child: Center(child: Text('1 day')),
-              ),
-              TableCell(
-                child: Center(child: Text('30')),
-              ),
-              TableCell(
-                child: Center(child: Text('Make an eco-brick')),
-              ),
-              TableCell(
-                  child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.grey,
-                onPressed: null,
-              )),
-            ],
-          ),
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                child: CheckboxExample(),
-              ),
-              TableCell(
-                child: Center(child: Text('1 week')),
-              ),
-              TableCell(
-                child: Center(child: Text('100')),
-              ),
-              TableCell(
-                child: Center(child: Text('Bike to the store')),
-              ),
-              TableCell(
-                  child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.grey,
-                onPressed: null,
-              )),
-            ],
-          ),
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                child: CheckboxExample(),
-              ),
-              TableCell(
-                child: Center(child: Text('1 day')),
-              ),
-              TableCell(
-                child: Center(child: Text('20')),
-              ),
-              TableCell(
-                child: Center(child: Text('Meatless Monday')),
-              ),
-              TableCell(
-                  child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.grey,
-                onPressed: null,
-              )),
-            ],
-          ),
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                child: CheckboxExample(),
-              ),
-              TableCell(
-                child: Center(child: Text('2 weeks')),
-              ),
-              TableCell(
-                child: Center(child: Text('150')),
-              ),
-              TableCell(
-                child: Center(child: Text('Use reusable coffee')),
-              ),
-              TableCell(
-                  child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.grey,
-                onPressed: null,
-              )),
-            ],
-          ),
-          TableRow(
-            children: <Widget>[
-              TableCell(
-                child: CheckboxExample(),
-              ),
-              TableCell(
-                child: Center(child: Text('1 week')),
-              ),
-              TableCell(
-                child: Center(child: Text('50')),
-              ),
-              TableCell(
-                child: Center(child: Text('Drive Track Streak')),
-              ),
-              TableCell(
-                  child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.grey,
-                onPressed: null,
-              )),
-            ],
-          ),
-        ]);
-  }
-} */

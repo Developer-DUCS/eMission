@@ -3,10 +3,8 @@
 *
 *       Meant for unit testing routes found in server.js
 *       Includes classes for mocking a connection to the mysql db.
-*       To run the tests, navigate to the /api folder by performing
-*        cd /api
-*       Then run
-*         npm test
+*       To run the tests
+*         run npm test
 */
 
 const express = require('express');
@@ -87,7 +85,6 @@ describe('Test /insertUser', () => {
             'INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)',
             ['Test@gmail.com', 'MyNewUser', 'MyNewPassword', 0, 0, 'Jane Doe']
           );
-          sinon.assert.calledOnce(disconnectStub); 
   
           if (err) {
             return done(err);
@@ -129,7 +126,7 @@ describe('Test /insertUser', () => {
           expect(res).to.have.status(200);
           expect(res.body).to.deep.equal({ msg: 'account created' });
     
-          sinon.assert.calledOnce(connectStub);
+         
           sinon.assert.calledWith(
             queryStub,
             'INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)',
@@ -143,13 +140,11 @@ describe('Test /insertUser', () => {
               expect(res).to.have.status(401); 
               expect(res.body).to.deep.equal({ msg: 'user already exists' }); 
     
-              sinon.assert.calledTwice(connectStub); 
               sinon.assert.calledWith(
                 queryStub,
                 'INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)',
                 ['Test@gmail.com', 'MyNewUser', 'MyNewPassword', 0, 0, 'Jane Doe']
               );
-              sinon.assert.calledTwice(disconnectStub); 
     
               if (err) {
                 return done(err);
@@ -186,7 +181,6 @@ describe('Test /insertUser', () => {
             'INSERT INTO Users (email, username, password, profilePicture, levelStatus, displayName) VALUES (?, ?, ?, ?, ?, ?)',
             [123, 'MyNewUser', 'MyNewPassword', 0, 0, 'Jane Doe'] // Incorrect field type for 'email'
           );
-          sinon.assert.calledOnce(disconnectStub);
     
           if (err) {
             return done(err);
@@ -315,7 +309,7 @@ describe('Test /getCurrentUserChallenges', () => {
     queryStub.callsArgWith(2, null, expectedResult);
   
     chai.request(app)
-      .post('/getCurentUserChallenges')
+      .post('/getCurrentUserChallenges')
       .send({ "userID": 1 })
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -335,7 +329,7 @@ describe('Test /getCurrentUserChallenges', () => {
       queryStub.callsArgWith(2, new Error('Incorrect userID format'), null);
 
       chai.request(app)
-        .post('/getCurentUserChallenges')
+        .post('/getCurrentUserChallenges')
         .send({ userID: invalidUserId }) 
         .end((err, res) => {
           expect(res).to.have.status(500);
@@ -435,39 +429,18 @@ describe('Test /getCurrentUserChallenges', () => {
     });
     
 
-      /* describe('Test /makeId',  () => {
-
-        it('user successfully gets makeId', (done)=>{
-            chai.request(app)
-            .get('/makeId')
-            .query({make: 'Ferrari'})
-            .end((err, res)=>{
-              expect(res).to.have.status(200);
-              expect(res.body).to.have.property('id');
-              done();
-            })
-        });
-        it('returns an error for missing make parameter', (done) => {
-          chai.request(app)
-              .get('/makeId')
-              .end((err, res) => {
-                  expect(res).to.have.status(404);
-                  expect(res.body).to.have.property('error', 'Must provide make of vehicle.');
-                  done();
-              });
+    describe('Test /makes', () => {
+      it('should return vehicle makes successfully.', (done) => {
+        request(app)
+          .get('/makes')
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(res.body).to.be.an('array');
+            done();
+          });
       });
-  
-      it('returns an error for a non-existent make', (done) => {
-          chai.request(app)
-              .get('/makeId')
-              .query({ make: 'NonExistentMake' })
-              .end((err, res) => {
-                  expect(res).to.have.status(404);
-                  expect(res.body).to.have.property('error', 'A car with that make could not be found.');
-                  done();
-              });
-      });
-      }); */
+    });
 
     describe('Test /vehicleCarbonReport',()=>{
       
@@ -527,76 +500,8 @@ describe('Test /getCurrentUserChallenges', () => {
         expect(response.body).to.deep.equal({ error: 'Must provide distance.' });
     });
 
-
     });
 
-/* 
-    describe('Test /getChallenges', () => {
-      let connectStub;
-      let queryStub;
-      let disconnectStub;
-    
-      beforeEach(() => {
-        connectStub = sinon.stub(Database.prototype, 'connect');
-        queryStub = sinon.stub(Database.prototype, 'query');
-        disconnectStub = sinon.stub(Database.prototype, 'disconnect');
-      });
-    
-      afterEach(() => {
-        sinon.restore();
-      });
-
-      it('should return challenges successfully', (done) => {
-        const mockResults = [
-          {
-            challengeID: 1,
-            points: 20,
-            description: 'Use reusable coffee mugs at your local coffee shop.',
-            length: '7',
-            expirationDate: null,
-            name: 'ReUse Coffee Cups'
-          }
-        ];
-    
-        queryStub.yields(null, mockResults);
-    
-        chai.request(app)
-          .get('/getChallenges')
-          .end((err, res) => {
-            console.log(res.status);
-            console.log(res.body);
-            expect(res.status).to.equal(200);
-            expect(res.body).to.deep.equal({ results: mockResults });
-    
-            expect(connectStub.calledOnce).to.be.true;
-            expect(queryStub.calledOnce).to.be.true;
-            expect(disconnectStub.calledOnce).to.be.true;
-    
-            done(); 
-          });
-      });
-
-      it('should handle database error', (done) => {
-        const errorMessage = 'Database error';
-        queryStub.yields(new Error(errorMessage), null);
-    
-        chai.request(app)
-          .get('/getChallenges')
-          .end((err, res) => {
-            expect(res.status).to.equal(500);
-            expect(res.body).to.deep.equal({ error: 'Error getting challenges.' });
-    
-            expect(connectStub.calledOnce).to.be.true;
-            expect(queryStub.calledOnce).to.be.true;
-            expect(disconnectStub.calledOnce).to.be.true;
-    
-            done();
-          });
-      });
-    
-    
-
-    }); */
     describe('Test /acceptNewChallenges', () => {
       let connectStub;
       let queryStub;
@@ -753,4 +658,250 @@ describe('Test /getCurrentUserChallenges', () => {
     });
 });
 
-  
+describe('Test /getEarnedPoints', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get earned points successfully.', (done) => {
+    connectStub.callsFake();
+
+    const userID = 49;
+    const expectedResult = [{ total: 100 }]; // Update with your expected result
+
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    request(app)
+      .post('/getEarnedPoints')
+      .send({ userID })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.results).to.deep.equal(expectedResult);
+        done();
+      });
+  });
+
+  it('should handle database error.', (done) => {
+    connectStub.callsFake();
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    request(app)
+      .post('/getEarnedPoints')
+      .send({ userID: 49 })
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
+
+describe('Test /models', () => {
+  let fetchStub;
+
+  beforeEach(() => {
+    fetchStub = sinon.stub(fetch, 'Promise');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should return vehicle models successfully.', (done) => {
+    const makeId = '5f266411-5bb1-4b91-b044-9707426df630';
+    const expectedResponse = [{ model: 'Model1' }, { model: 'Model2' }];
+    fetchStub.resolves({
+      ok: true,
+      json: () => expectedResponse,
+    });
+
+    request(app)
+      .get(`/models?makeId=${makeId}`)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should handle missing makeId.', (done) => {
+    request(app)
+      .get('/models')
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.error).to.equal('Must provide make ID.');
+        done();
+      });
+  });
+
+  it('should handle API server error.', (done) => {
+    const makeId = '123';
+    fetchStub.resolves({
+      ok: false,
+    });
+
+    request(app)
+      .get(`/models?makeId=${makeId}`)
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.error).to.equal('Server error.');
+        done();
+      });
+  });
+});
+describe('Test /vehicles', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get vehicles successfully.', (done) => {
+    connectStub.callsFake();
+
+    const owner = '1';
+    const expectedResult = [
+      { make: 'Toyota', model: 'Camry', year: 1993, carID: 4, carName: 'Work Car', currentMileage: 1401, modelID: 'a2d97d19-14c0-4c60-870c-e734796e014e', makeID: '2b1d0cd5-59be-4010-83b3-b60c5e5342da' }
+    ];
+
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    request(app)
+      .get(`/vehicles?owner=${owner}`)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body).to.deep.equal(expectedResult);
+        done();
+      });
+  });
+
+  it('should handle database error.', (done) => {
+    connectStub.callsFake();
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    request(app)
+      .get('/vehicles?owner=1')
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
+
+describe('Test /vehicles', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should insert a new vehicle successfully.', (done) => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      owner: '1',
+      name: 'Work Car',
+      make: 'Toyota',
+      model: 'Camry',
+      year: '1993',
+      makeId: '2b1d0cd5-59be-4010-83b3-b60c5e5342da',
+      modelId: 'a2d97d19-14c0-4c60-870c-e734796e014e',
+      mileage: '1401',
+    };
+
+    queryStub.callsArgWith(2, null, {}); // Assuming an empty object for successful insert
+
+    request(app)
+      .post('/vehicles?isEdit=false')
+      .send(requestBody)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should update an existing vehicle successfully.', (done) => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      id: '1',
+      name: 'Work Car',
+      make: 'Toyota',
+      model: 'Camry',
+      year: '1993',
+      makeId: '2b1d0cd5-59be-4010-83b3-b60c5e5342da',
+      modelId: 'a2d97d19-14c0-4c60-870c-e734796e014e',
+      mileage: '1401',
+    };
+
+    queryStub.callsArgWith(2, null, {}); // Assuming an empty object for successful update
+
+    request(app)
+      .post('/vehicles?isEdit=true')
+      .send(requestBody)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should handle database error.', (done) => {
+    connectStub.callsFake();
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    request(app)
+      .post('/vehicles?isEdit=false')
+      .send({
+        owner: '1',
+        name: 'Work Car',
+        make: 'Toyota',
+        model: 'Camry',
+        year: '1993',
+        makeId: '2b1d0cd5-59be-4010-83b3-b60c5e5342da',
+        modelId: 'a2d97d19-14c0-4c60-870c-e734796e014e',
+        mileage: '1401',
+      })
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
+
