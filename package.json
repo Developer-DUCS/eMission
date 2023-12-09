@@ -1,11 +1,11 @@
 {
-  "name": "api",
+  "name": "eMission",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "mocha ./testing.js"
+    "start": "node ./api/server.js",
+    "test": "mocha ./api/testing.js"
   },
   "keywords": [],
   "author": "",

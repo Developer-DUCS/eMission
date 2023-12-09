@@ -187,6 +187,7 @@ class _LoginState extends State<Login> {
   }
 
   // method responsible for storing the user's ID number locally
+
   Future<void> saveUserInfo(info) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setInt("userID", info["userID"]);
