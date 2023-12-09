@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Manual extends StatefulWidget {
   const Manual({Key? key});
@@ -28,10 +29,10 @@ class _ManualState extends State<Manual> {
   }
   
   // Fetch the user's vehicles
-  void fetchVehicles() {
-    var owner = '1'; // Get user from local storage
+  void fetchVehicles() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     http
-        .get(Uri.parse('http://localhost:3000/vehicles?owner=${owner}'))
+        .get(Uri.parse('http://localhost:3000/vehicles?owner=${pref.getInt("userID")}'))
         .then((res) {
         setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
@@ -47,14 +48,15 @@ class _ManualState extends State<Manual> {
   }
 
   // Submits miles and trip
-  void submitMiles(carID, distance, userID, modelID) async {
+  void submitMiles(carID, distance, modelID) async {
     print('Submitting Miles...');
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
     // Data to be sent
     var data = {
       'distance': distance,
       'vehicle': carID,
-      'userID': userID
+      'userID': pref.getInt("userID")
     };
 
     // API call to update milage and calculate trip
@@ -190,14 +192,13 @@ class _ManualState extends State<Manual> {
             backgroundColor: const Color.fromARGB(244, 244, 248, 6),
           ),
           onPressed: () {
-            var user = '1';
             int milesTotal = int.parse(textController.text);
             var selectedVehicle = vehicles.isNotEmpty ? vehicles[0] : null;
             if (selectedVehicle != null) {
               //print('Submitted Miles: $milesTotal');
               //print('Selected Car: ${selectedVehicle['carName']}');
               //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-              submitMiles(selectedVehicle['carID'], milesTotal, user, selectedVehicle['modelID']);
+              submitMiles(selectedVehicle['carID'], milesTotal, selectedVehicle['modelID']);
             }
           },
         child: const Text('Submit')),
