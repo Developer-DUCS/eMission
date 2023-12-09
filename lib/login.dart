@@ -62,7 +62,7 @@ class _LoginState extends State<Login> {
 
     // verify the request code
     if(resCode==200){
-      saveUserID(response); // store userID
+      saveUserInfo(response); // store info
       Navigator.pushNamed(context, 'home'); // push to home page
 
       // return status code for form validation 
@@ -182,9 +182,12 @@ class _LoginState extends State<Login> {
   }
 
   // method responsible for storing the user's ID number locally
-  Future<void> saveUserID(info) async {
+  Future<void> saveUserInfo(info) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setInt("userID", info["userID"]);
+    pref.setString("email", info["email"]);
+    pref.setString("userName", info["userName"]);
+    pref.setString("displayName", info["displayName"]);
   }
 
   

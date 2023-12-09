@@ -12,7 +12,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String? userInfo;
+  int? userID;
+  String? userEmail;
+  String? userName;
+  String? userDisplayName;
+
   int? totalPoints;
 
   @override
@@ -26,14 +30,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<dynamic> getUserID() async {
+  /* Future<dynamic> getUserID() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.getInt("userID");
     return pref.getInt("userID");
-  }
+  } */
 
   Future<int?> _getTotalPoints() async {
-    var userID = await getUserID();
+    //var userID = await getUserID();
     var jsonBody = jsonEncode({"userID": userID});
 
     var response = await http.post(
@@ -108,12 +112,12 @@ class _HomeState extends State<Home> {
           ),
         ),
         Container(
-          child: userInfo == null
+          child: userName == null
               ? const Text(
                   "Your Name",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 )
-              : Text(userInfo!,
+              : Text(userName!,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 24)),
         ),
@@ -131,7 +135,10 @@ class _HomeState extends State<Home> {
 
   void getUserInfo() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    userInfo = pref.getString("userName");
+    userID = pref.getInt("userID");
+    userEmail = pref.getString("email");
+    userName = pref.getString("userName");
+    userDisplayName = pref.getString("displayName");
     setState(() {});
   }
 }

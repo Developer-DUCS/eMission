@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:first_flutter_app/encryption.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -62,7 +61,7 @@ class _CreateAccountState extends State<CreateAccount> {
       if (response.statusCode == 200) {
         Navigator.pushNamed(context, 'login');
       }
-      if (response.statusCode == 401) {
+      else if (response.statusCode == 401) {
         Flushbar(
           title: 'Error',
           message: 'An account with that email already exists.',

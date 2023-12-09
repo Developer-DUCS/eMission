@@ -82,7 +82,7 @@ app.post("/authUser", (request, response) => {
   //
   const loginData = request.body;
   const query =
-    "SELECT userID, email, password FROM emission.Users WHERE email = ?";
+    "SELECT userID, email, userName, displayName, password FROM emission.Users WHERE email = ?";
 
   //
   //
