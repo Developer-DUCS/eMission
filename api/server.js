@@ -1,6 +1,7 @@
 const express = require("express");
-const Database = require("./sql_db_man.js");
+//const { Database } = require('./sql_db_man');
 const vehicleMakes = require("./VehicleMakes.json");
+const Database = require("./sql_db_man.js");
 const PORT = 3000;
 const app = express();
 const axios = require("axios");
@@ -22,8 +23,11 @@ app.use(express.json());
 
 app.post("/insertUser", (request, response) => {
   // insert user
-  console.log("Insertting Users");
+  console.log("Inserting Users");
   console.log(request.body);
+
+  const db = new Database(dbconfig);
+  db.connect();
 
   const userData = request.body;
   userData.profilePicture =
@@ -57,7 +61,6 @@ app.post("/insertUser", (request, response) => {
       response.status(200).json({ msg: "account created" });
     }
   });
-
   db.disconnect();
 });
 
@@ -72,14 +75,14 @@ app.post("/authUser", (request, response) => {
     password: "Letmein!eCoders",
     database: "emission",
   };
-  const db = new Database(dbconfig);
-  db.connect();
+  //const db = new Database(dbconfig);
+  //db.connect();
 
   //
   //
   const loginData = request.body;
-  console.log(loginData);
-  const query = "SELECT email, password FROM emission.Users WHERE email = ?";
+  const query =
+    "SELECT userID, email, password FROM emission.Users WHERE email = ?";
 
   //
   //
@@ -88,10 +91,9 @@ app.post("/authUser", (request, response) => {
       console.error("Error executing query:", error);
       response.status(500).json({ msg: "Database Error" });
     } else {
-      console.log(result);
       if (result.length == 0) {
         // The email was not present in database
-        console.log(`${result[0].email} was not recognized!`);
+        console.log("Email was not recognized!");
         response.status(401).json({ msg: "Authentication Failed" });
       } else {
         if (
@@ -99,13 +101,14 @@ app.post("/authUser", (request, response) => {
           result[0].password == loginData["password"]
         ) {
           console.log("User Authenticated");
-          response.status(200).json({ msg: "Authentication Successful" });
+          response.status(200).send(result[0]);
         } else {
-          console.log("Authentication Failed");
+          console.log(`Authentication Failed: ${loginData.email}`);
           response.status(401).json({ msg: "Authentication Failed" });
         }
       }
     }
+    //db.disconnect();
   });
 });
 
@@ -115,7 +118,7 @@ app.get("/getChallenges", (req, res) => {
   const query =
     "SELECT * FROM Challenges WHERE expirationDate IS NULL OR expirationDate > NOW()";
   const db = new Database(dbconfig);
-  db.connect();
+  //db.connect();
   console.log(db.status);
   db.query(query, (err, results) => {
     if (err) {
@@ -126,7 +129,60 @@ app.get("/getChallenges", (req, res) => {
       return res.status(200).json({ results });
     }
   });
-  db.disconnect();
+  //db.disconnect();
+});
+app.post("/getChallenges2", (req, res) => {
+  console.log("Get challenge called");
+
+  const userID = req.body.userID;
+
+  const query = `
+    SELECT * FROM Challenges
+    WHERE challengeID NOT IN (
+        SELECT DISTINCT challengeID FROM AcceptedChallenges
+        WHERE earnerID = ?
+      )`;
+
+  const db = new Database(dbconfig);
+  //db.connect();
+
+  db.query(query, [userID], (err, results) => {
+    //db.disconnect();
+
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Error getting challenges." });
+    } else {
+      console.log("Query results:", results);
+      return res.status(200).json({ results });
+    }
+  });
+});
+app.post("/getEarnedPoints", (req, res) => {
+  console.log("Get earned points called");
+
+  const userID = req.body.userID;
+
+  const query = `
+    SELECT COALESCE(SUM(points), 0) total FROM Challenges
+    WHERE challengeID IN(SELECT DISTINCT challengeID FROM AcceptedChallenges
+      WHERE earnerID = ? and dateFinished is not null)`;
+
+  const db = new Database(dbconfig);
+  //db.connect();
+
+  db.query(query, [userID], (err, results) => {
+    //db.disconnect();
+
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Error getting sum." });
+    } else {
+      
+      console.log("Query results:", results);
+      return res.status(200).json({ results });
+    }
+  });
 });
 
 app.get("/getChallengesByID", (req, res) => {
@@ -136,7 +192,7 @@ app.get("/getChallengesByID", (req, res) => {
   console.log(body);
   const id = [body.id];
   const db = new Database(dbconfig);
-  db.connect();
+ // db.connect();
   db.query(query, id, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -146,10 +202,10 @@ app.get("/getChallengesByID", (req, res) => {
       res.status(200).json({ results });
     }
   });
-  db.disconnect();
+  //db.disconnect();
 });
 
-app.get("/getUserChallenges", async (req, res) => {
+/* app.get("/getUserChallenges", async (req, res) => {
   const body = req.body;
   const id = 1;
   const db = new Database(dbconfig);
@@ -167,21 +223,21 @@ app.get("/getUserChallenges", async (req, res) => {
       res.status(200).json(results);
     }
   });
-});
+}); */
 
-app.get("/getCurrentUserChallenges", async (req, res) => {
-  console.log("Request to get current userChallenges");
+app.post("/getCurentUserChallenges", async (req, res) => {
+  console.log("Request to get current userChallenges update");
   const body = req.body;
-  const id = 1;
+  const id = body.earnerID;
+  console.log(id);
   const db = new Database(dbconfig);
-  db.connect();
+  //db.connect();
   const query =
-    "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
+    "SELECT a.challengeID, a.points, a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.earnerID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE earnerID = ? AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
 
-  db.query(query, [id], (err, results) => {
+  db.query(query, [id, id], (err, results) => {
     console.log("Query entered");
-    db.disconnect(); // Disconnect from the database after the query
-
+    ///db.disconnect(); // Disconnect from the database after the query
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: err });
@@ -196,18 +252,21 @@ app.get("/getCurrentUserChallenges", async (req, res) => {
 
 app.post("/acceptNewChallenges", async (req, res) => {
   console.log("Accept Challenges called");
-  console.log(req.body);
+  const { UserID, challenges } = req.body;
+
+  console.log("UserID:", UserID);
+  console.log("Challenges:", challenges);
 
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
 
   const selectQuery =
-    "SELECT * FROM AcceptedChallenges WHERE userID = ? AND challengeID = ?";
+    "SELECT * FROM AcceptedChallenges WHERE earnerID = ? AND challengeID = ?";
   const insertQuery =
-    "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
+    "INSERT INTO AcceptedChallenges (earnerID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
-  const challengeDataList = req.body;
-  const userID = 1; // Replace with actual userID from the request or authentication
+  const challengeDataList = challenges;
+  const userID = UserID; // Replace with actual userID from the request or authentication
 
   const queryPromise = (db, queryString, values) => {
     return new Promise((resolve, reject) => {
@@ -223,7 +282,7 @@ app.post("/acceptNewChallenges", async (req, res) => {
 
   try {
     const db = new Database(dbconfig);
-    await db.connect();
+    //await db.connect();
 
     const responseMessages = [];
 
@@ -259,7 +318,7 @@ app.post("/acceptNewChallenges", async (req, res) => {
       }
     }
 
-    db.disconnect();
+    //db.disconnect();
 
     // Send the response with the array of status messages
     res.status(200).json(responseMessages);
@@ -268,11 +327,12 @@ app.post("/acceptNewChallenges", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
+/* 
 // not in use: deletes rows before inserting them
 app.post("/acceptChallenges", async (req, res) => {
   console.log("Complete Challenges called");
   console.log(req.body);
+  const { UserID, challenges } = req.body;
 
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -282,8 +342,8 @@ app.post("/acceptChallenges", async (req, res) => {
   const insertQuery =
     "INSERT INTO AcceptedChallenges (userID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
-  const challengeDataList = req.body;
-  const userID = 1;
+  const challengeDataList = challenges.toList();
+  const userID = UserID;
 
   try {
     const db = new Database(dbconfig);
@@ -330,23 +390,139 @@ app.post("/acceptChallenges", async (req, res) => {
     console.error("Error executing queries:", err);
     res.status(500).send("Internal Server Error");
   }
+}); */
+
+// removed /getUserChallenges
+/* 
+app.get('/getCurrentUserChallenges', async (req, res) => {
+    console.log("Request to get current userChallenges");
+    const body = req.body;
+    const id = 1;
+    const db = new Database(dbconfig);
+    db.connect();
+    const query = "SELECT a.challengeID, a.points,a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.userID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE userID = 1 AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
+    
+    db.query(query, [id], (err, results) => {
+        console.log("Query entered");
+        db.disconnect(); // Disconnect from the database after the query
+
+        if (err) {
+            console.error("Error executing query:", err);
+            res.status(500).json({ error: err });
+            console.log("error :(")
+        } else {
+            console.log("Query results:", results);
+            //const challengeIDs = results.map(result => result.challengeID);
+            return res.status(200).json({results});
+        }
+    });
+}); */
+
+app.get("/makes", (req, res) => {
+  res.json(vehicleMakes);
+});
+
+app.get("/models", (req, res) => {
+  const { makeId } = req.query;
+
+  if (!makeId) return res.status(400).json({ error: "Must provide make ID." });
+
+  fetch(`${API_URL}/vehicle_makes/${makeId}/vehicle_models`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((apiRes) => {
+      if (apiRes.ok) {
+        return apiRes.json();
+      } else {
+        res.status(500).json({ error: "Server error." });
+      }
+    })
+    .then((apiRes) => {
+      res.json(apiRes);
+    })
+    .catch(console.log); //, (err) => res.status(500).json({ error: err }));
+});
+
+
+
+const getVehicleSql =
+  "SELECT make, model, year, carID, carName, modelID, currentMileage FROM Cars WHERE owner = ?;";
+
+app.get("/vehicles", (req, res) => {
+  const { owner } = req.query;
+
+  db.query(getVehicleSql, [owner], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Server error." });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+});
+
+const insertVehicleSql =
+  "INSERT INTO Cars (owner, carName, make, model, year, makeID, modelID, currentMileage) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+const updateVehicleSql =
+  "UPDATE Cars SET carName = ?, make = ?, model = ?, year = ?, makeID = ?, modelID = ?, currentMileage = ? WHERE carID = ?;";
+
+app.post("/vehicles", (req, res) => {
+  const isEdit = JSON.parse(req.query.isEdit);
+
+  const insertValues = [
+    parseInt(req.body.owner),
+    req.body.name,
+    req.body.make,
+    req.body.model,
+    parseInt(req.body.year),
+    req.body.makeId,
+    req.body.modelId,
+    parseInt(req.body.mileage),
+  ];
+
+  const updateValues = [
+    req.body.name,
+    req.body.make,
+    req.body.model,
+    parseInt(req.body.year),
+    req.body.makeId,
+    req.body.modelId,
+    parseInt(req.body.mileage),
+    req.body.id,
+  ];
+
+  db.query(
+    isEdit ? updateVehicleSql : insertVehicleSql,
+    isEdit ? updateValues : insertValues,
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Server error." });
+      } else {
+        res.status(200).send();
+      }
+    }
+  );
 });
 
 app.post("/completeChallenges", async (req, res) => {
   console.log("Complete Challenges called");
   console.log(req.body);
 
+  const { UserID, challenges } = req.body;
+
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
 
   const query =
-    "UPDATE AcceptedChallenges SET dateFinished = ? WHERE userID = ? AND challengeID = ?";
-  const challengeDataList = req.body;
-  const userID = 1;
-
+    "UPDATE AcceptedChallenges SET dateFinished = ? WHERE earnerID = ? AND challengeID = ?";
+  const challengeDataList = challenges;
+  const userID = UserID;
   try {
     const db = new Database(dbconfig);
-    await db.connect();
+    //await db.connect();
 
     for (const challengeData of challengeDataList) {
       const values = [formattedDate, userID, challengeData.challengeID];
@@ -366,149 +542,12 @@ app.post("/completeChallenges", async (req, res) => {
       });
     }
 
-    db.disconnect();
+    //db.disconnect();
     res.status(200).send("Challenges completed successfully!");
   } catch (err) {
     console.error("Error executing query:", err);
-    res.status(500).send("Internal Server Error");
+    res.status(400).send("Error with input");
   }
-});
-
-app.get("/makes", (req, res) => {
-  res.json(vehicleMakes);
-});
-
-app.get("/models", (req, res) => {
-  const { makeId } = req.query;
-
-  if (!makeId) return res.status(400).json({ error: "Must provide make ID." });
-
-  return res.json([
-    {
-      data: {
-        id: "7268a9b7-17e8-4c8d-acca-57059252afe9",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "7268a9b7-17e8-4c8d-acca-57059252afe9",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla",
-          year: 1994,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "a2d97d19-14c0-4c60-870c-e734796e014e",
-        type: "vehicle_model",
-        attributes: {
-          name: "Camry",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "14949244-b6d1-4a11-970f-73f75408f931",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla Wagon",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-  ]);
-
-  fetch({
-    url: `${API_URL}/vehicle_make/${makeId}/vehicle_models`,
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: {
-      type: "vehicle",
-      distance_unit: "mi",
-      distance_value: distance,
-      vehicle_model_id: vehicleId,
-    },
-  })
-    .then((apiRes) => {
-      if (res.ok) {
-        res.json(apiRes.json());
-      } else {
-        res.status(500).json({ error: "Server error." });
-      }
-    })
-    .catch((err) => res.status(500).json({ error: err }));
-});
-
-const getVehicleSql =
-  "SELECT make, model, year, carID, carName, modelID FROM Cars WHERE owner = ?;";
-
-app.get("/vehicles", (req, res) => {
-  const { owner } = req.query;
-
-  db.query(getVehicleSql, [owner], (err, results) => {
-    if (err) {
-      res.status(500).json({ error: "Server error." });
-    } else {
-      res.status(200).json(results);
-    }
-  });
-});
-
-const insertVehicleSql =
-  "INSERT INTO Cars (owner, carName, make, model, year, makeID, modelID, currentMileage) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-const updateVehicleSql =
-  "UPDATE Cars SET carName = ?, make = ?, model = ?, year = ?, makeID = ?, modelID = ? WHERE carID = ?;";
-
-app.post("/vehicles", (req, res) => {
-  const isEdit = JSON.parse(req.query.isEdit);
-
-  const insertValues = [
-    parseInt(req.body.owner),
-    req.body.name,
-    req.body.make,
-    req.body.model,
-    parseInt(req.body.year),
-    req.body.makeId,
-    req.body.modelId,
-    0,
-  ];
-
-  const updateValues = [
-    req.body.name,
-    req.body.make,
-    req.body.model,
-    parseInt(req.body.year),
-    req.body.makeId,
-    req.body.modelId,
-    req.body.id,
-  ];
-
-  db.query(
-    isEdit ? updateVehicleSql : insertVehicleSql,
-    isEdit ? updateValues : insertValues,
-    (err, results) => {
-      if (err) {
-        res.status(500).json({ error: "Server error." });
-      } else {
-        res.status(200).send();
-      }
-    }
-  );
 });
 
 const deleteVehicleSql = "DELETE FROM Cars WHERE carID = ?;";
@@ -531,9 +570,10 @@ app.get("/vehicleCarbonReport", (req, res) => {
 
   // Ensure modelID and trip distance were sent
   if (!vehicleId)
-    return res.status(400).json({ error: "Must provide vehicled id." });
+    return res.status(400).json({ error: "Must provide vehicle id." });
   if (!distance)
     return res.status(400).json({ error: "Must provide distance." });
+
 
   // Prep data for sending ot Carbon Interface
   const requestData = {
@@ -563,6 +603,7 @@ app.get("/vehicleCarbonReport", (req, res) => {
         res.status(500).json({ error: "Server error." });
       }
     })
+    .then((data) => res.json(data)) // added line to send the data
     .catch((err) => res.status(500).json({ error: err }));
 });
 
@@ -625,3 +666,5 @@ app.post("/updateDistance", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;

@@ -10,6 +10,7 @@ import 'package:first_flutter_app/settings.dart';
 import 'package:first_flutter_app/home.dart';
 import 'package:first_flutter_app/drive-button.dart';
 import 'package:first_flutter_app/manual.dart';
+import 'package:first_flutter_app/leaderboard.dart';
 
 void main() => runApp(const MyApp());
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'eMission',
-      initialRoute: 'create-account',
+      initialRoute: 'home',
       routes: {
         'create-account': (context) => const Layout(
               body: CreateAccount(),
@@ -35,12 +36,13 @@ class MyApp extends StatelessWidget {
               bottomBar: false,
               driveButton: false,
             ),
-        'home': (context) => const Layout(
+        'home': (context) => Layout(
               body: Home(),
               pageIndex: 1,
             ),
         'leaderboard': (context) => const Layout(
-              body: Settings(),
+              
+              body: Leaderboard(),
               pageIndex: 0,
             ),
         'settings': (context) => const Layout(
