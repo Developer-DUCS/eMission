@@ -427,75 +427,24 @@ app.get("/models", (req, res) => {
 
   if (!makeId) return res.status(400).json({ error: "Must provide make ID." });
 
-  return res.json([
-    {
-      data: {
-        id: "7268a9b7-17e8-4c8d-acca-57059252afe9",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "7268a9b7-17e8-4c8d-acca-57059252afe9",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla",
-          year: 1994,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "a2d97d19-14c0-4c60-870c-e734796e014e",
-        type: "vehicle_model",
-        attributes: {
-          name: "Camry",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-    {
-      data: {
-        id: "14949244-b6d1-4a11-970f-73f75408f931",
-        type: "vehicle_model",
-        attributes: {
-          name: "Corolla Wagon",
-          year: 1993,
-          vehicle_make: "Toyota",
-        },
-      },
-    },
-  ]);
-
-  fetch({
-    url: `${API_URL}/vehicle_make/${makeId}/vehicle_models`,
-    method: "POST",
+  fetch(`${API_URL}/vehicle_makes/${makeId}/vehicle_models`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: {
-      type: "vehicle",
-      distance_unit: "mi",
-      distance_value: distance,
-      vehicle_model_id: vehicleId,
-    },
   })
     .then((apiRes) => {
-      if (res.ok) {
-        res.json(apiRes.json());
+      if (apiRes.ok) {
+        return apiRes.json();
       } else {
         res.status(500).json({ error: "Server error." });
       }
     })
-    .catch((err) => res.status(500).json({ error: err }));
+    .then((apiRes) => {
+      res.json(apiRes);
+    })
+    .catch(console.log); //, (err) => res.status(500).json({ error: err }));
 });
 
 
