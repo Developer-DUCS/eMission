@@ -12,26 +12,11 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.account_box),
-        actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.share)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.person_add)),
-        ],
-        title: Text(
-          "Profile",
-          style: TextStyle(fontSize: 29),
-        ),
-        centerTitle: true,
-        elevation: 0.0,
-      ),
       body: SingleChildScrollView(
-
         child: Column(
           children: [
-
             Container(
-              padding: EdgeInsets.only(top : 40),
+              padding: EdgeInsets.only(top: 40),
               height: 330,
               decoration: BoxDecoration(
                   color: Color.fromRGBO(124, 184, 22, 1),
@@ -43,24 +28,16 @@ class _LeaderboardState extends State<Leaderboard> {
                   Stack(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage(
-                            "assets/images/stock-photo.jpg"),
+                        backgroundImage: AssetImage("assets/images/plant.jpg"),
                         radius: 50,
                       ),
-                      Positioned(
-                        bottom: 0.0,
-                        right: 0.0,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(shape: BoxShape.circle ,color: Colors.black),child: Icon(Icons.edit,color: Color.fromRGBO(160, 197, 89, 100),),),
-                      )
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Austin Skidmore",
+                    "Your Rank",
                     style: TextStyle(
                         fontSize: 22,
                         color: Colors.black,
@@ -133,21 +110,30 @@ class _LeaderboardState extends State<Leaderboard> {
                         title: Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  "assets/images/stock-photo.jpg"),
+                              backgroundImage:
+                                  AssetImage("assets/images/stock-photo.jpg"),
                             ),
                             SizedBox(
                               width: 3,
                             ),
-                            Text("Jali Purcell")
+                            Text("Other User")
                           ],
                         ),
-                        leading: Text("#${index + 1}" ,style: TextStyle(fontWeight: FontWeight.bold),),
+                        leading: Text(
+                          "#${index + 1}",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         trailing: Text(
-                            "Points.${(200000 / (index + 1)).toString().substring(0, 5)}",style: TextStyle(fontWeight: FontWeight.bold)),
+                            "Points.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                       );
                     },
-                    separatorBuilder: (context, index) => Divider(thickness: 1,color: Color.fromRGBO(160, 197, 89, 100),indent: 10,endIndent: 10,),
+                    separatorBuilder: (context, index) => Divider(
+                          thickness: 1,
+                          color: Color.fromRGBO(160, 197, 89, 100),
+                          indent: 10,
+                          endIndent: 10,
+                        ),
                     itemCount: 12),
               ),
             )

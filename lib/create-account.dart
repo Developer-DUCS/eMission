@@ -48,7 +48,7 @@ class _CreateAccountState extends State<CreateAccount> {
     Map<String, String?> formData = {
       'email': emailController.text,
       'username': usernameController.text,
-      'display_name': displayNameController.text,
+      'displayName': displayNameController.text,
       'password': encryptedPassword,
       'confirm_password': encryptedPassword,
     };
@@ -61,21 +61,22 @@ class _CreateAccountState extends State<CreateAccount> {
       debugPrint('Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         Navigator.pushNamed(context, 'login');
-      }
-      if (response.statusCode == 401) {
-        Flushbar(
-          title: 'Error',
-          message: 'An account with that email already exists.',
-          backgroundColor: Colors.redAccent,
-          flushbarPosition: FlushbarPosition.TOP,
-        ).show(context);
       } else {
-        Flushbar(
-          title: 'Error',
-          message: 'There was a server error. Please try again.',
-          backgroundColor: Colors.redAccent,
-          flushbarPosition: FlushbarPosition.TOP,
-        ).show(context);
+        if (response.statusCode == 401) {
+          Flushbar(
+            title: 'Error',
+            message: 'An account with that email already exists.',
+            backgroundColor: Colors.redAccent,
+            flushbarPosition: FlushbarPosition.TOP,
+          ).show(context);
+        } else {
+          Flushbar(
+            title: 'Error',
+            message: 'There was a server error. Please try again.',
+            backgroundColor: Colors.redAccent,
+            flushbarPosition: FlushbarPosition.TOP,
+          ).show(context);
+        }
       }
     } catch (error) {
       debugPrint('Error: $error');

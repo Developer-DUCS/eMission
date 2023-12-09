@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Layout extends StatelessWidget {
   final Widget body;
@@ -22,6 +23,13 @@ class Layout extends StatelessWidget {
     Navigator.pushNamed(context, 'button-page');
   }
 
+  Future<void> clearUserPref() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.clear();
+    print(pref.getInt("userID"));
+    print(pref.getString("displayName"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +38,7 @@ class Layout extends StatelessWidget {
               title: const Text('eMission'),
               backgroundColor: Colors.white,
               foregroundColor: Colors.black54,
+              automaticallyImplyLeading: false,
             )
           : null,
       endDrawer: Drawer(
@@ -64,12 +73,13 @@ class Layout extends StatelessWidget {
                 Navigator.pushNamed(context, 'challenges');
               },
             ),
-            ListTile(
+            // taking out since not functioning
+            /* ListTile(
               title: Text('Challenge Groups'),
               textColor: Colors.black,
               onTap:
                   null, // will link to Challenge Groups Page when it is completed
-            ),
+            ), */
             ListTile(
               title: const Text('Vehicles'),
               textColor: Colors.black,
@@ -89,6 +99,7 @@ class Layout extends StatelessWidget {
               textColor: Colors.black,
               onTap: () {
                 Navigator.pushNamed(context, 'login');
+                clearUserPref();
               }, // will link to login page
             ),
           ])),

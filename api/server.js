@@ -61,7 +61,7 @@ app.post("/insertUser", (request, response) => {
       response.status(200).json({ msg: "account created" });
     }
   });
-  db.disconnect();
+  //db.disconnect();
 });
 
 app.post("/authUser", (request, response) => {
@@ -82,7 +82,7 @@ app.post("/authUser", (request, response) => {
   //
   const loginData = request.body;
   const query =
-    "SELECT userID, email, password FROM emission.Users WHERE email = ?";
+    "SELECT userID, email, password, displayName FROM emission.Users WHERE email = ?";
 
   //
   //
