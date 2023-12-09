@@ -58,14 +58,6 @@ app.post('/insertUser', (request, response)=>{
 app.post("/authUser", (request, response) => {
   //authenticate user
   console.log("authenticating user...");
-  //
-  const dbconfig = {
-    host: "mcs.drury.edu",
-    port: "3306",
-    user: "emission",
-    password: "Letmein!eCoders",
-    database: "emission",
-  };
   const db = new Database(dbconfig);
   db.connect();
 
