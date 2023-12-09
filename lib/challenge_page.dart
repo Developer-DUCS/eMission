@@ -418,7 +418,7 @@ class _ChallengePageState extends State<ChallengePage> {
                             focusColor: Colors.white,
                             title: Text(challenge.name),
                             subtitle:
-                                Text(snapshot.data![index].points.toString()),
+                                Text("Points: ${snapshot.data![index].points}"),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -447,7 +447,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                                     .data![index].description),
                                                 SizedBox(height: 5),
                                                 Text(
-                                                    'Expires: $expirationDateText'),
+                                                    'Points for completing challenge: ${snapshot.data![index].points}'),
                                               ],
                                             ),
                                           ),
@@ -725,7 +725,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
         'Content-Type': 'application/json',
       },
       // Include the userID as a query parameter
-      body: jsonEncode({'userID': userID.toString()}),
+      body: jsonEncode({'earnerID': userID.toString()}),
     );
 
     print('Response status: ${response.statusCode}');
@@ -842,7 +842,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
                           return ListTile(
                             title: Text(challenge.name),
                             subtitle:
-                                Text(snapshot.data![index].points.toString()),
+                                Text("Points: ${snapshot.data![index].points}"),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [

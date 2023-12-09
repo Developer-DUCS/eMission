@@ -61,7 +61,7 @@ class Layout extends StatelessWidget {
               title: const Text('eFriendly Challenges'),
               textColor: Colors.black,
               onTap: () {
-                Navigator.pushNamed(context, 'past_challenges');
+                Navigator.pushNamed(context, 'challenges');
               },
             ),
             ListTile(

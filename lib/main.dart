@@ -36,12 +36,14 @@ class MyApp extends StatelessWidget {
               bottomBar: false,
               driveButton: false,
             ),
-        'home': (context) => const Layout(
+        'home': (context) => Layout(
               body: Home(),
               pageIndex: 1,
             ),
         'leaderboard': (context) => const Layout(
-              body: Leaderboard(players: [],),
+              body: Leaderboard(
+                players: [],
+              ),
               pageIndex: 0,
             ),
         'settings': (context) => const Layout(
