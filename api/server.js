@@ -36,7 +36,6 @@ app.post("/insertUser", (request, response) => {
   console.log(request.body);
 
   const db = new Database(dbconfig);
-  db.connect();
 
   const userData = request.body;
   userData.profilePicture =
@@ -110,7 +109,6 @@ app.post("/authUser", (request, response) => {
         }
       }
     }
-    db.disconnect();
   });
 });
 
@@ -515,8 +513,6 @@ app.post("/updateDistance", (req, res) => {
     database: "emission",
   };
   // Connect to database
-  const db = new Database(dbconfig);
-  db.connect();
 
   // Unpacking sent data
   const distance = req.body.distance;
