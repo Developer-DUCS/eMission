@@ -27,22 +27,23 @@ class _ManualState extends State<Manual> {
     textController.dispose();
     super.dispose();
   }
-  
+
   // Fetch the user's vehicles
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     http
-        .get(Uri.parse('http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
+        .get(Uri.parse(
+            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
         .then((res) {
-        setState(() {
+      setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
 
         // Print the items in the vehicles list
-      for (var vehicle in vehicles) {
-        print(vehicle);
-      }
+        for (var vehicle in vehicles) {
+          print(vehicle);
+        }
       });
     });
   }
@@ -61,78 +62,79 @@ class _ManualState extends State<Manual> {
 
     // API call to update milage and calculate trip distance
     var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDistance'),
-     headers: {'Content-Type': 'application/json'},
-     body: json.encode(data));
+        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
 
     // Parse the JSON string into a Map
     Map<String, dynamic> responseMap = json.decode(res.body);
     // Access the value associated with the "data" key
     dynamic dataValue = responseMap['data'];
 
-    if (dataValue == null){
+    if (dataValue == null) {
       showErrorAlert(context);
-    }
-    else{
+    } else {
       // Establish data to send to Carbon Interface API
       var tripDistance = dataValue;
       var vehicle = modelID;
 
-
       // API request to Carbon Interface
-      var results = await http.get(Uri.parse('http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
+      var results = await http.get(Uri.parse(
+          'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
 
       // Parse the JSON string into a Map
       Map<String, dynamic> resultsMap = json.decode(results.body);
-      
+
       // Extract the data
       var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
-      
+
       // Create pop-up
       showResultAlert(context, carbonLb);
-    };
+    }
+    ;
   }
 
   // Creates a pop-up with results of the trip
   void showResultAlert(BuildContext context, double carbonLb) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Trip Results'),
-        content: Text('During your trip, you emitted $carbonLb lbs of carbon!'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Trip Results'),
+          content:
+              Text('During your trip, you emitted $carbonLb lbs of carbon!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // Creates a pop-up with error if trip distance is not 1 or greater
   void showErrorAlert(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Trip Submission Error'),
-        content: Text('There was an error submitting your trip! Please ensure you enter your total mileage as shown on the odometer, and that the odometer has changed since your last submission!'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Trip Submission Error'),
+          content: Text(
+              'There was an error submitting your trip! Please ensure you enter your total mileage as shown on the odometer, and that the odometer has changed since your last submission!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -214,23 +216,23 @@ class _ManualState extends State<Manual> {
         height: 30,
         width: 250,
         child: TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor:const Color.fromARGB(244, 0, 0, 0),
-            backgroundColor: const Color.fromARGB(244, 244, 248, 6),
-          ),
-          onPressed: () {
-            int milesTotal = int.parse(textController.text);
-            var selectedVehicle = vehicles.isNotEmpty ? vehicles[0] : null;
-            if (selectedVehicle != null) {
-              //print('Submitted Miles: $milesTotal');
-              //print('Selected Car: ${selectedVehicle['carName']}');
-              //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-              submitMiles(selectedVehicle['carID'], milesTotal, selectedVehicle['modelID']);
-            }
-          },
-        child: const Text('Submit')),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color.fromARGB(244, 0, 0, 0),
+              backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+            ),
+            onPressed: () {
+              int milesTotal = int.parse(textController.text);
+              var selectedVehicle = vehicles.isNotEmpty ? vehicles[0] : null;
+              if (selectedVehicle != null) {
+                //print('Submitted Miles: $milesTotal');
+                //print('Selected Car: ${selectedVehicle['carName']}');
+                //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
+                submitMiles(selectedVehicle['carID'], milesTotal,
+                    selectedVehicle['modelID']);
+              }
+            },
+            child: const Text('Submit')),
       ),
-    ); 
+    );
   }
-
 }

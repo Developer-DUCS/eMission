@@ -30,14 +30,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  /* Future<dynamic> getUserID() async {
+  Future<dynamic> getUserID() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.getInt("userID");
     return pref.getInt("userID");
-  } */
+  }
 
   Future<int?> _getTotalPoints() async {
-    //var userID = await getUserID();
+    var userID = await getUserID();
     var jsonBody = jsonEncode({"userID": userID});
 
     var response = await http.post(

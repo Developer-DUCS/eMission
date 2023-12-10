@@ -22,7 +22,6 @@ class VehiclesState extends State<Vehicles> {
     fetchVehicles();
   }
 
-
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     http
@@ -39,7 +38,7 @@ class VehiclesState extends State<Vehicles> {
 
   void deleteVehicle(int id) {
     http
-        .delete(Uri.parse('http://localhost:3000/vehicles?id=${id}'))
+        .delete(Uri.parse('http://10.0.2.2:3000/vehicles?id=${id}'))
         .then((value) => fetchVehicles());
   }
 
@@ -182,7 +181,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
     isEdit = vehicle.isNotEmpty;
 
-    http.get(Uri.parse('http://localhost:3000/makes')).then((res) {
+    http.get(Uri.parse('http://10.0.2.2:3000/makes')).then((res) {
       vehicleMakes = List<dynamic>.from(json.decode(res.body))
           .map((item) => Map<String, dynamic>.from(item))
           .toList();
@@ -209,7 +208,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
     http
         .get(Uri.parse(
-            'http://localhost:3000/models?makeId=${make['data']['id']}'))
+            'http://10.0.2.2:3000/models?makeId=${make['data']['id']}'))
         .then((res) {
       setState(() {
         selectedMake = make;
@@ -257,7 +256,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
   void addVehicle(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     http
-        .post(Uri.parse('http://localhost:3000/vehicles?isEdit=false'),
+        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=false'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
               'owner': pref.getInt('userID'),
@@ -276,7 +275,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
   void editVehicle(BuildContext context) {
     http
-        .post(Uri.parse('http://localhost:3000/vehicles?isEdit=true'),
+        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=true'),
             headers: {'Content-Type': 'application/json'},
             body: json.encode({
               'id': vehicle['carID'],
