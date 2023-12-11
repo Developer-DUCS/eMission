@@ -1,25 +1,47 @@
 # Sprint 6
 
 ### Sprint Goals
-- [ ] Vehicle to SQL Database
-- [ ] Local Storage (UserID) + Vehicle Info
-- [ ] Test Server Routes
-- [ ] Manual UI Update + Manual API Calculation 
+- [*] Vehicle to SQL Database
+- [*] Local Storage (UserID) + Vehicle Info
+- [*] Test Server Routes
+- [*] Manual UI Update + Manual API Calculation 
 - [ ] Connect points SQL tables
-- [ ] Complete Leaderboard Page
-- [ ] Design Application Icon
+- [*] Complete Leaderboard Page
+- [*] Design Application Icon
 
 ---
 ### Local Storage Proccesses
-* Something 
+* Stored in SharedUserPreferences
+* User information is set on login, which can be retrieved on any page 
 
 ---
 ### Unit Test Details
-* Something else 
+* Used Chai and Sinon packages to test the server routes
+* Use assert to check if the expected response was thrown given mocked data
+* No calls to the database nor Carbon API happen in tests
+  
+---
+### Leaderboard
+* Leaderboard is at a UI only stage
+  
+---
+### App Icon / Splash
+* Designed in Inkscape, now a part of the project
+
+---
+### Points
+* Canceled this task - use AcceptedChallenges as it's the only source of points at the moment
+* Points is now displayed on the home page instead of the status bar
+
+---
+### Functioning Vehicle and Manual Input Pages
+* Moved from UI only to functioning
+* User can have up to 2 vehicles as to not spend too many of our API calls
+* Vehicle information includes Make, Model, Year, Mileage, and Nickname
+* Manual Input page takes in current mileage, if a user enters number of miles driven they will get an error
 
 ---
 ### Sprint Retrospective
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+* Ran into a lot of problems near the end with individuals uploading directly to development
+* User Testing helped guide some quality updates
 
