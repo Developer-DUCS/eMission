@@ -8,10 +8,11 @@
       make call on manual input page or drive button
 - [X] Make API route for Challenge Page
 
-      /getChallenges on page load
-      /acceptChallenges - needs SQL table update
+      /getChallenges on page load from the SQL database
+      Future updates include only getting the challenges that haven't been accepted
+      /completeChallenges complete selected on my challenges page
+      /getUserChallenges get the challenges the user has accepted
       Update Challenge Page Frontend
-      Challenges pulls from SQL table
 - [X] Make API route for User Authentication
 
       update login page
