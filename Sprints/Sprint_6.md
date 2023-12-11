@@ -1,13 +1,13 @@
 # Sprint 6
 
 ### Sprint Goals
-- [*] Vehicle to SQL Database
-- [*] Local Storage (UserID) + Vehicle Info
-- [*] Test Server Routes
-- [*] Manual UI Update + Manual API Calculation 
+- [x] Vehicle to SQL Database
+- [x] Local Storage (UserID) + Vehicle Info
+- [x] Test Server Routes
+- [x] Manual UI Update + Manual API Calculation 
 - [ ] Connect points SQL tables
-- [*] Complete Leaderboard Page
-- [*] Design Application Icon
+- [x] Complete Leaderboard Page
+- [x] Design Application Icon
 
 ---
 ### Local Storage Proccesses
