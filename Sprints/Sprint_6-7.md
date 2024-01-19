@@ -1,4 +1,4 @@
-# Sprint 6
+# Sprint 6-7
 
 ### Sprint Goals
 - [x] Vehicle to SQL Database
