@@ -120,7 +120,8 @@ For an in-depth look at the processes, user stories, and progress thus far, take
    4. [Challenge Page UI Update](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#challenge-page-ui-update)
    5. [Vehicle Management](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#vehicle-management)
    6. [Sprint Retrospective](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_5.md#sprint-retrospective)
-7. [Sprint 6](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_6.md)
+7. [Sprint 6-7](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_6-7.md)
+8. [Sprint 8]()
 
 
 </details>
