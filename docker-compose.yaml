@@ -5,38 +5,27 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    working_dir: /home/user/emission
+    container_name: eMission_app
+    working_dir: /home/user/eMission
     command: flutter run
     depends_on:
       - node-server
-      - mysql
-    volumes:
-       - ./:/home/user/emission
+    environment: 
+      DB_HOST: "mcs.drury.edu"
+      DB_PORT: 3306
+      DB_USER: "emission"
+      DB_PASSWORD: "Letmein!eCoders"
+      DB_DATABASE: "emission"
     
 
   node-server:
     image: node:14
+    restart: always
     working_dir: /home/user/emission/api
     command: npm start
     ports:
       - "3000:3000"
-    depends_on:
-      - mysql
     volumes:
        - ./api:/home/user/emission/api
-
-
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
-      MYSQL_DATABASE: 'emission'
-      MYSQL_USER: 'emission'
-      MYSQL_PASSWORD: 'Letmein!eCoders'
-    ports:
-      - "3306:3306"
-    #volumes:
-    #  - ./mysql:/var/lib/mysql
-
 
 

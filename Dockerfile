@@ -46,10 +46,11 @@ RUN apt-get update \
   && yes "y" | apt-get install pkg-config \
   && yes "y" | apt-get install libgtk-3-dev
 
-# Create New User
+# Create New User & Set Working Directory
 RUN useradd -ms /bin/bash user
-USER user
 WORKDIR /home/user
+
+
 
 
 #Installing Android SDK
@@ -75,12 +76,20 @@ RUN yes "yes" | flutter doctor --android-licenses \
     && flutter doctor \
     && flutter upgrade-packages
 
+    
+
 
 
 
 
 ## Clone Project Repository & Run project
-WORKDIR /home/user/eMission
-# RUN git clone -b development https://github.com/Developer-DUCS/eMission.git
-COPY . /home/user/eMission
-#CMD [ "flutter", "run"]
+RUN git clone -b task-complete-docker-image https://github.com/Developer-DUCS/eMission.git
+RUN cd eMission && flutter pub upgrade
+
+
+# Set correct permissions for assets
+RUN mkdir -p /home/user/eMission/assets
+COPY assets /home/user/eMission/assets
+RUN chown -R user:user /home/user/eMission/assets
+#RUN chmod -R 755 /home/user/eMission/assets
+
