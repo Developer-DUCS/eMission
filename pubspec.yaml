@@ -91,7 +91,7 @@ flutter:
   fonts:
     - family: Social Monster
       fonts:
-        - asset: assets/fonts/SocialMonsterNormal-Owjp.ttf
+        - asset: emission/assets/fonts/SocialMonsterNormal-Owjp.ttf
     - family: Nunito
       fonts: 
         - asset: assets/fonts/Nunito-Regular.ttf

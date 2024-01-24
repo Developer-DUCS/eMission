@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: eMission_app
     working_dir: /home/user/eMission
-    command: flutter run
+    command: flutter run -d Linux
     depends_on:
       - node-server
     environment: 
