@@ -105,13 +105,14 @@ RUN yes "yes" | flutter doctor --android-licenses \
 
 
 ## Clone Project Repository & Run project
+#COPY . /home/user/emission
 RUN git clone -b task-complete-docker-image https://github.com/Developer-DUCS/eMission.git
-RUN cd eMission && flutter pub upgrade
+RUN cd emission && flutter pub upgrade
 
 
 # Set correct permissions for assets
-RUN mkdir -p /home/user/eMission/assets
-COPY assets /home/user/eMission/assets
-RUN chown -R user:user /home/user/eMission/assets
+RUN mkdir -p /home/user/emission/assets
+COPY assets /home/user/emission/assets
+RUN chown -R user:user /home/user/emission/assets
 
 

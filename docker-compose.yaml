@@ -6,16 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: eMission_app
-    working_dir: /home/user/eMission
+    working_dir: /home/user/emission
     command: flutter run -d Linux
     depends_on:
       - node-server
-    environment: 
-      DB_HOST: "mcs.drury.edu"
-      DB_PORT: 3306
-      DB_USER: "emission"
-      DB_PASSWORD: "Letmein!eCoders"
-      DB_DATABASE: "emission"
+    environment:
+      - DISPLAY=$DISPLAY
+      - DB_HOST=mcs.drury.edu
+      - DB_PORT=3306
+      - DB_USER=emission
+      - DB_PASSWORD=Letmein!eCoders
+      - DB_DATABASE=emission
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix
     
 
   node-server:
