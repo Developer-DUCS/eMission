@@ -460,10 +460,60 @@ app.delete("/vehicles", (req, res) => {
   });
 });
 
-// Submits vehicle ID and miles driven to Carbon Report API
-app.get("/vehicleCarbonReport", (req, res) => {
-  const { vehicleId, distance } = req.query;
+app.post("/updateDrives", async (req,res)=>{
+  try{
+    let pointsEarned;
+    if (req.body.carbon_lb > 30) {
+      pointsEarned = 5;
+    } else if (req.body.carbon_lb > 0 && req.body.carbon_lb<30) {
+      pointsEarned = 20;
+    } else {
+      pointsEarned = 0;
+    }
+  console.log(req.body);
+  const db = new Database(dbconfig);
+  const insertData = {
+    userID: req.body.userID,
+    carID: req.body.vehicleID,
+    unitOfMeasure: "mi",
+    distance: req.body.distance,
+    carbon_lb: req.body.carbon_lb,
+    carbon_kg: req.body.carbon_kg,
+    points_earned: pointsEarned,
+    date_earned:  new Date()
+  };
+  const query =
+        "INSERT INTO Drives (userID, carID, unitOfMeasure, amount, carbon_lb, carbon_kg, points_earned, date_earned) VALUES (?, ?, ?, ?, ?, ?,? , ?)";
+  const values = [insertData.userID, insertData.carID, insertData.unitOfMeasure, insertData.distance, insertData.carbon_lb, insertData.carbon_kg, insertData.points_earned, insertData.date_earned];
+  console.log(values);
+  await new Promise((resolve, reject) => {
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        reject(err);
+        res.status(500).json({ error: err });
+      } else {
+        console.log("Query results:", results);
+        
+        // Handle results if needed
+        resolve();
+        res.status(200).json({ data: results });
+      }
+    });
+  });
+}
+catch
+  (err) {
+    console.error("Error updating drives table", err);
+    res.status(400).send("Error updating drives table");
+}
+  
+});
 
+// Submits vehicle ID and miles driven to Carbon Report API
+app.get("/vehicleCarbonReport", async (req, res) => {
+  const { vehicleId, distance, userID } = req.query;
+  console.log("vehicle carbon report called");
   // Ensure modelID and trip distance were sent
   if (!vehicleId)
     return res.status(400).json({ error: "Must provide vehicle id." });
@@ -477,6 +527,7 @@ app.get("/vehicleCarbonReport", (req, res) => {
     distance_value: distance,
     vehicle_model_id: vehicleId,
   };
+  console.log("requestData formed");
 
   const jsonData = JSON.stringify(requestData);
 
@@ -490,9 +541,11 @@ app.get("/vehicleCarbonReport", (req, res) => {
     body: jsonData,
   })
     .then((res) => res.json())
-    .then((data) => {
+    .then(async (data) => {
       // If we get data back, send it to user
       if (data) {
+        console.log(data);
+       
         res.status(200).json({ data: data });
       } else {
         res.status(500).json({ error: "Server error." });
