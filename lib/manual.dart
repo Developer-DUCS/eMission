@@ -80,6 +80,7 @@ class _ManualState extends State<Manual> {
   // Submits miles and trip
   void submitMiles(carID, distance, modelID) async {
     print('Submitting Miles...');
+    print('carID');
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     // Data to be sent
@@ -194,6 +195,7 @@ class _ManualState extends State<Manual> {
                           if (newValue != null) {
                             setState(() {
                               selectedVehicle = newValue;
+                              print(selectedVehicle);
                               // Handle the selected value (newValue)
                             });
                           }
@@ -260,13 +262,18 @@ class _ManualState extends State<Manual> {
             ),
             onPressed: () {
               int milesTotal = int.parse(textController.text);
-              var selectedVehicle = vehicles.isNotEmpty ? vehicles[0] : null;
-              if (selectedVehicle != null) {
-                //print('Submitted Miles: $milesTotal');
-                //print('Selected Car: ${selectedVehicle['carName']}');
-                //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-                submitMiles(selectedVehicle['carID'], milesTotal,
-                    selectedVehicle['modelID']);
+
+              // Check if vehicles list is not empty and selectedVehicle is not null
+              if (vehicles.isNotEmpty && selectedVehicle != null) {
+                // Get the selected vehicle from the list based on its ID
+                var selectedVehicleFromList = vehicles.firstWhere(
+                    (vehicle) => vehicle['carID'] == selectedVehicle?['carID']);
+
+                // Ensure that the selected vehicle is found
+                if (selectedVehicleFromList != null) {
+                  submitMiles(selectedVehicleFromList['carID'], milesTotal,
+                      selectedVehicleFromList['modelID']);
+                }
               }
             },
             child: const Text('Submit')),

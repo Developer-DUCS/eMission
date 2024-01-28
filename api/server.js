@@ -181,10 +181,48 @@ app.post("/getEarnedPoints", (req, res) => {
 
   const userID = req.body.userID;
 
-  const query = `
+  /*const query = `
     SELECT COALESCE(SUM(points), 0) total FROM Challenges
     WHERE challengeID IN(SELECT DISTINCT challengeID FROM AcceptedChallenges
-      WHERE earnerID = ? and dateFinished is not null)`;
+      WHERE earnerID = ? and dateFinished is not null)`;*/
+    const query =
+    `   
+    SELECT
+        COALESCE(ac.earnerID, dt.userID) AS userID,
+        COALESCE(SUM(c.points), 0) AS totalChallengePoints,
+        COALESCE(SUM(dt.total_points_earned), 0) AS totalDrivePoints,
+        COALESCE(SUM(c.points) + SUM(dt.total_points_earned), 0) AS totalPointsBoth
+    FROM
+        AcceptedChallenges ac
+    LEFT JOIN Challenges c ON ac.challengeID = c.challengeID AND ac.dateFinished IS NOT NULL
+    LEFT JOIN (
+        SELECT
+            t.userID,
+            MIN(t.date_earned) AS earliest_date,
+            SUM(t.points_earned) AS total_points_earned
+        FROM
+            Drives t
+        INNER JOIN (
+            SELECT
+                userID,
+                DATE(date_earned) AS day,
+                MIN(date_earned) AS earliest_date
+            FROM
+                Drives
+            GROUP BY
+                userID,
+                DATE(date_earned)
+        ) subquery ON t.userID = subquery.userID
+                    AND DATE(t.date_earned) = subquery.day
+                    AND t.date_earned = subquery.earliest_date
+        GROUP BY
+            t.userID,
+            DATE(t.date_earned)
+    ) dt ON ac.earnerID = dt.userID
+    WHERE
+        COALESCE(ac.earnerID, dt.userID) = ?
+    GROUP BY
+        COALESCE(ac.earnerID, dt.userID)`;
 
   const db = new Database(dbconfig);
   db.query(query, [userID], (err, results) => {
