@@ -1,4 +1,4 @@
-# Sprint 8
+# Sprint 8 Re(elaboration)
 
 ### Sprint Goals
 - [ ] Cleanup Project Board - Re(elaboration)
@@ -6,5 +6,30 @@
 - [ ] Design Deployment Plan
 - [ ] Codebase Quality Check
 - [ ] Design GPS/Map Technologies
-- [ ] Establish GPS-Deployment Groups
-- [ ] 
+- [X] Establish GPS-Deployment Groups
+
+---
+
+### Deployment PLan
+
+#### Dev-Team
+* Chris Warren
+* Jacob Hutchinson
+
+---
+
+### GPS/Map Technologies
+
+#### Dev-Team
+* Jace Reinke
+* Jali Purcell
+* Austin Skidmore
+
+---
+
+### Workflow & Project Board Updates
+* 
+
+---
+
+### Sprint Retrospective
