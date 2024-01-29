@@ -1,10 +1,10 @@
 # Sprint 8 Re(elaboration)
 
 ### Sprint Goals
-- [ ] Cleanup Project Board - Re(elaboration)
+- [X] Cleanup Project Board - Re(elaboration)
 - [ ] Continue User Testing
 - [ ] Design Deployment Plan
-- [ ] Codebase Quality Check
+- [X] Codebase Quality Check
 - [ ] Design GPS/Map Technologies
 - [X] Establish GPS-Deployment Groups
 
