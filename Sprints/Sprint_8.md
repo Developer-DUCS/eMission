@@ -28,8 +28,12 @@
 ---
 
 ### Workflow & Project Board Updates
-* 
+* High Priority Tasks
+  * Lorem Ipsum
+* Updated Backlog
+  * [See Project Board]
 
 ---
 
 ### Sprint Retrospective
+* Dividing the development team aids our efficiency in ensuring the most important features and technologies are completed before the deadline. Alongside these technologies are smaller features and tasks that should also be prioritized, by individual members of the development team. During this sprint we decided the priority of tasks using the project board & updated our backlog. 
