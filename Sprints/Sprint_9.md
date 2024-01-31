@@ -2,8 +2,7 @@
 
 ### Sprint Goals
 - [ ] Complete Product License
-- [ ] Draft Test Plan?
-- [ ] Acceptance Planning Against Requirements
+- [ ] Draft Test Plan w/ Requirements
 - [ ] Make Leaderboard Interactive
 - [ ] Design GPS/Map Technologies
 - [ ] Deployment Strategies w/ Sigman
