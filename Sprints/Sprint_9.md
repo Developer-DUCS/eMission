@@ -9,6 +9,7 @@
 - [ ] Deployment Strategies w/ Sigman
 - [ ] Review Emission Calculation
 - [ ] Review Point C02 Score Calculation & Point Strategy
+- [ ] Merging Development Codebase
 
 ---
 
