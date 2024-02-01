@@ -29,9 +29,14 @@
 
 ### Workflow & Project Board Updates
 * High Priority Tasks
-  * Lorem Ipsum
+  * Implement GPS/Map Functions
+  * Design Deployment Strategy
+  * Make Leaderboard Interactive
+  * Product Legal Notes
+  * UI Update/Dark Mode
+  * Store Datetime & Request Frequency
 * Updated Backlog
-  * [See Project Board]
+  * [See Project Board](https://github.com/orgs/Developer-DUCS/projects/3/views/1)
 
 ---
 
