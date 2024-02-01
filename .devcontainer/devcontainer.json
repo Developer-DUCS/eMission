@@ -1,0 +1,19 @@
+{
+    "name": "flutter_docker",
+    "context": "..",
+    "dockerFile": "../Dockerfile",
+    "dockerComposeFile": "../docker-compose.yaml",
+    "remoteUser": "user",
+    "mounts": ["source=/dev/bus/usb,target=/dev/bus/usb,type=bind"],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": null
+            },
+            "extensions": ["dart-code.flutter"]
+        }
+    },
+    "runArgs": ["--privileged"],
+    "workspaceMount": "source=${localWorkspaceFolder}/emission,target=/home/user/emission,type=bind,consistency=delegated",
+    "workspaceFolder": "/home/user/emission"
+  }
