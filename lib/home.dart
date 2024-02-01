@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -9,15 +10,52 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-class _HomeState extends State<Home> {
-  // 
-  String? userInfo;
 
+class _HomeState extends State<Home> {
+  int? userID;
+  String? userEmail;
+  String? userName;
+  String? userDisplayName;
+
+  int? totalPoints;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getUserInfo();
+    _getTotalPoints().then((value) {
+      setState(() {
+        totalPoints = value;
+      });
+    });
+  }
+
+  Future<dynamic> getUserID() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.getInt("userID");
+    return pref.getInt("userID");
+  }
+
+  Future<int?> _getTotalPoints() async {
+    var userID = await getUserID();
+    var jsonBody = jsonEncode({"userID": userID});
+
+    var response = await http.post(
+      Uri.parse("http://10.0.2.2:3000/getEarnedPoints"),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonBody,
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      var totalPointsFromJson = jsonResponse['results'][0]['total'] ??
+          0; // Access the total points field
+      return totalPointsFromJson as int;
+    } else {
+      throw Exception("Failed to load post");
+    }
   }
 
   @override
@@ -25,74 +63,68 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Column(
         children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(202, 217, 150, 1),
+              border: Border.all(
+                color: Colors.black,
+                width: 2.0,
+              ),
+            ),
+            height: MediaQuery.of(context).size.height / 4,
+            child: Center(
+              child: profilePic(),
+            ),
+          ),
           Expanded(
-            child: Column(
-              children: <Widget>[
-                
-                Container(
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(202, 217, 150, 1),
-                      border: Border.all(color: Colors.black, width: 2.0), // Set the border color and width
+            child: Container(
+              color: const Color.fromRGBO(124, 184, 22, 1),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    Text(
+                      "Total Points: ${totalPoints ?? ""}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 24),
                     ),
-                  height: MediaQuery.of(context).size.height / 4, // 1/4 of the screen height
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: <Widget>[
-                        profilePic(),
-                        const Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Column(
-                              children: <Widget>[
-                                Text("Your Rank: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                                Text("Eco Friendly", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                                Text("Tier X ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                              ]
-                            )
-                          )
-                        )
-                      ]
-                    ),
-                  )
+                  ],
                 ),
-
-                Expanded(
-                  child: Container(
-                    color: const Color.fromRGBO(124, 184, 22, 1),
-                    child: Center(
-                      child: progressBar(),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
-  // 
+
   Widget profilePic() {
     return Container(
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.grey.shade200,
-            child: const CircleAvatar(
-              radius: 45,
-              backgroundImage: AssetImage('assets/images/pexels-robert-so-18127674-2.jpg'),
-            ),
+      child: Column(children: [
+        SizedBox(height: 20),
+        CircleAvatar(
+          radius: 50,
+          backgroundColor: Colors.grey.shade200,
+          child: const CircleAvatar(
+            radius: 45,
+            backgroundImage: AssetImage('assets/images/plant.jpg'),
           ),
-          Container(
-            child: userInfo == null ? const Text("Your Name", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),) : Text(userInfo!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24))
-          ),
-        ]
-      ),
+        ),
+        Container(
+          child: userName == null
+              ? const Text(
+                  "Your Name",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                )
+              : Text(userName!,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 24)),
+        ),
+      ]),
     );
   }
-  //
+
   Widget progressBar() {
     return Container(
       child: const LinearProgressIndicator(
@@ -100,13 +132,13 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-  //
+
   void getUserInfo() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    userInfo = pref.getString("userName");
-    setState(() {
-      
-    });
+    userID = pref.getInt("userID");
+    userEmail = pref.getString("email");
+    userName = pref.getString("userName");
+    userDisplayName = pref.getString("displayName");
+    setState(() {});
   }
-
 }

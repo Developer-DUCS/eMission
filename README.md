@@ -1,6 +1,10 @@
 # SE-SemesterProject
 
-Build your Project ReadMe here. Your design documentation, will go in your Wiki. So this is the first page that other developers using your software will see. They should find the information necessary to build and run your project on this page.
+## Documentation
+
+For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation.
+
+[Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 
 ## Project Description
 
@@ -65,12 +69,6 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
       - Choose a device emulator
         - <img src="https://github.com/Developer-DUCS/eMission/assets/78006078/10e69d95-522f-44cf-8a29-a3d1c86edad0" alt="vscode_choose_device" width="400" height="200"/>
 3. Open command line in your local repository and run `flutter run`
-
-## Documentation
-
-For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation.
-
-[Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 
 <details><summary>Sprint Workflow</summary>
 

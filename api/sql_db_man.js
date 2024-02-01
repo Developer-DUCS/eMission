@@ -1,3 +1,8 @@
+/*
+*   sql_db_man.js Author: Jali Purcell
+*   Defines connecting, disconnect, and query for 
+*   MySQL Database
+*/
 
 const mysql = require("mysql");
 
