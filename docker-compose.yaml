@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: eMission_app
-    working_dir: /home/user/emission
-    command: flutter run -d Linux
+    working_dir: /home/user/eMission
+    command: flutter run
     depends_on:
       - node-server
     environment:
@@ -24,11 +24,11 @@ services:
   node-server:
     image: node:14
     restart: always
-    working_dir: /home/user/emission/api
+    working_dir: /home/user/eMission/api
     command: npm start
     ports:
       - "3000:3000"
     volumes:
-       - ./api:/home/user/emission/api
+       - ./api:/home/user/eMission/api
 
 
