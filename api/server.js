@@ -566,6 +566,7 @@ app.post("/updateDistance", (req, res) => {
 });
 app.post("/addDistance", (req, res) => {
   // Database Credentials
+  console.log("Add distance called");
   const dbconfig = {
     host: "mcs.drury.edu",
     port: "3306",
@@ -592,8 +593,9 @@ app.post("/addDistance", (req, res) => {
     } else {
       // Save old mileage
       const currentMilage = result[0]["currentMileage"];
-      const newMileage = parseInt(distance) + currentMilage;
-
+      const newMileage = Math.ceil(distance) + parseInt(currentMilage);
+      console.log("New mileage");
+      console.log(newMileage);
       // Check if submitted mileage is greater than the saved mileage.
       // If not, send back an error.
       
@@ -610,7 +612,7 @@ app.post("/addDistance", (req, res) => {
               response.status(500).json({ msg: "Database Error" });
             } else {
               // After update, return travelled distance
-              res.status(200).json({ data: travelDist });
+              res.status(200).json({ data: distance });
             }
           }
         );

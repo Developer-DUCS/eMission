@@ -157,6 +157,7 @@ class _ButtonPageState extends State<ButtonPage> {
       'vehicle': carID,
       'userID': pref.getInt("userID")
     };
+    print(data);
 
     // API call to update milage and calculate trip distance
     var res = await http.post(Uri.parse('http://10.0.2.2:3000/addDistance'),
@@ -269,12 +270,12 @@ class _ButtonPageState extends State<ButtonPage> {
                       var selectedVehicle =
                           vehicles.isNotEmpty ? vehicles[0] : null;
                       if (selectedVehicle != null) {
-                        print(totalDistance.toInt());
+                        print(totalDistance);
                         //print('Submitted Miles: $milesTotal');
                         //print('Selected Car: ${selectedVehicle['carName']}');
                         //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-                        submitMiles(selectedVehicle['carID'],
-                            totalDistance.toInt(), selectedVehicle['modelID']);
+                        submitMiles(selectedVehicle['carID'], totalDistance,
+                            selectedVehicle['modelID']);
                       }
                       //Navigator.of(context).pop();
                       //Navigator.pushNamed(context, 'carbon_report');
