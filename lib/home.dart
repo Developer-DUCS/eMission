@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
-      var totalPointsFromJson = jsonResponse['results'][0]['total'] ??
+      var totalPointsFromJson = jsonResponse['results'][0]['totalPointsBoth'] ??
           0; // Access the total points field
       return totalPointsFromJson as int;
     } else {

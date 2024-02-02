@@ -48,9 +48,39 @@ class _ManualState extends State<Manual> {
     });
   }
 
+  void carbonReport(distance, vehicle, userID, carID) async {
+    print("carbon report called");
+    var results = await http.get(Uri.parse(
+        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}'));
+    Map<String, dynamic> resultsMap = json.decode(results.body);
+    print(resultsMap);
+
+    // Extract the data
+    var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+    var carbonKg = resultsMap['data']['data']['attributes']['carbon_kg'];
+    if (carbonLb != null && carbonKg != null) {
+      var body = {
+        "vehicleID": carID,
+        "distance": distance,
+        "userID": userID,
+        "carbon_lb": carbonLb,
+        "carbon_kg": carbonKg
+      };
+      var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDrives'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(body));
+      if (res.statusCode == 200) {
+        showResultAlert(context, carbonLb);
+      } else {
+        showErrorAlert(context);
+      }
+    }
+  }
+
   // Submits miles and trip
   void submitMiles(carID, distance, modelID) async {
     print('Submitting Miles...');
+    print('carID');
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     // Data to be sent
@@ -59,15 +89,19 @@ class _ManualState extends State<Manual> {
       'vehicle': carID,
       'userID': pref.getInt("userID")
     };
-
+    print("Hi 1");
     // API call to update milage and calculate trip distance
     var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDistance'),
         headers: {'Content-Type': 'application/json'}, body: json.encode(data));
-
+    print("Hi 2");
     // Parse the JSON string into a Map
     Map<String, dynamic> responseMap = json.decode(res.body);
+
+    print(responseMap);
     // Access the value associated with the "data" key
     dynamic dataValue = responseMap['data'];
+    print("Data value");
+    print(dataValue);
 
     if (dataValue == null) {
       showErrorAlert(context);
@@ -75,8 +109,13 @@ class _ManualState extends State<Manual> {
       // Establish data to send to Carbon Interface API
       var tripDistance = dataValue;
       var vehicle = modelID;
+      try {
+        carbonReport(tripDistance, vehicle, pref.getInt("userID"), carID);
+      } catch (err) {
+        print(err);
+      }
 
-      // API request to Carbon Interface
+      /*  // API request to Carbon Interface
       var results = await http.get(Uri.parse(
           'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
 
@@ -87,7 +126,7 @@ class _ManualState extends State<Manual> {
       var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
 
       // Create pop-up
-      showResultAlert(context, carbonLb);
+      showResultAlert(context, carbonLb); */
     }
     ;
   }
@@ -156,6 +195,7 @@ class _ManualState extends State<Manual> {
                           if (newValue != null) {
                             setState(() {
                               selectedVehicle = newValue;
+                              print(selectedVehicle);
                               // Handle the selected value (newValue)
                             });
                           }
@@ -222,13 +262,18 @@ class _ManualState extends State<Manual> {
             ),
             onPressed: () {
               int milesTotal = int.parse(textController.text);
-              var selectedVehicle = vehicles.isNotEmpty ? vehicles[0] : null;
-              if (selectedVehicle != null) {
-                //print('Submitted Miles: $milesTotal');
-                //print('Selected Car: ${selectedVehicle['carName']}');
-                //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-                submitMiles(selectedVehicle['carID'], milesTotal,
-                    selectedVehicle['modelID']);
+
+              // Check if vehicles list is not empty and selectedVehicle is not null
+              if (vehicles.isNotEmpty && selectedVehicle != null) {
+                // Get the selected vehicle from the list based on its ID
+                var selectedVehicleFromList = vehicles.firstWhere(
+                    (vehicle) => vehicle['carID'] == selectedVehicle?['carID']);
+
+                // Ensure that the selected vehicle is found
+                if (selectedVehicleFromList != null) {
+                  submitMiles(selectedVehicleFromList['carID'], milesTotal,
+                      selectedVehicleFromList['modelID']);
+                }
               }
             },
             child: const Text('Submit')),
