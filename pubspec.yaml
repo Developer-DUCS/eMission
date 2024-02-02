@@ -53,6 +53,9 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.2.2
   another_flushbar: ^1.12.30
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
+
 
 dev_dependencies:
   flutter_test:
