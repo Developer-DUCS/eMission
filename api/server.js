@@ -493,6 +493,7 @@ app.delete("/vehicles", (req, res) => {
   });
 });
 
+
 app.post("/updateDrives", async (req,res)=>{
   try{
     let pointsEarned;
@@ -544,8 +545,14 @@ catch
 });
 
 // Submits vehicle ID and miles driven to Carbon Report API
-app.get("/vehicleCarbonReport", async (req, res) => {
-  const { vehicleId, distance, userID } = req.query;
+app.get("/vehicleCarbonReport", (req, res) => {
+  const { vehicleId, distance } = req.query;
+  
+
+
+// Submits vehicle ID and miles driven to Carbon Report API
+//app.get("/vehicleCarbonReport", async (req, res) => {
+// const { vehicleId, distance, userID } = req.query;
   console.log("vehicle carbon report called");
   // Ensure modelID and trip distance were sent
   if (!vehicleId)
@@ -561,6 +568,8 @@ app.get("/vehicleCarbonReport", async (req, res) => {
     vehicle_model_id: vehicleId,
   };
   console.log("requestData formed");
+
+  console.log(distance);
 
   const jsonData = JSON.stringify(requestData);
 
@@ -645,6 +654,62 @@ app.post("/updateDistance", (req, res) => {
         );
       }
     }
+  });
+});
+app.post("/addDistance", (req, res) => {
+  // Database Credentials
+  console.log("Add distance called");
+  const dbconfig = {
+    host: "mcs.drury.edu",
+    port: "3306",
+    user: "emission",
+    password: "Letmein!eCoders",
+    database: "emission",
+  };
+  // Connect to database
+
+  // Unpacking sent data
+  const distance = req.body.distance;
+  const userCredentials = req.body.userID;
+  const submittedVehicle = req.body.vehicle;
+
+  // Query to fetch saved milage
+  const query =
+    "select currentMileage from emission.Cars where owner = ? and carID = ?;";
+
+  db.query(query, [userCredentials, submittedVehicle], (error, result) => {
+    // Catch Errors
+    if (error) {
+      //console.error("Error executing query:", error);
+      response.status(500).json({ msg: "Database Error" });
+    } else {
+      // Save old mileage
+      const currentMilage = result[0]["currentMileage"];
+      const newMileage = Math.ceil(distance) + parseInt(currentMilage);
+      console.log("New mileage");
+      console.log(newMileage);
+      // Check if submitted mileage is greater than the saved mileage.
+      // If not, send back an error.
+      
+        // Query to update saved mileage to submitted mileage
+        const updateQuery =
+          "UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;";
+        db.query(
+          updateQuery,
+          [newMileage, userCredentials, submittedVehicle],
+          (error, result) => {
+            // Catch Errors
+            if (error) {
+              //console.error("Error executing query:", error);
+              response.status(500).json({ msg: "Database Error" });
+            } else {
+              // After update, return travelled distance
+              res.status(200).json({ data: distance });
+            }
+          }
+        );
+      }
+    
   });
 });
 
