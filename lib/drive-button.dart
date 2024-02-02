@@ -30,7 +30,6 @@ class _ButtonPageState extends State<ButtonPage> {
 
   void initLocationService() async {
     await Geolocator.requestPermission();
-    fetchVehicles();
   }
 
   void startLocationUpdates() {
@@ -89,6 +88,8 @@ class _ButtonPageState extends State<ButtonPage> {
 
   void startTimer() {
     initLocationService();
+    vehicles = [];
+    fetchVehicles();
     startLocationUpdates();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -147,7 +148,7 @@ class _ButtonPageState extends State<ButtonPage> {
     );
   }
 
-  void submitMiles(carID, distance, modelID) async {
+  void submitMiles2(carID, distance, modelID) async {
     print('Submitting Miles...');
     SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -191,6 +192,89 @@ class _ButtonPageState extends State<ButtonPage> {
     ;
   }
 
+  // Submits miles and trip
+  void submitMiles(carID, distance, modelID) async {
+    print('Submitting Miles...');
+    print('carID');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    // Data to be sent
+    var data = {
+      'distance': distance,
+      'vehicle': carID,
+      'userID': pref.getInt("userID")
+    };
+    print("Hi 1");
+    // API call to update milage and calculate trip distance
+    var res = await http.post(Uri.parse('http://10.0.2.2:3000/addDistance'),
+        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
+    print("Hi 2");
+    // Parse the JSON string into a Map
+    Map<String, dynamic> responseMap = json.decode(res.body);
+
+    print(responseMap);
+    // Access the value associated with the "data" key
+    dynamic dataValue = responseMap['data'];
+    print("Data value");
+    print(dataValue);
+
+    if (dataValue == null) {
+      showErrorAlert(context);
+    } else {
+      // Establish data to send to Carbon Interface API
+      var tripDistance = dataValue;
+      var vehicle = modelID;
+      try {
+        //carbonReport(tripDistance, vehicle, pref.getInt("userID"), carID);
+      } catch (err) {
+        print(err);
+      }
+
+      /*  // API request to Carbon Interface
+      var results = await http.get(Uri.parse(
+          'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
+
+      // Parse the JSON string into a Map
+      Map<String, dynamic> resultsMap = json.decode(results.body);
+
+      // Extract the data
+      var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+
+      // Create pop-up
+      showResultAlert(context, carbonLb); */
+    }
+    ;
+  }
+
+  void carbonReport(distance, vehicle, userID, carID) async {
+    print("carbon report called");
+    var results = await http.get(Uri.parse(
+        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}'));
+    Map<String, dynamic> resultsMap = json.decode(results.body);
+    print(resultsMap);
+
+    // Extract the data
+    var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+    var carbonKg = resultsMap['data']['data']['attributes']['carbon_kg'];
+    if (carbonLb != null && carbonKg != null) {
+      var body = {
+        "vehicleID": carID,
+        "distance": distance,
+        "userID": userID,
+        "carbon_lb": carbonLb,
+        "carbon_kg": carbonKg
+      };
+      var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDrives'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(body));
+      if (res.statusCode == 200) {
+        showResultAlert(context, carbonLb);
+      } else {
+        showErrorAlert(context);
+      }
+    }
+  }
+
   void showResultAlert(BuildContext context, double carbonLb) {
     showDialog(
       context: context,
@@ -203,6 +287,7 @@ class _ButtonPageState extends State<ButtonPage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushNamed(context, 'carbon_report');
               },
               child: Text('OK'),
             ),
@@ -267,15 +352,21 @@ class _ButtonPageState extends State<ButtonPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       //closeOverlay();
-                      var selectedVehicle =
-                          vehicles.isNotEmpty ? vehicles[0] : null;
+                      var selectedVehicleFromList = vehicles.firstWhere(
+                          (vehicle) =>
+                              vehicle['carID'] == selectedVehicle?['carID']);
+
                       if (selectedVehicle != null) {
                         print(totalDistance);
+                        print(selectedVehicle?['carID']);
+                        var chosenVehicle = vehicles.firstWhere((vehicle) =>
+                            vehicle['carID'] == selectedVehicle?['carID']);
+
                         //print('Submitted Miles: $milesTotal');
                         //print('Selected Car: ${selectedVehicle['carName']}');
                         //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-                        submitMiles(selectedVehicle['carID'], totalDistance,
-                            selectedVehicle['modelID']);
+                        submitMiles2(chosenVehicle['carID'], totalDistance,
+                            chosenVehicle['modelID']);
                       }
                       //Navigator.of(context).pop();
                       //Navigator.pushNamed(context, 'carbon_report');
@@ -290,14 +381,14 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
               ],
             ),
-            actions: <Widget>[
+            /* actions: <Widget>[
               TextButton(
                 onPressed: () {
                   closeOverlay();
                 },
                 child: Text('Close'),
               ),
-            ],
+            ], */
           );
         });
       },
