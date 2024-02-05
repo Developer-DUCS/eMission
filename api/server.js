@@ -494,6 +494,48 @@ app.delete("/vehicles", (req, res) => {
 });
 
 
+
+app.get("/getRecentDrive", async (req,res)=>{
+  try{
+   
+    const { userID } = req.query;
+  
+    console.log(req.body);
+    const db = new Database(dbconfig);
+  
+    const query = `SELECT c.carName, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned
+    from Drives d
+    inner join Cars c on c.owner=d.userID and c.carID=d.carID
+    where d.userID = ?
+    order by d.date_earned desc
+    limit 1`;
+    values = [userID];
+
+  await new Promise((resolve, reject) => {
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        reject(err);
+        res.status(500).json({ error: err });
+      } else {
+        console.log("Query results:", results);
+        
+        // Handle results if needed
+        resolve();
+        res.status(200).json({ data: results });
+      }
+    });
+  });
+}
+catch
+  (err) {
+    console.error("Error getting drive results", err);
+    res.status(400).send("Error getting drive results");
+}
+  
+});
+
+
 app.post("/updateDrives", async (req,res)=>{
   try{
     let pointsEarned;
@@ -656,6 +698,8 @@ app.post("/updateDistance", (req, res) => {
     }
   });
 });
+
+
 app.post("/addDistance", (req, res) => {
   // Database Credentials
   console.log("Add distance called");

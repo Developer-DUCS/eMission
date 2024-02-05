@@ -230,6 +230,8 @@ class _ButtonPageState extends State<ButtonPage> {
         print(err);
       }
 
+      // IMPORTANT NOTE: UNCOMMENT OUT TO TEST
+
       /*  // API request to Carbon Interface
       var results = await http.get(Uri.parse(
           'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
