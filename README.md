@@ -2,8 +2,8 @@
 
 
 ## Project Description
-&nbsp;&nbsp;The eMission’s project will consist of research and design for the carbon footprint application with an emphasis on an individual’s car emissions. We will identify a target market for our app and design its features around what our users would like to see in the app. Users are encouraged to actively participate in climate action and the problems associated with it. The rationale behind this project is that if individuals are more conscientious about their impact on the earth, the sustainability goal of climate action can also be encouraged.
 
+&nbsp;&nbsp;The eMission’s project will consist of research and design for the carbon footprint application with an emphasis on an individual’s car emissions. We will identify a target market for our app and design its features around what our users would like to see in the app. Users are encouraged to actively participate in climate action and the problems associated with it. The rationale behind this project is that if individuals are more conscientious about their impact on the earth, the sustainability goal of climate action can also be encouraged.
 
 
 ## Installation & Setup
