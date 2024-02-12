@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:first_flutter_app/challenge_page.dart';
-import 'package:first_flutter_app/encryption.dart';
+import 'package:emission/challenge_page.dart';
+import 'package:emission/encryption.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';

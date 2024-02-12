@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:first_flutter_app/encryption.dart';
+import 'package:emission/encryption.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
