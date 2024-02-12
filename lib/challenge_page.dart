@@ -118,7 +118,7 @@ Future<List<Challenge>> _getChallenges() async {
   List<Challenge> challenges = [];
 
   var response = await http.post(
-    Uri.parse("http://10.0.2.2:3000/getChallenges2"),
+    Uri.parse("https://mcs.drury.edu/emission/getChallenges2"),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -223,7 +223,7 @@ class _ChallengePageState extends State<ChallengePage> {
     print(selectedChallenges);
     if (selectedChallenges.isNotEmpty) {
       print('Selected Challenges: $selectedChallenges');
-      var url = "http://10.0.2.2:3000/acceptChallenges";
+      var url = "https://mcs.drury.edu/emission/acceptChallenges";
 
       for (Challenge challenge in selectedChallenges) {
         list.add(challenge.toJson());
@@ -239,7 +239,7 @@ class _ChallengePageState extends State<ChallengePage> {
       print(jsonBody);
 
       var response = await http.post(
-        Uri.parse("http://10.0.2.2:3000/acceptNewChallenges"),
+        Uri.parse("https://mcs.drury.edu/emission/acceptNewChallenges"),
         headers: {
           'Content-Type': 'application/json',
         },

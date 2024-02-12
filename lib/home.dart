@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
     var jsonBody = jsonEncode({"userID": userID});
 
     var response = await http.post(
-      Uri.parse("http://10.0.2.2:3000/getEarnedPoints"),
+      Uri.parse("https://mcs.drury.edu/emission/getEarnedPoints"),
       headers: {
         'Content-Type': 'application/json',
       },

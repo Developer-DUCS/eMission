@@ -66,7 +66,7 @@ class _ManualState extends State<Manual> {
         "carbon_lb": carbonLb,
         "carbon_kg": carbonKg
       };
-      var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDrives'),
+      var res = await http.post(Uri.parse('https://mcs.drury.edu/emission/updateDrives'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode(body));
       if (res.statusCode == 200) {
@@ -91,7 +91,7 @@ class _ManualState extends State<Manual> {
     };
     print("Hi 1");
     // API call to update milage and calculate trip distance
-    var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDistance'),
+    var res = await http.post(Uri.parse('https://mcs.drury.edu/emission/updateDistance'),
         headers: {'Content-Type': 'application/json'}, body: json.encode(data));
     print("Hi 2");
     // Parse the JSON string into a Map

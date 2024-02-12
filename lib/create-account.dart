@@ -38,7 +38,7 @@ class _CreateAccountState extends State<CreateAccount> {
   // this request will insert the user's login information.
   void _submitForm(context) async {
     // android emulator url
-    String url = 'http://10.0.2.2:3000/insertUser';
+    String url = 'https://mcs.drury.edu/emission/insertUser';
 
     // Encrypt the password
     String encryptedPassword = encryptPassword(confirmPasswordController.text);
