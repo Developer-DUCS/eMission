@@ -58,7 +58,7 @@ class _ButtonPageState extends State<ButtonPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     http
         .get(Uri.parse(
-            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
+            'https://mcs.drury.edu/emission/vehicles?owner=${pref.getInt("userID")}'))
         .then((res) {
       setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
@@ -160,7 +160,7 @@ class _ButtonPageState extends State<ButtonPage> {
     print(data);
 
     // API call to update milage and calculate trip distance
-    var res = await http.post(Uri.parse('http://10.0.2.2:3000/addDistance'),
+    var res = await http.post(Uri.parse('https://mcs.drury.edu/emission/addDistance'),
         headers: {'Content-Type': 'application/json'}, body: json.encode(data));
 
     // Parse the JSON string into a Map
@@ -177,7 +177,7 @@ class _ButtonPageState extends State<ButtonPage> {
 
       // API request to Carbon Interface
       var results = await http.get(Uri.parse(
-          'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
+          'https://mcs.drury.edu/emission/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
 
       // Parse the JSON string into a Map
       Map<String, dynamic> resultsMap = json.decode(results.body);
@@ -309,7 +309,7 @@ class _ButtonPageState extends State<ButtonPage> {
     //final response = await apiService.calculateCarbonFootprint();
     const make = 'Toyota';
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:3000/makeId?make=$make'));
+        await http.get(Uri.parse('https://mcs.drury.edu/emission/makeId?make=$make'));
     print(response);
     // ignore: use_build_context_synchronously
     showDialog(

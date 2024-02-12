@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:first_flutter_app/challenge_page.dart';
-import 'package:first_flutter_app/encryption.dart';
+import 'package:emission/challenge_page.dart';
+import 'package:emission/encryption.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +120,7 @@ class SettingsState extends State<Settings> {
   Widget account() {
     void updateAccount(BuildContext context) {
       http
-          .patch(Uri.parse('http://10.0.2.2:3000/user'),
+          .patch(Uri.parse('https://mcs.drury.edu/emission/user'),
               headers: {'Content-Type': 'application/json'},
               body: json.encode({
                 'id': userID,
@@ -501,7 +501,7 @@ class SettingsState extends State<Settings> {
       }
 
       http
-          .patch(Uri.parse('http://10.0.2.2:3000/password'),
+          .patch(Uri.parse('https://mcs.drury.edu/emission/password'),
               headers: {'Content-Type': 'application/json'},
               body: json.encode({
                 'id': userID,

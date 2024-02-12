@@ -1,18 +1,23 @@
 //
-import 'package:first_flutter_app/vehicles.dart';
-import 'package:flutter/material.dart';
-import 'package:first_flutter_app/layout.dart';
-import 'package:first_flutter_app/login.dart';
-import 'package:first_flutter_app/create-account.dart';
-import 'package:first_flutter_app/challenge_page.dart';
-import 'package:first_flutter_app/carbon_report.dart';
-import 'package:first_flutter_app/settings.dart';
-import 'package:first_flutter_app/home.dart';
-import 'package:first_flutter_app/drive-button.dart';
-import 'package:first_flutter_app/manual.dart';
-import 'package:first_flutter_app/leaderboard.dart';
+import 'dart:io';
 
-void main() => runApp(const MyApp());
+import 'package:emission/vehicles.dart';
+import 'package:flutter/material.dart';
+import 'package:emission/layout.dart';
+import 'package:emission/login.dart';
+import 'package:emission/create-account.dart';
+import 'package:emission/challenge_page.dart';
+import 'package:emission/carbon_report.dart';
+import 'package:emission/settings.dart';
+import 'package:emission/home.dart';
+import 'package:emission/drive-button.dart';
+import 'package:emission/manual.dart';
+import 'package:emission/leaderboard.dart';
+
+void main() async {
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(const MyApp());
+}
 
 /* */
 class MyApp extends StatelessWidget {
@@ -71,5 +76,13 @@ class MyApp extends StatelessWidget {
             ),
       },
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
