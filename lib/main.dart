@@ -1,4 +1,6 @@
 //
+import 'dart:io';
+
 import 'package:emission/vehicles.dart';
 import 'package:flutter/material.dart';
 import 'package:emission/layout.dart';
@@ -12,7 +14,10 @@ import 'package:emission/drive-button.dart';
 import 'package:emission/manual.dart';
 import 'package:emission/leaderboard.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(const MyApp());
+}
 
 /* */
 class MyApp extends StatelessWidget {
@@ -71,5 +76,13 @@ class MyApp extends StatelessWidget {
             ),
       },
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
