@@ -27,7 +27,7 @@ class CarbonReportPage extends StatefulWidget {
   CarbonReportPage({Key? key}) : super(key: key);
 
   String carName = "";
-  double amount = 0.0;
+  int amount = 0;
   String unitOfMeasure = 'mi';
   double carbon_lb = 0.0;
   int points_earned = 0;
@@ -42,16 +42,20 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
 
   @override
   void initState() {
+    print("Init state called");
     super.initState();
-    initAsyncState();
-  }
-
-  Future<void> initAsyncState() async {
     getMostRecentDrive();
-    // Other asynchronous initialization logic can go here
   }
 
-  void getMostRecentDrive() async {
+  Future<Map<String, dynamic>> getMostRecentDrive2() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    http.Response res = await http.get(Uri.parse(
+        'http://10.0.2.2:3000/getRecentDrive?userID=${pref.getInt("userID")}'));
+    print(json.decode(res.body));
+    return json.decode(res.body);
+  }
+
+  Future<void> getMostRecentDrive() async {
     print("hi");
     SharedPreferences pref = await SharedPreferences.getInstance();
     print(pref);
@@ -63,6 +67,7 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
       setState(() {
         print(res.body);
         var jsonResponse = json.decode(res.body);
+        print(jsonResponse);
         var firstDataItem = jsonResponse["data"][0];
         widget.carName = firstDataItem["carName"];
         widget.amount = firstDataItem["amount"];
@@ -76,7 +81,120 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     });
   }
 
-  /* @override
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getMostRecentDrive2(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // While the data is being fetched, display a loading indicator
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          // If there's an error during the fetch, display an error message
+          return Text('Error: ${snapshot.error}');
+        } else {
+          // Once the data is available, update the widget's properties
+          var firstDataItem = snapshot.data!["data"][0];
+          widget.carName = firstDataItem["carName"];
+          widget.amount = firstDataItem["amount"];
+          widget.unitOfMeasure = firstDataItem["unitOfMeasure"];
+          widget.carbon_lb = firstDataItem["carbon_lb"];
+          widget.points_earned = firstDataItem["points_earned"];
+          widget.date_earned = DateTime.parse(firstDataItem["date_earned"]);
+
+          // Return your UI with the updated values
+          return Container(
+            padding: const EdgeInsets.all(25.0),
+            color: const Color.fromRGBO(124, 184, 22, 1),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(40, 40, 40, 40),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color.fromRGBO(206, 213, 92, 100)),
+                    color: const Color.fromRGBO(160, 197, 89, 100),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 30),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            "Your Recent Carbon Footprint",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2.0,
+                              fontFamily: 'Nunito',
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "${widget.amount} total ${widget.unitOfMeasure}",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Your carbon footprint is equal to: ${widget.carbon_lb} pounds of carbon",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "That is ${(widget.carbon_lb / 25) * 100}% of the daily average for most Americans today.",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "Date Earned: ${DateFormat('MM/dd/yyyy h:mm a').format(widget.date_earned.toLocal())}",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+/* @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(25.0),
@@ -204,138 +322,3 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     );
   }
 } */
-  @override
-  Widget build(BuildContext context) {
-    return Screenshot(
-      controller: screenshotController,
-      child: Container(
-        padding: const EdgeInsets.all(25.0),
-        color: const Color.fromRGBO(124, 184, 22, 1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.fromLTRB(40, 40, 40, 40),
-              decoration: BoxDecoration(
-                border:
-                    Border.all(color: const Color.fromRGBO(206, 213, 92, 100)),
-                color: const Color.fromRGBO(160, 197, 89, 100),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        "Your Recent Carbon Footprint",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.0,
-                          fontFamily: 'Nunito',
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      "${widget.amount} total ${widget.unitOfMeasure}",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      "Your carbon footprint is equal to: ${widget.carbon_lb} pounds of carbon",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      "That is ${(widget.carbon_lb / 30) * 100}% of the daily average for most Americans today.",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      "Date Earned: ${DateFormat('MM/dd/yyyy h:mm a').format(widget.date_earned.toLocal())}",
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                width: 150,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    OutlinedButton(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                          Color.fromRGBO(227, 167, 27, 100),
-                        ),
-                        foregroundColor: MaterialStatePropertyAll(Colors.white),
-                        overlayColor: MaterialStatePropertyAll(
-                          Color.fromRGBO(139, 141, 43, 100),
-                        ),
-                        shadowColor: MaterialStatePropertyAll(Colors.black),
-                      ),
-                      onPressed: () async {
-                        // Request permission
-                        var status = await Permission.storage.request();
-                        if (status.isGranted) {
-                          // Permission is granted, capture the screenshot
-                          final imageBytes =
-                              await screenshotController.capture();
-
-                          // Save the image to photos or perform any other action
-                          // You may use the imageBytes to save the screenshot as an image file
-                        } else {
-                          // Permission denied
-                          // Handle the case where the user denied access to the gallery
-                        }
-                      },
-                      child: const Align(
-                        alignment: Alignment.center,
-                        child: Text("Save To Photos"),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

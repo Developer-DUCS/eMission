@@ -40,10 +40,8 @@ class MyApp extends StatelessWidget {
               body: Home(),
               pageIndex: 1,
             ),
-        'leaderboard': (context) => const Layout(
-              body: Leaderboard(),
-              pageIndex: 0,
-            ),
+        'leaderboard': (context) =>
+            const Layout(body: Leaderboard(), pageIndex: 0, driveButton: false),
         'settings': (context) => const Layout(
               body: Settings(),
               pageIndex: 2,

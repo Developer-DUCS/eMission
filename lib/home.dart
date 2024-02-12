@@ -37,20 +37,19 @@ class _HomeState extends State<Home> {
   }
 
   Future<int?> _getTotalPoints() async {
+    print("totalPointsCalled");
     var userID = await getUserID();
-    var jsonBody = jsonEncode({"userID": userID});
-
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:3000/getEarnedPoints"),
+    print(userID);
+    var response = await http.get(
+      Uri.parse("http://10.0.2.2:3000/getEarnedPoints?userID=${userID}"),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonBody,
     );
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
-      var totalPointsFromJson = jsonResponse['results'][0]['totalPointsBoth'] ??
+      var totalPointsFromJson = jsonResponse['results'][0]['total_points'] ??
           0; // Access the total points field
       return totalPointsFromJson as int;
     } else {

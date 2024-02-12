@@ -878,5 +878,50 @@ describe('Test /vehicles', () => {
         done();
       });
   });
+  
 });
 
+// test are WIP
+describe('Test /vehicleCarbonReport', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should find user that has over 6 daily drives.', (done) => {
+    connectStub.callsFake();
+
+
+
+    queryStub.callsArgWith(2, null, {}); // Assuming an empty object for successful insert
+
+    request(app)
+      .post('/vehicleCarbonReport?vehicleId=1&distance=20&date=2024-02-02')
+      .send(requestBody)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should get a user that has less than 6 drives', (done) => {
+    connectStub.callsFake();
+
+  });
+
+  it('should handle database error when car does not exist.', (done) => {
+    connectStub.callsFake();
+
+    
+  });
+});

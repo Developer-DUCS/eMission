@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Manual extends StatefulWidget {
   const Manual({Key? key});
@@ -50,8 +51,12 @@ class _ManualState extends State<Manual> {
 
   void carbonReport(distance, vehicle, userID, carID) async {
     print("carbon report called");
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(now);
+
     var results = await http.get(Uri.parse(
-        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}'));
+        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}'));
     Map<String, dynamic> resultsMap = json.decode(results.body);
     print(resultsMap);
 
@@ -144,6 +149,7 @@ class _ManualState extends State<Manual> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushNamed(context, 'carbon_report');
               },
               child: Text('OK'),
             ),

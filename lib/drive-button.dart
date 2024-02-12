@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class ButtonPage extends StatefulWidget {
   const ButtonPage({Key? key});
@@ -27,6 +28,7 @@ class _ButtonPageState extends State<ButtonPage> {
   double totalDistance = 0.0;
   List<Map<String, dynamic>> vehicles = [];
   Map<String, dynamic>? selectedVehicle;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void initLocationService() async {
     await Geolocator.requestPermission();
@@ -148,16 +150,13 @@ class _ButtonPageState extends State<ButtonPage> {
     );
   }
 
+// three parts: Add Distance, Update Drives, and Get Carbon Report
   void submitMiles2(carID, distance, modelID) async {
     print('Submitting Miles...');
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    var userID = pref.getInt("userID");
     // Data to be sent
-    var data = {
-      'distance': distance,
-      'vehicle': carID,
-      'userID': pref.getInt("userID")
-    };
+    var data = {'distance': distance, 'vehicle': carID, 'userID': userID};
     print(data);
 
     // API call to update milage and calculate trip distance
@@ -172,22 +171,48 @@ class _ButtonPageState extends State<ButtonPage> {
     if (dataValue == null) {
       showErrorAlert(context);
     } else {
-      // Establish data to send to Carbon Interface API
+      // Establish data to send
+      //to Carbon Interface API
       var tripDistance = dataValue;
       var vehicle = modelID;
-
+      final DateTime now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formatted = formatter.format(now);
       // API request to Carbon Interface
       var results = await http.get(Uri.parse(
-          'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
+          'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${modelID}&carID=${carID}&distance=${tripDistance}&date=${formatted}'));
+      Map<String, dynamic> resultsMap = json.decode(results.body);
+      print(resultsMap);
 
-      // Parse the JSON string into a Map
+      // Extract the data
+      var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+      var carbonKg = resultsMap['data']['data']['attributes']['carbon_kg'];
+      if (carbonLb != null && carbonKg != null) {
+        var body = {
+          "vehicleID": carID,
+          "distance": distance,
+          "userID": userID,
+          "carbon_lb": carbonLb,
+          "carbon_kg": carbonKg
+        };
+        var res = await http.post(
+            Uri.parse('http://10.0.2.2:3000/updateDrives'),
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode(body));
+        if (res.statusCode == 200) {
+          showResultAlert(context, carbonLb);
+        } else {
+          showErrorAlert(context);
+        }
+      }
+      /* // Parse the JSON string into a Map
       Map<String, dynamic> resultsMap = json.decode(results.body);
 
       // Extract the data
       var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
 
       // Create pop-up
-      showResultAlert(context, carbonLb);
+      showResultAlert(context, carbonLb); */
     }
     ;
   }
@@ -232,7 +257,7 @@ class _ButtonPageState extends State<ButtonPage> {
 
       // IMPORTANT NOTE: UNCOMMENT OUT TO TEST
 
-      /*  // API request to Carbon Interface
+      /*// API request to Carbon Interface
       var results = await http.get(Uri.parse(
           'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
 
@@ -313,77 +338,93 @@ class _ButtonPageState extends State<ButtonPage> {
               'Drive: $lastDrive seconds elapsed, miles: ${totalDistance.toStringAsFixed(2)}',
               style: GoogleFonts.nunito(),
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Select a vehicle:',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  child: DropdownButton<Map<String, dynamic>>(
-                    value: selectedVehicle,
-                    onChanged: (Map<String, dynamic>? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          selectedVehicle = newValue;
-                          print(selectedVehicle);
-                          // Handle the selected value (newValue)
-                        });
-                      }
-                    },
-                    items: vehicles.map((Map<String, dynamic> vehicle) {
-                      return DropdownMenuItem<Map<String, dynamic>>(
-                        value: vehicle,
-                        child: Text(vehicle['carName'] ?? ''),
-                      );
-                    }).toList(),
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Select a vehicle:',
+                    style: TextStyle(fontSize: 16),
                   ),
-                ),
-                SizedBox(height: 10),
-                selectedVehicle != null
-                    ? Text(
-                        'Selected Car: ${selectedVehicle?['carName']}',
-                        style: TextStyle(fontSize: 16),
-                      )
-                    : Container(),
-                SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      //closeOverlay();
-                      var selectedVehicleFromList = vehicles.firstWhere(
-                          (vehicle) =>
-                              vehicle['carID'] == selectedVehicle?['carID']);
-
-                      if (selectedVehicle != null) {
-                        print(totalDistance);
-                        print(selectedVehicle?['carID']);
-                        var chosenVehicle = vehicles.firstWhere((vehicle) =>
-                            vehicle['carID'] == selectedVehicle?['carID']);
-
-                        //print('Submitted Miles: $milesTotal');
-                        //print('Selected Car: ${selectedVehicle['carName']}');
-                        //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
-                        submitMiles2(chosenVehicle['carID'], totalDistance,
-                            chosenVehicle['modelID']);
-                      }
-                      //Navigator.of(context).pop();
-                      //Navigator.pushNamed(context, 'carbon_report');
-                      //Navigator.of(context).pop();
-                      //Navigator.pushNamed(context, 'carbon_report');
-                    },
-                    child: Text('See My Carbon Footprint'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green, // Use your desired color
+                  SizedBox(height: 10),
+                  Container(
+                    child: DropdownButton<Map<String, dynamic>>(
+                      value: selectedVehicle,
+                      onChanged: (Map<String, dynamic>? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedVehicle = newValue;
+                            print(selectedVehicle);
+                            // Handle the selected value (newValue)
+                          });
+                        }
+                      },
+                      items: vehicles.map((Map<String, dynamic> vehicle) {
+                        return DropdownMenuItem<Map<String, dynamic>>(
+                          value: vehicle,
+                          child: Text(vehicle['carName'] ?? ''),
+                        );
+                      }).toList(),
                     ),
                   ),
-                ),
-              ],
-            ),
-            /* actions: <Widget>[
+                  SizedBox(height: 10),
+                  selectedVehicle != null
+                      ? Text(
+                          'Selected Car: ${selectedVehicle?['carName']}',
+                          style: TextStyle(fontSize: 16),
+                        )
+                      : Container(),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        //closeOverlay();
+                        if (_formKey.currentState!.validate()) {
+                          var selectedVehicleFromList = vehicles.firstWhere(
+                              (vehicle) =>
+                                  vehicle['carID'] ==
+                                  selectedVehicle?['carID']);
+
+                          if (selectedVehicle != null) {
+                            print(totalDistance);
+                            print(selectedVehicle?['carID']);
+                            var chosenVehicle = vehicles.firstWhere((vehicle) =>
+                                vehicle['carID'] == selectedVehicle?['carID']);
+                            /* var selectedVehicleFromList = vehicles.firstWhere(
+                            (vehicle) =>
+                                vehicle['carID'] == selectedVehicle?['carID']);
+
+                        if (selectedVehicle != null) {
+                          print(totalDistance);
+                          print(selectedVehicle?['carID']);
+                          var chosenVehicle = vehicles.firstWhere((vehicle) =>
+                              vehicle['carID'] == selectedVehicle?['carID']);
+ */
+                            //print('Submitted Miles: $milesTotal');
+                            //print('Selected Car: ${selectedVehicle['carName']}');
+                            //print('Selected Vehicle ID: ${selectedVehicle['carID']}');
+                            submitMiles2(chosenVehicle['carID'], totalDistance,
+                                chosenVehicle['modelID']);
+                            this.selectedVehicle = null;
+                            Navigator.of(context).pop();
+                          }
+                        }
+                        //Navigator.of(context).pop();
+                        //Navigator.pushNamed(context, 'carbon_report');
+                        //Navigator.of(context).pop();
+                        //Navigator.pushNamed(context, 'carbon_report');
+                      },
+                      child: Text('See My Carbon Footprint'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green, // Use your desired color
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              /* actions: <Widget>[
               TextButton(
                 onPressed: () {
                   closeOverlay();
@@ -391,13 +432,14 @@ class _ButtonPageState extends State<ButtonPage> {
                 child: Text('Close'),
               ),
             ], */
+            ),
           );
         });
       },
     );
   }
 
-  Future<void> showCustomDialog1() async {
+  /* Future<void> showCustomDialog1() async {
     //final apiService = CalculateApiService();
     //final response = await apiService.calculateCarbonFootprint();
     const make = 'Toyota';
@@ -433,7 +475,7 @@ class _ButtonPageState extends State<ButtonPage> {
         );
       },
     );
-  }
+  } */
 
   // @override
   // void showCustomDialog() {
