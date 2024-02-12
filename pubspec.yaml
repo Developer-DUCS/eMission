@@ -1,4 +1,4 @@
-name: first_flutter_app
+name: emission
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 3.16.9
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -48,10 +48,10 @@ dependencies:
   material: ^1.0.0+2
   flutter_riverpod: ^2.4.3
   sqflite: ^2.0.0+3
-  path: ^1.8.0
+  path: ^1.8.3
   mysql1: ^0.20.0
   http: ^1.0.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   shared_preferences: ^2.2.2
   another_flushbar: ^1.12.30
   geolocator: ^10.1.0
