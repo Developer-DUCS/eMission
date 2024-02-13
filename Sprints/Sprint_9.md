@@ -2,17 +2,49 @@
 
 ### Sprint Goals
 - [ ] Complete Product License
-- [ ] Draft Test Plan w/ Requirements
-- [ ] Make Leaderboard Interactive
+- [X] Draft Test Plan w/ Requirements
+- [X] Make Leaderboard Interactive
 - [ ] Design GPS/Map Technologies
-- [ ] Deployment Strategies w/ Sigman
-- [ ] Review Emission Calculation
+- [X] Deployment Strategies w/ Sigman
+- [X] Review Emission Calculation
 - [ ] Review Point C02 Score Calculation & Point Strategy
-- [ ] Merging Development Codebase
+- [X] Merging Development Codebase
 
 ---
 
-### Lorem Ipsum
+### Draft Test Plan
+* something
+
+**Development**
+  * dfs
+
+**Test**
+  * hello
+
+**DEBUG**
+* hello
+
+**Decision**
+  * ff
+    
+**Deadline**
+  * d
+
+**Done**
+  * dfs
+
+
+
+---
+### Deployment Strategies
+
+---
+### Updated Leaderboard Page
+
+
+---
+### GPS/Map Technologies
+
 
 
 ---
