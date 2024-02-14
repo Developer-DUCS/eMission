@@ -2,16 +2,16 @@
 
 ### Sprint Goals
 - [ ] Complete Product License
-- [ ] Make Leaderboard Interactive
-- [ ] Design GPS/Map Technologies
+- [ ] Testing Leaderboard
+- [ ] Merge Sprint 9 Changes
+- [ ] Flutter UI Testing 
 - [ ] Application Deployment Testing
 ---
 
 
 
-### Leaderboard Redesign
+### Flutter UI Testing Strategies
 * something
-* 
 ---
 
 
