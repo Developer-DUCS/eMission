@@ -1,4 +1,4 @@
-# Sprint 2
+# Sprint 2: Planning & Design
 
 ### Sprint 2 Goals:
 - [X] Assign Codebase Manager
