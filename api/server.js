@@ -11,7 +11,7 @@
 const express = require("express");
 const vehicleMakes = require("./VehicleMakes.json");
 const Database = require("./sql_db_man.js");
-const PORT = 3000;
+const PORT = 3300;
 const app = express();
 const axios = require("axios");
 
