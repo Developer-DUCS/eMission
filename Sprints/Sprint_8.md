@@ -1,4 +1,4 @@
-# Sprint: 8 Re(elaboration)
+# Sprint 8: Re(elaboration)
 
 ### Sprint Goals
 - [X] Cleanup Project Board - Re(elaboration)
