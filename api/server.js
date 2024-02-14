@@ -14,7 +14,6 @@ const Database = require("./sql_db_man.js");
 const PORT = 3000;
 const app = express();
 const axios = require("axios");
-
 const API_URL = "https://www.carboninterface.com/api/v1";
 const API_KEY = "5p3VT63zAweQ6X3j8OQriw";
 
@@ -30,6 +29,7 @@ db.connect();
 
 app.use(express.json());
 
+// tested
 app.post("/insertUser", (request, response) => {
   // insert user
   console.log("Inserting Users");
@@ -71,6 +71,7 @@ app.post("/insertUser", (request, response) => {
   });
 });
 
+// tested
 app.post("/authUser", (request, response) => {
   //authenticate user
   console.log("authenticating user...");
@@ -144,6 +145,7 @@ app.patch("/password", (req, res) => {
 });
 
 // update from /getChallenges - called with userID
+// tested
 app.post("/getChallenges2", (req, res) => {
   console.log("Get challenge called");
 
@@ -171,6 +173,8 @@ app.post("/getChallenges2", (req, res) => {
     }
   });
 });
+
+// tested
 app.get("/getEarnedPoints", (req, res) => {
   console.log("Get earned points called");
 
@@ -229,6 +233,7 @@ app.get("/getEarnedPoints", (req, res) => {
   });
 });
 
+// not tested
 app.get("/getTopTen", (req, res) => {
   console.log("Get earned points called");
 
@@ -301,6 +306,7 @@ app.get("/getTopTen", (req, res) => {
 
 
 // can be used to get specific challenge - currently not called.
+// not used atm- not tested
 app.get("/getChallengesByID", (req, res) => {
   console.log("Get challenge by ID called");
   const query = "SELECT * FROM Challenges WHERE challengeID=?";
@@ -322,6 +328,7 @@ app.get("/getChallengesByID", (req, res) => {
 
 // User Challenge - a challenge in acceptedChallenges
 // short for user Accepted Challege
+// tests completed
 app.post("/getCurrentUserChallenges", async (req, res) => {
   console.log("Request to get current userChallenges update");
   const body = req.body;
@@ -345,6 +352,7 @@ app.post("/getCurrentUserChallenges", async (req, res) => {
   });
 });
 
+// test completed
 app.post("/acceptNewChallenges", async (req, res) => {
   console.log("Accept Challenges called");
   const { UserID, challenges } = req.body;
@@ -470,6 +478,7 @@ const insertVehicleSql =
 const updateVehicleSql =
   "UPDATE Cars SET carName = ?, make = ?, model = ?, year = ?, makeID = ?, modelID = ?, currentMileage = ? WHERE carID = ?;";
 
+// tests completed
 app.post("/vehicles", (req, res) => {
   const isEdit = JSON.parse(req.query.isEdit);
 
@@ -508,6 +517,7 @@ app.post("/vehicles", (req, res) => {
   );
 });
 
+// tests completed
 app.post("/completeChallenges", async (req, res) => {
   console.log("Complete Challenges called");
   console.log(req.body);
@@ -701,7 +711,6 @@ catch
 app.get("/vehicleCarbonReport", (req, res) => {
   const { vehicleId,carID, distance, date } = req.query;
   
-  console.log(date);
   // check if the user ID pertaining to this report has too many daily drives
   const query1 = 
   `SELECT COUNT(*) as DayDriveTotal
@@ -720,11 +729,12 @@ app.get("/vehicleCarbonReport", (req, res) => {
       console.error("Error executing query:", err);
       return res.status(500).json({ error: "Error getting drive total." });
     } else {
-      console.log(results.length);
       if(results.length > 0 && results[0].DayDriveTotal<=6){
         /* return res.status(200).json({
           "Drive total" :  results.data[0].DayDriveTotal
         }); */
+        console.log("vehicleId");
+        console.log(results[0].DayDriveTotal);
         const requestData = {
           type: "vehicle",
           distance_unit: "mi",
@@ -732,6 +742,7 @@ app.get("/vehicleCarbonReport", (req, res) => {
           vehicle_model_id: vehicleId,
         };
         const jsonData = JSON.stringify(requestData);
+        console.log(jsonData);
         fetch("https://www.carboninterface.com/api/v1/estimates", {
         method: "POST",
         headers: {
@@ -755,7 +766,8 @@ app.get("/vehicleCarbonReport", (req, res) => {
         .catch((err) => res.status(500).json({ error: err }));
       }
       else{
-        res.status(422).status({error: "Too many drives for the day, try again later."});
+        console.log(results[0].DayDriveTotal);
+        res.status(422).json({error: "Too many drives for the day, try again later."});
       }
     }
   });

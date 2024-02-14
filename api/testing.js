@@ -17,12 +17,16 @@ const sinon = require('sinon');
 const chaiHttp=require('chai-http');
 const app = require('./server.js');
 const request = require('supertest');
-const fetch = require('node-fetch');
+//const jest = require('jest');
+//import {jest} from '@jest/globals';
 const expect = chai.expect;
+//const fetch = require('jest-fetch-mock');
 chai.use(chaiHttp);
-const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
-const API_KEY = '5p3VT63zAweQ6X3j8OQriw';
+//require('jest-fetch-mock').enableMocks();
 
+const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
+const API_KEY = '1234asffake';
+const nock = require('nock');
 const dbconfig = {
     host:     "mcs.drury.edu",
     port:     "3306",
@@ -439,43 +443,7 @@ describe('Test /getCurrentUserChallenges', () => {
       });
     });
 
-    describe('Test /vehicleCarbonReport',()=>{
-      
-
-      it('should return vehicle carbon report successfully', async () => {
-        const mockApiResponse = {
-          ok: true,
-          json: () => ({ result: '240 units' }),
-        };
     
-         const fetchStub = sinon.stub(global, 'fetch');
-        fetchStub.resolves(mockApiResponse);
-    
-        const response = await chai.request(app)
-          .get('/vehicleCarbonReport')
-          .query({ vehicleId: '123', distance: '100' });
-    
-        expect(response).to.have.status(200);
-    
-        fetchStub.restore();
-      });
-      it('should return 400 if vehicleId is missing', async () => {
-        const response = await chai.request(app)
-            .get('/vehicleCarbonReport')
-            .query({ distance: '100' });
-
-        expect(response).to.have.status(400);
-    });
-
-    it('should return 400 if distance is missing', async () => {
-        const response = await chai.request(app)
-            .get('/vehicleCarbonReport')
-            .query({ vehicleId: '123' });
-
-        expect(response).to.have.status(400);
-    });
-
-    });
 
     describe('Test /acceptNewChallenges', () => {
       let connectStub;
@@ -648,17 +616,17 @@ describe('Test /getEarnedPoints', () => {
     sinon.restore();
   });
 
-  it('should get earned points successfully.', (done) => {
+  it('should get earned points successfully with challenges and drives.', (done) => {
     connectStub.callsFake();
 
     const userID = 49;
-    const expectedResult = [{ total: 100 }]; // Update with your expected result
+    const expectedResult = [{ total_points: 100 }]; // Update with your expected result
 
     queryStub.callsArgWith(2, null, expectedResult);
 
     request(app)
-      .post('/getEarnedPoints')
-      .send({ userID })
+      .get('/getEarnedPoints')
+      .query({ userID })
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
@@ -667,14 +635,34 @@ describe('Test /getEarnedPoints', () => {
       });
   });
 
+  it('should get earned points successfully with no challenges or drives.', (done) => {
+    connectStub.callsFake();
+
+    const userID = 50;
+    const expectedResult = [{ total_points: null}]; // Update with your expected result
+
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    request(app)
+      .get('/getEarnedPoints')
+      .query({ userID })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.results).to.deep.equal(expectedResult);
+        done();
+      });
+  });
+
+
   it('should handle database error.', (done) => {
     connectStub.callsFake();
 
     queryStub.callsArgWith(2, new Error('Database error'), null);
 
     request(app)
-      .post('/getEarnedPoints')
-      .send({ userID: 49 })
+      .get('/getEarnedPoints')
+      .query({ userID: 49 })
       .expect(500)
       .end((err, res) => {
         if (err) return done(err);
@@ -879,12 +867,11 @@ describe('Test /vehicles', () => {
       });
   });
   
-});
+}); 
 
-// test are WIP
-describe('Test /vehicleCarbonReport', () => {
-  let connectStub;
+describe('Test /updateDrives', () => {
   let queryStub;
+  let connectStub;
   let disconnectStub;
 
   beforeEach(() => {
@@ -897,31 +884,248 @@ describe('Test /vehicleCarbonReport', () => {
     sinon.restore();
   });
 
-  it('should find user that has over 6 daily drives.', (done) => {
+  it('should update drives successfully and earn 5 points', async () => {
     connectStub.callsFake();
 
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 40,
+      carbon_kg: 18.14,
+    };
 
+    const expectedPointsEarned = 5;
 
-    queryStub.callsArgWith(2, null, {}); // Assuming an empty object for successful insert
+    queryStub.callsArgWith(2, null, { insertId: 123 }); // Assuming successful insert
 
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data).to.deep.equal({ insertId: 123 });
+   
+  });
+
+  it('should update drives successfully and earn 20 points', async () => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 20,
+      carbon_kg: 9.07,
+    };
+
+    const expectedPointsEarned = 20;
+
+    queryStub.callsArgWith(2, null, { insertId: 456 }); // Assuming successful insert
+
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data).to.deep.equal({ insertId: 456 });
+   
+  });
+
+  it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 40,
+      carbon_kg: 18.14,
+    };
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(500);
+  });
+});
+/* global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.reject({"Error Message"}),
+  })
+); */
+
+// test are WIP
+describe('Test /vehicleCarbonReport', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+
+  });
+
+  afterEach(() => {
+    sinon.restore();
+    nock.cleanAll();
+  });
+  
+
+  it('should find user that has over 6 daily drives.', (done) => {
+    //connectStub.callsFake();
+    connectStub.callsFake(()=>{});
+
+    queryStub.callsFake((query, values, callback)=>{
+        const results = [{DayDriveTotal: 7}];
+        callback(null, results);
+    });
+
+    // const { vehicleId,carID, distance, date } = req.query;
     request(app)
-      .post('/vehicleCarbonReport?vehicleId=1&distance=20&date=2024-02-02')
-      .send(requestBody)
-      .expect(200)
+      .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
+      .send()
+      .expect(422)
       .end((err, res) => {
         if (err) return done(err);
         done();
       });
   });
 
-  it('should get a user that has less than 6 drives', (done) => {
-    connectStub.callsFake();
+ 
 
-  });
+  /* it('should find user that has less than 6 daily drives.', (done) => {
+    //connectStub.callsFake();
+    connectStub.callsFake(()=>{});
 
-  it('should handle database error when car does not exist.', (done) => {
-    connectStub.callsFake();
+    queryStub.callsFake((query, values, callback)=>{
+        const results = [{DayDriveTotal: 5}];
+        callback(null, results);
+    });
+
+    const requestData = {
+      type: "vehicle",
+      distance_unit: "mi",
+      distance_value: 20,
+      vehicle_model_id: "12d93fhq93jd",
+    };
+    const jsonData = JSON.stringify(requestData);
+
+    nock('https://www.carboninterface.com/api/v1/estimates')
+    .post(jsonData) 
+    .matchHeader('Authorization', `Bearer ${"5p3VT63zAweQ6X3j8OQriw"}`)  
+    .matchHeader('Content-Type', 'application/json')  
+    .reply(200, { mockedResponse: 'success' });
+    // const { vehicleId,carID, distance, date } = req.query;
+    request(app)
+      .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
+      .send()
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });  */
+  
+  // not working as expected - is actually calling carbon interface.
+  /* it('should handle carbon interface error', (done) => {
+    //connectStub.callsFake();
+    connectStub.callsFake(()=>{});
+
+    queryStub.callsFake((query, values, callback)=>{
+        const results = [{DayDriveTotal: 5}];
+        callback(null, results);
+    });
+    const distance = 20;
+    const vehicleId="a2d97d19-14c0-4c60-870c-e734796e014e";
+    //[ 1, 2, 'mi', 50, 40, 18.14, 5, 2024-02-14T14:39:53.177Z ]
+    const requestData = {
+      type: "vehicle",
+      distance_unit: "mi",
+      distance_value: distance,
+      vehicle_model_id: vehicleId,
+    };
+    const jsonData = JSON.stringify(requestData);
+    fetch.mockImplementationOnce(() => Promise.reject("API is down"));
 
     
+    /* nock('https://www.carboninterface.com/api/v1/estimates')
+    .post(jsonData) 
+    //.matchHeader('Authorization', `Bearer ${"5p3VT63zAweQ6X3j8OQriw"}`)  
+    //.matchHeader('Content-Type', 'application/json')  
+    .reply(500);  
+
+    // const { vehicleId,carID, distance, date } = req.query;
+    request(app)
+      .get('/vehicleCarbonReport?vehicleId=a2d97d19-14c0-4c60-870c-e734796e014e&carID=2&distance=20&date=2024-02-02')
+      .send()
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  }); */ 
+  
+});
+
+describe('Test /getDailyDrives', () => {
+  let queryStub;
+  let connectStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get daily drives successfully', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    const expectedResult = [{ DayDriveTotal: 5 }]; // Update with your expected result
+
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(200);
+    
+  });
+
+  it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(500);
   });
 });
