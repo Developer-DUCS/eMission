@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:first_flutter_app/challenge_page.dart';
+import 'package:first_flutter_app/api_service.dart';
 import 'package:first_flutter_app/encryption.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -119,15 +117,11 @@ class SettingsState extends State<Settings> {
 
   Widget account() {
     void updateAccount(BuildContext context) {
-      http
-          .patch(Uri.parse('http://10.0.2.2:3000/user'),
-              headers: {'Content-Type': 'application/json'},
-              body: json.encode({
-                'id': userID,
-                'username': usernameController.text,
-                'displayName': displayNameController.text
-              }))
-          .then((res) {
+      ApiService().patch('user', {
+        'id': userID,
+        'username': usernameController.text,
+        'displayName': displayNameController.text
+      }).then((res) {
         if (res.statusCode == 200) {
           Flushbar(
             title: 'Success',
@@ -500,15 +494,11 @@ class SettingsState extends State<Settings> {
         return;
       }
 
-      http
-          .patch(Uri.parse('http://10.0.2.2:3000/password'),
-              headers: {'Content-Type': 'application/json'},
-              body: json.encode({
-                'id': userID,
-                'oldPassword': encryptPassword(oldPassword.text),
-                'newPassword': encryptPassword(newPassword.text)
-              }))
-          .then((res) {
+      ApiService().patch('password', {
+        'id': userID,
+        'oldPassword': encryptPassword(oldPassword.text),
+        'newPassword': encryptPassword(newPassword.text)
+      }).then((res) {
         if (res.statusCode == 200) {
           Flushbar(
             title: 'Success',

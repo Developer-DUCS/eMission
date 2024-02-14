@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 
+import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Vehicles extends StatefulWidget {
@@ -24,12 +23,9 @@ class VehiclesState extends State<Vehicles> {
 
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    http
-        .get(Uri.parse(
-            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
-        .then((res) {
+    ApiService().get('vehicles?owner=${pref.getInt("userID")}').then((res) {
       setState(() {
-        vehicles = List<dynamic>.from(json.decode(res.body))
+        vehicles = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
       });
@@ -37,9 +33,7 @@ class VehiclesState extends State<Vehicles> {
   }
 
   void deleteVehicle(int id) {
-    http
-        .delete(Uri.parse('http://10.0.2.2:3000/vehicles?id=${id}'))
-        .then((value) => fetchVehicles());
+    ApiService().delete('vehicles?id=${id}').then((value) => fetchVehicles());
   }
 
   @override
@@ -181,8 +175,8 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
     isEdit = vehicle.isNotEmpty;
 
-    http.get(Uri.parse('http://10.0.2.2:3000/makes')).then((res) {
-      vehicleMakes = List<dynamic>.from(json.decode(res.body))
+    ApiService().get('makes').then((res) {
+      vehicleMakes = List<dynamic>.from(res.data)
           .map((item) => Map<String, dynamic>.from(item))
           .toList();
       if (isEdit) {
@@ -206,13 +200,10 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
   Future handleSelectedMake(Map<String, dynamic> make) {
     Completer completer = Completer();
 
-    http
-        .get(Uri.parse(
-            'http://10.0.2.2:3000/models?makeId=${make['data']['id']}'))
-        .then((res) {
+    ApiService().get('models?makeId=${make['data']['id']}').then((res) {
       setState(() {
         selectedMake = make;
-        allModels = List<dynamic>.from(json.decode(res.body))
+        allModels = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
         vehicleModels = allModels.fold([], (previousValue, element) {
@@ -255,39 +246,31 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
 
   void addVehicle(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    http
-        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=false'),
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode({
-              'owner': pref.getInt('userID'),
-              'name': vehicleNameController.text,
-              'make': selectedMake['data']['attributes']['name'],
-              'model': selectedModel['data']['attributes']['name'],
-              'year': selectedYear['data']['attributes']['year'].toString(),
-              'makeId': selectedMake['data']['id'],
-              'modelId': selectedYear['data']['id'],
-              'mileage': vehicleMileageController.text
-            }))
-        .then((res) {
+    ApiService().post('vehicles?isEdit=false', {
+      'owner': pref.getInt('userID'),
+      'name': vehicleNameController.text,
+      'make': selectedMake['data']['attributes']['name'],
+      'model': selectedModel['data']['attributes']['name'],
+      'year': selectedYear['data']['attributes']['year'].toString(),
+      'makeId': selectedMake['data']['id'],
+      'modelId': selectedYear['data']['id'],
+      'mileage': vehicleMileageController.text
+    }).then((res) {
       Navigator.pop(context);
     });
   }
 
   void editVehicle(BuildContext context) {
-    http
-        .post(Uri.parse('http://10.0.2.2:3000/vehicles?isEdit=true'),
-            headers: {'Content-Type': 'application/json'},
-            body: json.encode({
-              'id': vehicle['carID'],
-              'name': vehicleNameController.text,
-              'make': selectedMake['data']['attributes']['name'],
-              'model': selectedModel['data']['attributes']['name'],
-              'year': selectedYear['data']['attributes']['year'].toString(),
-              'makeId': selectedMake['data']['id'],
-              'modelId': selectedYear['data']['id'],
-              'mileage': vehicleMileageController.text
-            }))
-        .then((res) {
+    ApiService().post('vehicles?isEdit=true', {
+      'id': vehicle['carID'],
+      'name': vehicleNameController.text,
+      'make': selectedMake['data']['attributes']['name'],
+      'model': selectedModel['data']['attributes']['name'],
+      'year': selectedYear['data']['attributes']['year'].toString(),
+      'makeId': selectedMake['data']['id'],
+      'modelId': selectedYear['data']['id'],
+      'mileage': vehicleMileageController.text
+    }).then((res) {
       Navigator.pop(context);
     });
   }

@@ -1,8 +1,6 @@
+import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,19 +36,13 @@ class _HomeState extends State<Home> {
 
   Future<int?> _getTotalPoints() async {
     var userID = await getUserID();
-    var jsonBody = jsonEncode({"userID": userID});
 
-    var response = await http.post(
-      Uri.parse("http://10.0.2.2:3000/getEarnedPoints"),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonBody,
-    );
+    var response =
+        await ApiService().post('getEarnedPoints', {"userID": userID});
 
     if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      var totalPointsFromJson = jsonResponse['results'][0]['totalPointsBoth'] ??
+      var totalPointsFromJson = response.data['results'][0]
+              ['totalPointsBoth'] ??
           0; // Access the total points field
       return totalPointsFromJson as int;
     } else {
