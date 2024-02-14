@@ -20,7 +20,7 @@
    - [install git](https://git-scm.com/downloads) 
 
 3. install flutter
-   - This project is written in and primarily uses flutter. To make changes to the codebase, you will need to install flutter onto your machine.
+   - This project is written in and primarily uses flutter. To run this application on your machine, you will need to install flutter onto your machine.
    - [install flutter](https://docs.flutter.dev/get-started/install)
 
 4. Additional steps
@@ -30,7 +30,7 @@
 
 
 5. Testing
-   - run ```flutter doctor``` in your commandline interface
+   - run ```flutter doctor``` in your command line interface
    - This will let you know if flutter is properly installed and list any issues that need to be resolved. 
 
 
