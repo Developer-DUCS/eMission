@@ -74,7 +74,8 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 
 [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
 
-**_Note_**: [Iteration & Development]() covers sprints 6 and 7. 
+**_Note_**: _Iteration & Development_ covers sprints 6 and 7. 
+
 <details><summary>Sprint Workflow</summary>
 
 1. [**Team Processes & Intro**](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_1.md)
