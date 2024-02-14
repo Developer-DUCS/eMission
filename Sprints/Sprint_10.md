@@ -4,8 +4,10 @@
 - [ ] Complete Product License
 - [ ] Testing Leaderboard
 - [ ] Merge Sprint 9 Changes
-- [ ] Flutter UI Testing 
+- [ ] Flutter UI Update (Darkmode and Stylesheet)
+- [ ] Flutter UI Testing Research 
 - [ ] Application Deployment Testing
+- [ ] Make User Login Info Lowercase
 ---
 
 
