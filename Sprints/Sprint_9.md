@@ -1,4 +1,4 @@
-# Sprint 9 Verification Planning
+# Sprint 9: Verification Planning
 
 ### Sprint Goals
 - [ ] Complete Product License
