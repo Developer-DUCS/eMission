@@ -1,4 +1,4 @@
-# Sprint 3
+# Sprint 3: Backend Strategies
 
 ### Sprint 3 Goals
 - [X] Design/Implement Backend Infrastructure (Nodejs)
