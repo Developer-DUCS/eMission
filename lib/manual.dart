@@ -33,7 +33,7 @@ class _ManualState extends State<Manual> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     http
         .get(Uri.parse(
-            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
+            'https://mcs.drury.edu/emission/vehicles?owner=${pref.getInt("userID")}'))
         .then((res) {
       setState(() {
         vehicles = List<dynamic>.from(json.decode(res.body))
@@ -51,7 +51,7 @@ class _ManualState extends State<Manual> {
   void carbonReport(distance, vehicle, userID, carID) async {
     print("carbon report called");
     var results = await http.get(Uri.parse(
-        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}'));
+        'https://mcs.drury.edu/emission/vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}'));
     Map<String, dynamic> resultsMap = json.decode(results.body);
     print(resultsMap);
 
