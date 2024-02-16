@@ -1,5 +1,44 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+class User {
+  final int userID;
+  final int points;
+  final String username;
+
+  User({required this.userID, required this.points, required this.username});
+}
+
+Future<List<User>> _getUsers() async {
+  var response = await http.get(
+    Uri.parse("http://10.0.2.2:3000/getTopTen"),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    var jsonResponse = json.decode(response.body);
+    List<User> users = [];
+    for (var challenge in jsonResponse['results']) {
+      users.add(User(
+          userID: challenge['userID'],
+          points: challenge['total_points'],
+          username: challenge['username']));
+    }
+    return users;
+  } else {
+    throw Exception("Failed to load post");
+  }
+}
+
+Future<int> getUserID() async {
+  final SharedPreferences pref = await SharedPreferences.getInstance();
+  return pref.getInt("userID") ?? 0;
+}
 
 class Leaderboard extends StatefulWidget {
   const Leaderboard({Key? key}) : super(key: key);
@@ -99,13 +138,19 @@ class _LeaderboardState extends State<Leaderboard> {
               "Leaderboard",
               style: TextStyle(fontSize: 20),
             ),
-            Container(
-              margin: EdgeInsets.all(20),
-              child: SizedBox(
-                height: 300,
-                child: ListView.separated(
+            // Display the leaderboard based on fetched user data
+            FutureBuilder<List<User>>(
+              future: _getUsers(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return ListView.separated(
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
+                      final user = snapshot.data![index];
                       return ListTile(
                         title: Row(
                           children: [
@@ -116,26 +161,30 @@ class _LeaderboardState extends State<Leaderboard> {
                             SizedBox(
                               width: 3,
                             ),
-                            Text("Other User")
+                            // Jali changed to username, can also be changed to
+                            // display name, userID is too sensitive info/doesn't mean
+                            // anything to the users
+                            Text("User ${user.username}"), // Display user name
                           ],
                         ),
                         leading: Text(
                           "#${index + 1}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        trailing: Text(
-                            "Points.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                        trailing: Text("Points: ${user.points}",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       );
                     },
                     separatorBuilder: (context, index) => Divider(
-                          thickness: 1,
-                          color: Color.fromRGBO(160, 197, 89, 100),
-                          indent: 10,
-                          endIndent: 10,
-                        ),
-                    itemCount: 12),
-              ),
+                      thickness: 1,
+                      color: Color.fromRGBO(160, 197, 89, 100),
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    itemCount: snapshot.data!.length,
+                  );
+                }
+              },
             )
           ],
         ),

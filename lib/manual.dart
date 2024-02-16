@@ -1,6 +1,9 @@
-import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Manual extends StatefulWidget {
   const Manual({Key? key});
@@ -29,23 +32,37 @@ class _ManualState extends State<Manual> {
   // Fetch the user's vehicles
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    ApiService().get('vehicles?owner=${pref.getInt("userID")}').then((res) {
+    http
+        .get(Uri.parse(
+            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
+        .then((res) {
       setState(() {
-        vehicles = List<dynamic>.from(res.data)
+        vehicles = List<dynamic>.from(json.decode(res.body))
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
+
+        // Print the items in the vehicles list
+        for (var vehicle in vehicles) {
+          print(vehicle);
+        }
       });
     });
   }
 
   void carbonReport(distance, vehicle, userID, carID) async {
     print("carbon report called");
-    var results = await ApiService().get(
-        'vehicleCarbonReport?vehicleId=${vehicle}&distance=${distance}&userID=${userID}');
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(now);
+
+    var results = await http.get(Uri.parse(
+        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}'));
+    Map<String, dynamic> resultsMap = json.decode(results.body);
+    print(resultsMap);
 
     // Extract the data
-    var carbonLb = results.data['data']['data']['attributes']['carbon_lb'];
-    var carbonKg = results.data['data']['data']['attributes']['carbon_kg'];
+    var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+    var carbonKg = resultsMap['data']['data']['attributes']['carbon_kg'];
     if (carbonLb != null && carbonKg != null) {
       var body = {
         "vehicleID": carID,
@@ -54,7 +71,9 @@ class _ManualState extends State<Manual> {
         "carbon_lb": carbonLb,
         "carbon_kg": carbonKg
       };
-      var res = await ApiService().post('updateDrives', body);
+      var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDrives'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(body));
       if (res.statusCode == 200) {
         showResultAlert(context, carbonLb);
       } else {
@@ -75,10 +94,17 @@ class _ManualState extends State<Manual> {
       'vehicle': carID,
       'userID': pref.getInt("userID")
     };
+    print("Hi 1");
     // API call to update milage and calculate trip distance
-    var res = await ApiService().post('updateDistance', data);
+    var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDistance'),
+        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
+    print("Hi 2");
+    // Parse the JSON string into a Map
+    Map<String, dynamic> responseMap = json.decode(res.body);
+
+    print(responseMap);
     // Access the value associated with the "data" key
-    dynamic dataValue = res.data['data'];
+    dynamic dataValue = responseMap['data'];
     print("Data value");
     print(dataValue);
 
@@ -123,6 +149,7 @@ class _ManualState extends State<Manual> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushNamed(context, 'carbon_report');
               },
               child: Text('OK'),
             ),
