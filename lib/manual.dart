@@ -32,7 +32,7 @@ class _ManualState extends State<Manual> {
   // Fetch the user's vehicles
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    apiService.get('/vehicles?owner=${pref.getInt("userID")}').then((res) {
+    apiService.get('vehicles?owner=${pref.getInt("userID")}').then((res) {
       setState(() {
         vehicles = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
@@ -53,7 +53,7 @@ class _ManualState extends State<Manual> {
     final String formatted = formatter.format(now);
 
     var results = await apiService.get(
-        '/vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}');
+        'vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}');
     Map<String, dynamic> resultsMap = results.data;
     print(resultsMap);
 
@@ -68,7 +68,7 @@ class _ManualState extends State<Manual> {
         "carbon_lb": carbonLb,
         "carbon_kg": carbonKg
       };
-      var res = await apiService.post('/updateDrives', body);
+      var res = await apiService.post('updateDrives', body);
       if (res.statusCode == 200) {
         showResultAlert(context, carbonLb);
       } else {
@@ -91,7 +91,7 @@ class _ManualState extends State<Manual> {
     };
     print("Hi 1");
     // API call to update milage and calculate trip distance
-    var res = await apiService.post('/updateDistance', data);
+    var res = await apiService.post('updateDistance', data);
     print("Hi 2");
     // Parse the JSON string into a Map
     Map<String, dynamic> responseMap = res.data;

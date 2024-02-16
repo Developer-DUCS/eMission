@@ -40,10 +40,11 @@ class _HomeState extends State<Home> {
     print("totalPointsCalled");
     var userID = await getUserID();
     print(userID);
-    var response = await apiService.get('/getEarnedPoints?userID=${userID}');
+    var response = await apiService.get('getEarnedPoints?userID=${userID}');
 
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
+      print(jsonResponse);
       var totalPointsFromJson = jsonResponse['results'][0]['total_points'] ??
           0; // Access the total points field
       return totalPointsFromJson as int;

@@ -49,26 +49,42 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
   Future<Map<String, dynamic>> getMostRecentDrive2() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     ApiResponse res =
-        await apiService.get('/getRecentDrive?userID=${pref.getInt("userID")}');
+        await apiService.get('getRecentDrive?userID=${pref.getInt("userID")}');
     return res.data;
   }
 
   Future<void> getMostRecentDrive() async {
+    print("hi");
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    print(pref);
+    print(pref.getInt("userID"));
     apiService
-        .get('/getRecentDrive?userID=${pref.getInt("userID")}')
+        .get('getRecentDrive?userID=${pref.getInt("userID")}')
         .then((res) {
-      setState(() {
+      if (res.statusCode == 200) {
         var jsonResponse = res.data;
-        var firstDataItem = jsonResponse["data"][0];
-        widget.carName = firstDataItem["carName"];
-        widget.amount = firstDataItem["amount"];
-        widget.unitOfMeasure = firstDataItem["unitOfMeasure"];
-        widget.carbon_lb = firstDataItem["carbon_lb"];
-        widget.points_earned = firstDataItem["points_earned"];
-        widget.date_earned = DateTime.parse(firstDataItem["date_earned"]);
-      });
+
+        // Check if "data" key exists in the response
+        if (jsonResponse.containsKey("data") &&
+            jsonResponse["data"].isNotEmpty) {
+          var firstDataItem = jsonResponse["data"][0];
+          setState(() {
+            widget.carName = firstDataItem["carName"];
+            widget.amount = firstDataItem["amount"];
+            widget.unitOfMeasure = firstDataItem["unitOfMeasure"];
+            widget.carbon_lb = firstDataItem["carbon_lb"];
+            widget.points_earned = firstDataItem["points_earned"];
+            widget.date_earned = DateTime.parse(firstDataItem["date_earned"]);
+            print(widget.carName);
+          });
+        } else {
+          print("No data received or empty data array.");
+        }
+      } else {
+        print("HTTP request failed with status code: ${res.statusCode}");
+      }
+    }).catchError((error) {
+      print("Error during HTTP request: $error");
     });
   }
 

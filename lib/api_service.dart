@@ -16,11 +16,11 @@ class ApiService {
 
   ApiService() {
     if (kReleaseMode) {
-      baseUrl = 'http://mcs.drury.edu:$port/'; //replace with actual server url
+      baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
     } else {
       baseUrl = Platform.isAndroid
-          ? 'http://10.0.2.2:$port/'
-          : 'http://localhost:$port/';
+          ? 'http://10.0.2.2:$port'
+          : 'http://localhost:$port';
     }
   }
 
@@ -36,6 +36,7 @@ class ApiService {
 
   Future<ApiResponse<T>> post<T>(
       String endpoint, Map<String, dynamic> data) async {
+    print('$baseUrl/$endpoint');
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/$endpoint'),
@@ -45,7 +46,8 @@ class ApiService {
         body: jsonEncode(data),
       );
 
-      return ApiResponse(response.statusCode, json.decode(response.body) as T);
+      return ApiResponse(response.statusCode,
+          (response.body.isNotEmpty ? json.decode(response.body) : null) as T);
     } catch (e) {
       throw Exception('Post request failed.');
     }
@@ -62,7 +64,8 @@ class ApiService {
         body: jsonEncode(data),
       );
 
-      return ApiResponse(response.statusCode, json.decode(response.body) as T);
+      return ApiResponse(response.statusCode,
+          (response.body.isNotEmpty ? json.decode(response.body) : null) as T);
     } catch (e) {
       throw Exception('Patch request failed.');
     }
@@ -72,8 +75,10 @@ class ApiService {
     try {
       final response = await http.delete(Uri.parse('$baseUrl/$endpoint'));
 
-      return ApiResponse(response.statusCode, json.decode(response.body) as T);
+      return ApiResponse(response.statusCode,
+          (response.body.isNotEmpty ? json.decode(response.body) : null) as T);
     } catch (e) {
+      print(e);
       throw Exception('Get request failed.');
     }
   }
