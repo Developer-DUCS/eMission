@@ -11,13 +11,11 @@
 /// Author: Chris Warren
 
 // import statements
+import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'dart:convert';
 import 'package:screenshot/screenshot.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
 
 /*
@@ -39,6 +37,7 @@ class CarbonReportPage extends StatefulWidget {
 
 class _CarbonReportPageState extends State<CarbonReportPage> {
   ScreenshotController screenshotController = ScreenshotController();
+  ApiService apiService = new ApiService();
 
   @override
   void initState() {
@@ -49,25 +48,19 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
 
   Future<Map<String, dynamic>> getMostRecentDrive2() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    http.Response res = await http.get(Uri.parse(
-        'http://10.0.2.2:3000/getRecentDrive?userID=${pref.getInt("userID")}'));
-    print(json.decode(res.body));
-    return json.decode(res.body);
+    ApiResponse res =
+        await apiService.get('/getRecentDrive?userID=${pref.getInt("userID")}');
+    return res.data;
   }
 
   Future<void> getMostRecentDrive() async {
-    print("hi");
     SharedPreferences pref = await SharedPreferences.getInstance();
-    print(pref);
-    print(pref.getInt("userID"));
-    http
-        .get(Uri.parse(
-            'http://10.0.2.2:3000/getRecentDrive?userID=${pref.getInt("userID")}'))
+
+    apiService
+        .get('/getRecentDrive?userID=${pref.getInt("userID")}')
         .then((res) {
       setState(() {
-        print(res.body);
-        var jsonResponse = json.decode(res.body);
-        print(jsonResponse);
+        var jsonResponse = res.data;
         var firstDataItem = jsonResponse["data"][0];
         widget.carName = firstDataItem["carName"];
         widget.amount = firstDataItem["amount"];
@@ -75,8 +68,6 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
         widget.carbon_lb = firstDataItem["carbon_lb"];
         widget.points_earned = firstDataItem["points_earned"];
         widget.date_earned = DateTime.parse(firstDataItem["date_earned"]);
-
-        print(widget.carName);
       });
     });
   }

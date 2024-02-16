@@ -1,7 +1,5 @@
+import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +14,8 @@ class _ManualState extends State<Manual> {
   TextEditingController textController = TextEditingController();
   List<Map<String, dynamic>> vehicles = [];
   Map<String, dynamic>? selectedVehicle;
+
+  ApiService apiService = new ApiService();
 
   @override
   void initState() {
@@ -32,12 +32,9 @@ class _ManualState extends State<Manual> {
   // Fetch the user's vehicles
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    http
-        .get(Uri.parse(
-            'http://10.0.2.2:3000/vehicles?owner=${pref.getInt("userID")}'))
-        .then((res) {
+    apiService.get('/vehicles?owner=${pref.getInt("userID")}').then((res) {
       setState(() {
-        vehicles = List<dynamic>.from(json.decode(res.body))
+        vehicles = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
 
@@ -55,9 +52,9 @@ class _ManualState extends State<Manual> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted = formatter.format(now);
 
-    var results = await http.get(Uri.parse(
-        'http://10.0.2.2:3000/vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}'));
-    Map<String, dynamic> resultsMap = json.decode(results.body);
+    var results = await apiService.get(
+        '/vehicleCarbonReport?vehicleId=${vehicle}&carID=${carID}&distance=${distance}&date=${formatted}');
+    Map<String, dynamic> resultsMap = results.data;
     print(resultsMap);
 
     // Extract the data
@@ -71,9 +68,7 @@ class _ManualState extends State<Manual> {
         "carbon_lb": carbonLb,
         "carbon_kg": carbonKg
       };
-      var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDrives'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(body));
+      var res = await apiService.post('/updateDrives', body);
       if (res.statusCode == 200) {
         showResultAlert(context, carbonLb);
       } else {
@@ -96,11 +91,10 @@ class _ManualState extends State<Manual> {
     };
     print("Hi 1");
     // API call to update milage and calculate trip distance
-    var res = await http.post(Uri.parse('http://10.0.2.2:3000/updateDistance'),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
+    var res = await apiService.post('/updateDistance', data);
     print("Hi 2");
     // Parse the JSON string into a Map
-    Map<String, dynamic> responseMap = json.decode(res.body);
+    Map<String, dynamic> responseMap = res.data;
 
     print(responseMap);
     // Access the value associated with the "data" key

@@ -1,8 +1,6 @@
+import 'package:first_flutter_app/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,6 +16,8 @@ class _HomeState extends State<Home> {
   String? userDisplayName;
 
   int? totalPoints;
+
+  ApiService apiService = new ApiService();
 
   @override
   void initState() {
@@ -40,15 +40,10 @@ class _HomeState extends State<Home> {
     print("totalPointsCalled");
     var userID = await getUserID();
     print(userID);
-    var response = await http.get(
-      Uri.parse("http://10.0.2.2:3000/getEarnedPoints?userID=${userID}"),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
+    var response = await apiService.get('/getEarnedPoints?userID=${userID}');
 
     if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
+      var jsonResponse = response.data;
       var totalPointsFromJson = jsonResponse['results'][0]['total_points'] ??
           0; // Access the total points field
       return totalPointsFromJson as int;

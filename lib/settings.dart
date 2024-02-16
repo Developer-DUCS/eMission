@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:first_flutter_app/api_service.dart';
 import 'package:first_flutter_app/encryption.dart';
