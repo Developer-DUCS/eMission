@@ -16,6 +16,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const chaiHttp=require('chai-http');
 const app = require('./server.js');
+const server = require('./server.js');
 const request = require('supertest');
 //const jest = require('jest');
 //import {jest} from '@jest/globals';
@@ -23,6 +24,10 @@ const expect = chai.expect;
 //const fetch = require('jest-fetch-mock');
 chai.use(chaiHttp);
 //require('jest-fetch-mock').enableMocks();
+//const fetch = require('node-fetch');
+const fetch = require('node-fetch');
+
+
 
 const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
 const API_KEY = '1234asffake';
@@ -639,8 +644,8 @@ describe('Test /getEarnedPoints', () => {
     connectStub.callsFake();
 
     const userID = 50;
-    const expectedResult = [{ total_points: null}]; // Update with your expected result
-
+    const expectedResult = [{ total_points: 0}]; 
+    // expected result = 0
     queryStub.callsArgWith(2, null, expectedResult);
 
     request(app)
@@ -675,7 +680,8 @@ describe('Test /models', () => {
   let fetchStub;
 
   beforeEach(() => {
-    fetchStub = sinon.stub(fetch, 'Promise');
+    fetchStub = sinon.stub();
+
   });
 
   afterEach(() => {
@@ -688,7 +694,7 @@ describe('Test /models', () => {
     fetchStub.resolves({
       ok: true,
       json: () => expectedResponse,
-    });
+    }); 
 
     request(app)
       .get(`/models?makeId=${makeId}`)
@@ -963,6 +969,9 @@ describe('Test /updateDrives', () => {
     json: () => Promise.reject({"Error Message"}),
   })
 ); */
+async function mockFetchData(jsonData) {
+  return { mockedResponse: 'success' };
+}
 
 // test are WIP
 describe('Test /vehicleCarbonReport', () => {
@@ -974,25 +983,20 @@ describe('Test /vehicleCarbonReport', () => {
     connectStub = sinon.stub(Database.prototype, 'connect');
     queryStub = sinon.stub(Database.prototype, 'query');
     disconnectStub = sinon.stub(Database.prototype, 'disconnect');
-
   });
 
   afterEach(() => {
     sinon.restore();
     nock.cleanAll();
   });
-  
 
   it('should find user that has over 6 daily drives.', (done) => {
-    //connectStub.callsFake();
-    connectStub.callsFake(()=>{});
-
-    queryStub.callsFake((query, values, callback)=>{
-        const results = [{DayDriveTotal: 7}];
-        callback(null, results);
+    connectStub.callsFake(() => {});
+    queryStub.callsFake((query, values, callback) => {
+      const results = [{ DayDriveTotal: 7 }];
+      callback(null, results);
     });
 
-    // const { vehicleId,carID, distance, date } = req.query;
     request(app)
       .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
       .send()
@@ -1003,15 +1007,11 @@ describe('Test /vehicleCarbonReport', () => {
       });
   });
 
- 
-
   /* it('should find user that has less than 6 daily drives.', (done) => {
-    //connectStub.callsFake();
-    connectStub.callsFake(()=>{});
-
-    queryStub.callsFake((query, values, callback)=>{
-        const results = [{DayDriveTotal: 5}];
-        callback(null, results);
+    // Stub the database query
+    queryStub.callsFake((query, values, callback) => {
+      const results = [{ DayDriveTotal: 5 }];
+      callback(null, results);
     });
 
     const requestData = {
@@ -1022,21 +1022,20 @@ describe('Test /vehicleCarbonReport', () => {
     };
     const jsonData = JSON.stringify(requestData);
 
-    nock('https://www.carboninterface.com/api/v1/estimates')
-    .post(jsonData) 
-    .matchHeader('Authorization', `Bearer ${"5p3VT63zAweQ6X3j8OQriw"}`)  
-    .matchHeader('Content-Type', 'application/json')  
-    .reply(200, { mockedResponse: 'success' });
-    // const { vehicleId,carID, distance, date } = req.query;
+    //const fetchDataStub = sinon.stub(global, 'fetchData').resolves({ mockedResponse: 'success' });
+
     request(app)
       .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
-      .send()
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
+
+        //fetchDataStub.restore();
         done();
       });
-  });  */
+  }); */
+});
+
   
   // not working as expected - is actually calling carbon interface.
   /* it('should handle carbon interface error', (done) => {
@@ -1077,7 +1076,7 @@ describe('Test /vehicleCarbonReport', () => {
       });
   }); */ 
   
-});
+
 
 describe('Test /getDailyDrives', () => {
   let queryStub;
@@ -1128,4 +1127,208 @@ describe('Test /getDailyDrives', () => {
 
     expect(res).to.have.status(500);
   });
+});
+
+describe('Test /getTopTen', () => {
+  let queryStub;
+  let connectStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get top ten successfully', async () => {
+    connectStub.callsFake();
+    var expectedResult = {
+      "results": [
+          {
+              "userID": 92,
+              "username": "username",
+              "drive_points": 80,
+              "challenge_points": 70,
+              "total_points": 150
+          },
+          {
+              "userID": 1,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 120,
+              "total_points": 120
+          },
+          {
+              "userID": 80,
+              "username": "user",
+              "drive_points": 0,
+              "challenge_points": 115,
+              "total_points": 115
+          },
+          {
+              "userID": 49,
+              "username": "New",
+              "drive_points": 0,
+              "challenge_points": 105,
+              "total_points": 105
+          },
+          {
+              "userID": 51,
+              "username": "User",
+              "drive_points": 0,
+              "challenge_points": 85,
+              "total_points": 85
+          },
+          {
+              "userID": 86,
+              "username": "meganiscool",
+              "drive_points": 0,
+              "challenge_points": 54,
+              "total_points": 54
+          },
+          {
+              "userID": 85,
+              "username": "hi",
+              "drive_points": 0,
+              "challenge_points": 50,
+              "total_points": 50
+          },
+          {
+              "userID": 55,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 40,
+              "total_points": 40
+          },
+          {
+              "userID": 91,
+              "username": "Jenny_is_cool",
+              "drive_points": 0,
+              "challenge_points": 32,
+              "total_points": 32
+          },
+          {
+              "userID": 76,
+              "username": "check",
+              "drive_points": 0,
+              "challenge_points": 20,
+              "total_points": 20
+          }
+      ]
+  }
+    
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getTopTen`)
+      .send();
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.deep.equal({ results: expectedResult});
+    
+    
+  });
+  it('should get top ten successfully when 9 users', async () => {
+    connectStub.callsFake();
+    var expectedResult = {
+      "results": [
+          {
+              "userID": 92,
+              "username": "username",
+              "drive_points": 80,
+              "challenge_points": 70,
+              "total_points": 150
+          },
+          {
+              "userID": 1,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 120,
+              "total_points": 120
+          },
+          {
+              "userID": 80,
+              "username": "user",
+              "drive_points": 0,
+              "challenge_points": 115,
+              "total_points": 115
+          },
+          {
+              "userID": 49,
+              "username": "New",
+              "drive_points": 0,
+              "challenge_points": 105,
+              "total_points": 105
+          },
+          {
+              "userID": 51,
+              "username": "User",
+              "drive_points": 0,
+              "challenge_points": 85,
+              "total_points": 85
+          },
+          {
+              "userID": 86,
+              "username": "meganiscool",
+              "drive_points": 0,
+              "challenge_points": 54,
+              "total_points": 54
+          },
+          {
+              "userID": 85,
+              "username": "hi",
+              "drive_points": 0,
+              "challenge_points": 50,
+              "total_points": 50
+          },
+          {
+              "userID": 55,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 40,
+              "total_points": 40
+          },
+          {
+              "userID": 91,
+              "username": "Jenny_is_cool",
+              "drive_points": 0,
+              "challenge_points": 32,
+              "total_points": 32
+          }
+      ]
+  }
+    
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getTopTen`)
+      .send();
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.deep.equal({ results: expectedResult});
+    
+    
+  });
+
+  /* it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(500);
+  }); */
 });

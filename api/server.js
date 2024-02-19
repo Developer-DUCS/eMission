@@ -16,6 +16,7 @@ const app = express();
 const axios = require("axios");
 const API_URL = "https://www.carboninterface.com/api/v1";
 const API_KEY = "5p3VT63zAweQ6X3j8OQriw";
+const fetch = require('node-fetch');
 
 const dbconfig = {
   host: "mcs.drury.edu",
@@ -303,7 +304,87 @@ app.get("/getTopTen", (req, res) => {
     }
   });
 });
+// make sure all users are represented
+app.get("/getUserRank", (req, res) => {
+  console.log("Get earned points called");
 
+  const {userID} = req.query;
+  console.log(userID);
+  
+    const query =
+    `   
+    WITH DrivePoints AS (
+      SELECT
+          userID,
+          COALESCE(SUM(points_earned), 0) AS drive_points
+      FROM (
+          SELECT
+              userID,
+              points_earned,
+              date_earned,
+              ROW_NUMBER() OVER (PARTITION BY userID, DATE(date_earned) ORDER BY date_earned) AS row_num
+          FROM
+              Drives
+          WHERE date_earned IS NOT NULL
+      ) t
+      WHERE row_num = 1
+      GROUP BY userID
+  ),
+  
+  ChallengePoints AS (
+      SELECT
+          a.earnerID AS userID,
+          COALESCE(SUM(c.points), 0) AS challenge_points
+      FROM
+          AcceptedChallenges a
+      LEFT JOIN
+          Challenges c ON c.challengeID = a.challengeID
+      WHERE
+          a.dateFinished IS NOT NULL
+      GROUP BY
+          a.earnerID
+  )
+  
+  SELECT
+      leaderboard_rank,
+      userID,
+      username,
+      drive_points,
+      challenge_points,
+      total_points
+  FROM (
+      SELECT
+          RANK() OVER (ORDER BY (COALESCE(dp.drive_points, 0) + COALESCE(cp.challenge_points, 0)) DESC) AS leaderboard_rank,
+          u.userID,
+          u.username,
+          COALESCE(dp.drive_points, 0) AS drive_points,
+          COALESCE(cp.challenge_points, 0) AS challenge_points,
+          COALESCE(dp.drive_points, 0) + COALESCE(cp.challenge_points, 0) AS total_points
+      FROM
+          Users u
+      LEFT JOIN
+          DrivePoints dp ON u.userID = dp.userID
+      LEFT JOIN
+          ChallengePoints cp ON u.userID = cp.userID
+      ORDER BY
+          total_points DESC,
+          u.userID
+  ) leaderboard
+  WHERE
+      userID = ?;
+  `;
+
+  const db = new Database(dbconfig);
+  db.query(query, [userID], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Error getting sum." });
+    } else {
+      console.log("Query results:", results);
+      return res.status(200).json({ results });
+    }
+  });
+});
 
 // can be used to get specific challenge - currently not called.
 // not used atm- not tested
@@ -706,71 +787,89 @@ catch
   
 });
 
-// Submits vehicle ID and miles driven to Carbon Report API
-// expects carID, vehicleID (modelID), distance, and date 
 app.get("/vehicleCarbonReport", (req, res) => {
-  const { vehicleId,carID, distance, date } = req.query;
-  
-  // check if the user ID pertaining to this report has too many daily drives
-  const query1 = 
-  `SELECT COUNT(*) as DayDriveTotal
-  FROM (
-      SELECT c.carName, c.modelID, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned, c.owner
-      FROM Drives d
-      INNER JOIN Cars c ON c.owner = d.userID AND c.carID = d.carID
-      WHERE d.userID = (SELECT owner FROM Cars WHERE carID = ?) AND date_earned LIKE ?
-      ORDER BY d.date_earned DESC
-  ) myTable
- `;
+  const { vehicleId, carID, distance, date } = req.query;
 
-  
-  db.query(query1, [carID, `${date}%`], (err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      return res.status(500).json({ error: "Error getting drive total." });
-    } else {
-      if(results.length > 0 && results[0].DayDriveTotal<=6){
-        /* return res.status(200).json({
-          "Drive total" :  results.data[0].DayDriveTotal
-        }); */
+  // Check if the user ID pertaining to this report has too many daily drives
+  const query1 =
+    `SELECT COUNT(*) as DayDriveTotal
+    FROM (
+        SELECT c.carName, c.modelID, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned, c.owner
+        FROM Drives d
+        INNER JOIN Cars c ON c.owner = d.userID AND c.carID = d.carID
+        WHERE d.userID = (SELECT owner FROM Cars WHERE carID = ?) AND date_earned LIKE ?
+        ORDER BY d.date_earned DESC
+    ) myTable`;
+
+  db.query(query1, [carID, `${date}%`], async (err, results) => {
+    try {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ error: "Error getting drive total." });
+      }
+
+      if (results.length > 0 && results[0].DayDriveTotal <= 6) {
         console.log("vehicleId");
         console.log(results[0].DayDriveTotal);
+
         const requestData = {
           type: "vehicle",
           distance_unit: "mi",
           distance_value: distance,
           vehicle_model_id: vehicleId,
         };
+
         const jsonData = JSON.stringify(requestData);
-        console.log(jsonData);
-        fetch("https://www.carboninterface.com/api/v1/estimates", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: jsonData,
-      })
-        .then((res) => res.json())
-        .then(async (data) => {
-          // If we get data back, send it to user
+
+        try {
+          const data = await fetchData(jsonData);
+
           if (data) {
             console.log(data);
-            
             res.status(200).json({ data: data });
           } else {
             res.status(500).json({ error: "Server error." });
           }
-        })
-        .then((data) => res.json(data)) // added line to send the data
-        .catch((err) => res.status(500).json({ error: err }));
-      }
-      else{
+        } catch (fetchError) {
+          console.error("Error in fetching data:", fetchError);
+          res.status(500).json({ error: "Error in fetching data." });
+        }
+      } else {
         console.log(results[0].DayDriveTotal);
-        res.status(422).json({error: "Too many drives for the day, try again later."});
+        res.status(422).json({ error: "Too many drives for the day, try again later." });
       }
+    } catch (error) {
+      console.error("Error in route handler:", error);
+      res.status(500).json({ error: "Internal server error." });
     }
   });
+});
+
+
+async function fetchData(jsonData) {
+  try {
+    const response = await fetch("https://www.carboninterface.com/api/v1/estimates", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: jsonData,
+    });
+
+    if (!response.ok) {
+      console.error("Error in fetch:", response.statusText);
+      throw new Error("Error in fetch");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error in fetch:", error.message);
+    throw new Error("Error in fetch");
+  }
+}
+
+
 /* 
 // Submits vehicle ID and miles driven to Carbon Report API
 //app.get("/vehicleCarbonReport", async (req, res) => {
@@ -817,7 +916,6 @@ app.get("/vehicleCarbonReport", (req, res) => {
     })
     .then((data) => res.json(data)) // added line to send the data
     .catch((err) => res.status(500).json({ error: err })); */
-});
 
 // Calculates difference between submitted miles and currently saved miles
 app.post("/updateDistance", (req, res) => {
