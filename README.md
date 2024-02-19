@@ -73,8 +73,7 @@ $ git clone https://github.com/Developer-DUCS/eMission.git
 For an in-depth look at the processes, user stories, and progress thus far, take a look at the project documentation. 
 
 [Project Wiki](https://github.com/Developer-DUCS/eMission/wiki)
-
-**_Note_**: _Iteration & Development_ covers sprints 6 and 7. 
+ 
 
 <details><summary>Sprint Workflow</summary>
 
@@ -137,7 +136,8 @@ For an in-depth look at the processes, user stories, and progress thus far, take
 
 
 </details>
-   
+
+**_Note_**: _Iteration & Development_ covers sprints 6 and 7.
 
 
 
