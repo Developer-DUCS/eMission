@@ -16,13 +16,23 @@ const chai = require('chai');
 const sinon = require('sinon');
 const chaiHttp=require('chai-http');
 const app = require('./server.js');
+const server = require('./server.js');
 const request = require('supertest');
-const fetch = require('node-fetch');
+const {fetchData} = require('./server.js');
+//const jest = require('jest');
+//import {jest} from '@jest/globals';
 const expect = chai.expect;
+//const fetch = require('jest-fetch-mock');
 chai.use(chaiHttp);
-const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
-const API_KEY = '5p3VT63zAweQ6X3j8OQriw';
+//require('jest-fetch-mock').enableMocks();
+//const fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
+
+
+const API_URL = 'https://www.carboninterface.com/api/v1/estimates';
+const API_KEY = '1234asffake';
+const nock = require('nock');
 const dbconfig = {
     host:     "mcs.drury.edu",
     port:     "3306",
@@ -439,43 +449,7 @@ describe('Test /getCurrentUserChallenges', () => {
       });
     });
 
-    describe('Test /vehicleCarbonReport',()=>{
-      
-
-      it('should return vehicle carbon report successfully', async () => {
-        const mockApiResponse = {
-          ok: true,
-          json: () => ({ result: '240 units' }),
-        };
     
-         const fetchStub = sinon.stub(global, 'fetch');
-        fetchStub.resolves(mockApiResponse);
-    
-        const response = await chai.request(app)
-          .get('/vehicleCarbonReport')
-          .query({ vehicleId: '123', distance: '100' });
-    
-        expect(response).to.have.status(200);
-    
-        fetchStub.restore();
-      });
-      it('should return 400 if vehicleId is missing', async () => {
-        const response = await chai.request(app)
-            .get('/vehicleCarbonReport')
-            .query({ distance: '100' });
-
-        expect(response).to.have.status(400);
-    });
-
-    it('should return 400 if distance is missing', async () => {
-        const response = await chai.request(app)
-            .get('/vehicleCarbonReport')
-            .query({ vehicleId: '123' });
-
-        expect(response).to.have.status(400);
-    });
-
-    });
 
     describe('Test /acceptNewChallenges', () => {
       let connectStub;
@@ -648,17 +622,17 @@ describe('Test /getEarnedPoints', () => {
     sinon.restore();
   });
 
-  it('should get earned points successfully.', (done) => {
+  it('should get earned points successfully with challenges and drives.', (done) => {
     connectStub.callsFake();
 
     const userID = 49;
-    const expectedResult = [{ total: 100 }]; // Update with your expected result
+    const expectedResult = [{ total_points: 100 }]; // Update with your expected result
 
     queryStub.callsArgWith(2, null, expectedResult);
 
     request(app)
-      .post('/getEarnedPoints')
-      .send({ userID })
+      .get('/getEarnedPoints')
+      .query({ userID })
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
@@ -667,14 +641,34 @@ describe('Test /getEarnedPoints', () => {
       });
   });
 
+  it('should get earned points successfully with no challenges or drives.', (done) => {
+    connectStub.callsFake();
+
+    const userID = 50;
+    const expectedResult = [{ total_points: 0}]; 
+    // expected result = 0
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    request(app)
+      .get('/getEarnedPoints')
+      .query({ userID })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.results).to.deep.equal(expectedResult);
+        done();
+      });
+  });
+
+
   it('should handle database error.', (done) => {
     connectStub.callsFake();
 
     queryStub.callsArgWith(2, new Error('Database error'), null);
 
     request(app)
-      .post('/getEarnedPoints')
-      .send({ userID: 49 })
+      .get('/getEarnedPoints')
+      .query({ userID: 49 })
       .expect(500)
       .end((err, res) => {
         if (err) return done(err);
@@ -687,7 +681,8 @@ describe('Test /models', () => {
   let fetchStub;
 
   beforeEach(() => {
-    fetchStub = sinon.stub(fetch, 'Promise');
+    fetchStub = sinon.stub();
+
   });
 
   afterEach(() => {
@@ -700,7 +695,7 @@ describe('Test /models', () => {
     fetchStub.resolves({
       ok: true,
       json: () => expectedResponse,
-    });
+    }); 
 
     request(app)
       .get(`/models?makeId=${makeId}`)
@@ -878,5 +873,465 @@ describe('Test /vehicles', () => {
         done();
       });
   });
+  
+}); 
+
+describe('Test /updateDrives', () => {
+  let queryStub;
+  let connectStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should update drives successfully and earn 5 points', async () => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 40,
+      carbon_kg: 18.14,
+    };
+
+    const expectedPointsEarned = 5;
+
+    queryStub.callsArgWith(2, null, { insertId: 123 }); // Assuming successful insert
+
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data).to.deep.equal({ insertId: 123 });
+   
+  });
+
+  it('should update drives successfully and earn 20 points', async () => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 20,
+      carbon_kg: 9.07,
+    };
+
+    const expectedPointsEarned = 20;
+
+    queryStub.callsArgWith(2, null, { insertId: 456 }); // Assuming successful insert
+
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(200);
+    expect(res.body.data).to.deep.equal({ insertId: 456 });
+   
+  });
+
+  it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const requestBody = {
+      userID: 1,
+      vehicleID: 2,
+      unitOfMeasure: 'mi',
+      distance: 50,
+      carbon_lb: 40,
+      carbon_kg: 18.14,
+    };
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .post('/updateDrives')
+      .send(requestBody);
+
+    expect(res).to.have.status(500);
+  });
+});
+/* global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.reject({"Error Message"}),
+  })
+); */
+async function mockFetchData(jsonData) {
+  return { mockedResponse: 'success' };
+}
+
+// test are WIP
+describe('Test /vehicleCarbonReport', () => {
+  let connectStub;
+  let queryStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+    nock.cleanAll();
+  });
+
+  it('should find user that has over 6 daily drives.', (done) => {
+    connectStub.callsFake(() => {});
+    queryStub.callsFake((query, values, callback) => {
+      const results = [{ DayDriveTotal: 7 }];
+      callback(null, results);
+    });
+
+    request(app)
+      .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
+      .send()
+      .expect(422)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+   it('should find user that has less than 6 daily drives.', (done) => {
+    // Stub the database query
+    queryStub.callsFake((query, values, callback) => {
+      const results = [{ DayDriveTotal: 5 }];
+      callback(null, results);
+    });
+
+    const requestData = {
+      type: "vehicle",
+      distance_unit: "mi",
+      distance_value: 20,
+      vehicle_model_id: "12d93fhq93jd-fake",
+    };
+    const jsonData = JSON.stringify(requestData);
+
+    //const fetchDataStub = sinon.stub(global, 'fetchData').resolves({ mockedResponse: 'success' });
+    //const fetchDataStub = sinon.stub(global, 'fetchData').resolves({ mockedResponse: 'success' });
+    const fetchDataStub = sinon.stub(app, 'fetchData').resolves({ mockedResponse: 'success' });
+
+    request(app)
+      .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        sinon.assert.calledWith(fetchDataStub, jsonData);
+        fetchDataStub.restore();
+        done();
+      });
+  }); 
 });
 
+  
+  // not working as expected - is actually calling carbon interface.
+  /* it('should handle carbon interface error', (done) => {
+    //connectStub.callsFake();
+    connectStub.callsFake(()=>{});
+
+    queryStub.callsFake((query, values, callback)=>{
+        const results = [{DayDriveTotal: 5}];
+        callback(null, results);
+    });
+    const distance = 20;
+    const vehicleId="a2d97d19-14c0-4c60-870c-e734796e014e";
+    //[ 1, 2, 'mi', 50, 40, 18.14, 5, 2024-02-14T14:39:53.177Z ]
+    const requestData = {
+      type: "vehicle",
+      distance_unit: "mi",
+      distance_value: distance,
+      vehicle_model_id: vehicleId,
+    };
+    const jsonData = JSON.stringify(requestData);
+    fetch.mockImplementationOnce(() => Promise.reject("API is down"));
+
+    
+    /* nock('https://www.carboninterface.com/api/v1/estimates')
+    .post(jsonData) 
+    //.matchHeader('Authorization', `Bearer ${"5p3VT63zAweQ6X3j8OQriw"}`)  
+    //.matchHeader('Content-Type', 'application/json')  
+    .reply(500);  
+
+    // const { vehicleId,carID, distance, date } = req.query;
+    request(app)
+      .get('/vehicleCarbonReport?vehicleId=a2d97d19-14c0-4c60-870c-e734796e014e&carID=2&distance=20&date=2024-02-02')
+      .send()
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  }); */ 
+  
+
+
+describe('Test /getDailyDrives', () => {
+  let queryStub;
+  let connectStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get daily drives successfully', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    const expectedResult = [{ DayDriveTotal: 5 }]; // Update with your expected result
+
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(200);
+    
+  });
+
+  it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(500);
+  });
+});
+
+describe('Test /getTopTen', () => {
+  let queryStub;
+  let connectStub;
+  let disconnectStub;
+
+  beforeEach(() => {
+    connectStub = sinon.stub(Database.prototype, 'connect');
+    queryStub = sinon.stub(Database.prototype, 'query');
+    disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should get top ten successfully', async () => {
+    connectStub.callsFake();
+    var expectedResult = {
+      "results": [
+          {
+              "userID": 92,
+              "username": "username",
+              "drive_points": 80,
+              "challenge_points": 70,
+              "total_points": 150
+          },
+          {
+              "userID": 1,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 120,
+              "total_points": 120
+          },
+          {
+              "userID": 80,
+              "username": "user",
+              "drive_points": 0,
+              "challenge_points": 115,
+              "total_points": 115
+          },
+          {
+              "userID": 49,
+              "username": "New",
+              "drive_points": 0,
+              "challenge_points": 105,
+              "total_points": 105
+          },
+          {
+              "userID": 51,
+              "username": "User",
+              "drive_points": 0,
+              "challenge_points": 85,
+              "total_points": 85
+          },
+          {
+              "userID": 86,
+              "username": "meganiscool",
+              "drive_points": 0,
+              "challenge_points": 54,
+              "total_points": 54
+          },
+          {
+              "userID": 85,
+              "username": "hi",
+              "drive_points": 0,
+              "challenge_points": 50,
+              "total_points": 50
+          },
+          {
+              "userID": 55,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 40,
+              "total_points": 40
+          },
+          {
+              "userID": 91,
+              "username": "Jenny_is_cool",
+              "drive_points": 0,
+              "challenge_points": 32,
+              "total_points": 32
+          },
+          {
+              "userID": 76,
+              "username": "check",
+              "drive_points": 0,
+              "challenge_points": 20,
+              "total_points": 20
+          }
+      ]
+  }
+    
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getTopTen`)
+      .send();
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.deep.equal({ results: expectedResult});
+    
+    
+  });
+  it('should get top ten successfully when 9 users', async () => {
+    connectStub.callsFake();
+    var expectedResult = {
+      "results": [
+          {
+              "userID": 92,
+              "username": "username",
+              "drive_points": 80,
+              "challenge_points": 70,
+              "total_points": 150
+          },
+          {
+              "userID": 1,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 120,
+              "total_points": 120
+          },
+          {
+              "userID": 80,
+              "username": "user",
+              "drive_points": 0,
+              "challenge_points": 115,
+              "total_points": 115
+          },
+          {
+              "userID": 49,
+              "username": "New",
+              "drive_points": 0,
+              "challenge_points": 105,
+              "total_points": 105
+          },
+          {
+              "userID": 51,
+              "username": "User",
+              "drive_points": 0,
+              "challenge_points": 85,
+              "total_points": 85
+          },
+          {
+              "userID": 86,
+              "username": "meganiscool",
+              "drive_points": 0,
+              "challenge_points": 54,
+              "total_points": 54
+          },
+          {
+              "userID": 85,
+              "username": "hi",
+              "drive_points": 0,
+              "challenge_points": 50,
+              "total_points": 50
+          },
+          {
+              "userID": 55,
+              "username": "username",
+              "drive_points": 0,
+              "challenge_points": 40,
+              "total_points": 40
+          },
+          {
+              "userID": 91,
+              "username": "Jenny_is_cool",
+              "drive_points": 0,
+              "challenge_points": 32,
+              "total_points": 32
+          }
+      ]
+  }
+    
+    queryStub.callsArgWith(2, null, expectedResult);
+
+    const res = await chai
+      .request(app)
+      .get(`/getTopTen`)
+      .send();
+
+    expect(res).to.have.status(200);
+    expect(res.body).to.deep.equal({ results: expectedResult});
+    
+    
+  });
+
+  /* it('should handle database error.', async () => {
+    connectStub.callsFake();
+
+    const userID = 92;
+    const date = '2024-02-02';
+
+    queryStub.callsArgWith(2, new Error('Database error'), null);
+
+    const res = await chai
+      .request(app)
+      .get(`/getDailyDrives?userID=${userID}&date=${date}`)
+      .send();
+
+    expect(res).to.have.status(500);
+  }); */
+});

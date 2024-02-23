@@ -1,8 +1,8 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\Users\Chriz\dev\flutter
-FLUTTER_APPLICATION_PATH=C:\Users\Chriz\OneDrive - Drury University\Drury_2023-2024\Second_Semester_23-24\CSCI_496\repositories\eMission
+FLUTTER_ROOT=/usr/local/Caskroom/flutter/3.13.2/flutter
+FLUTTER_APPLICATION_PATH=/Users/jalipurcell/Desktop/eMission-New/eMission
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=lib\main.dart
+FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=3.16.9
 FLUTTER_BUILD_NUMBER=3.16.9

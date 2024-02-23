@@ -1,9 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:emission/encryption.dart';
+import 'encryption.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -37,9 +36,6 @@ class _CreateAccountState extends State<CreateAccount> {
   // void method responisble for creating an http request to the server.
   // this request will insert the user's login information.
   void _submitForm(context) async {
-    // android emulator url
-    String url = 'https://mcs.drury.edu/emission/insertUser';
-
     // Encrypt the password
     String encryptedPassword = encryptPassword(confirmPasswordController.text);
 
@@ -52,33 +48,26 @@ class _CreateAccountState extends State<CreateAccount> {
       'confirm_password': encryptedPassword,
     };
 
-    try {
-      // http request here
-      var response = await http.post(Uri.parse(url),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(formData));
-      debugPrint('Response status: ${response.statusCode}');
-      if (response.statusCode == 200) {
-        Navigator.pushNamed(context, 'login');  
+    var response = await ApiService().post('insertUser', formData);
+    debugPrint('Response status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      Navigator.pushNamed(context, 'login');
+    } else {
+      if (response.statusCode == 401) {
+        Flushbar(
+          title: 'Error',
+          message: 'An account with that email already exists.',
+          backgroundColor: Colors.redAccent,
+          flushbarPosition: FlushbarPosition.TOP,
+        ).show(context);
       } else {
-        if (response.statusCode == 401) {
-          Flushbar(
-            title: 'Error',
-            message: 'An account with that email already exists.',
-            backgroundColor: Colors.redAccent,
-            flushbarPosition: FlushbarPosition.TOP,
-          ).show(context);
-        } else {
-          Flushbar(
-            title: 'Error',
-            message: 'There was a server error. Please try again.',
-            backgroundColor: Colors.redAccent,
-            flushbarPosition: FlushbarPosition.TOP,
-          ).show(context);
-        }
+        Flushbar(
+          title: 'Error',
+          message: 'There was a server error. Please try again.',
+          backgroundColor: Colors.redAccent,
+          flushbarPosition: FlushbarPosition.TOP,
+        ).show(context);
       }
-    } catch (error) {
-      debugPrint('Error: $error');
     }
   }
 

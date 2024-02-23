@@ -45,10 +45,8 @@ class MyApp extends StatelessWidget {
               body: Home(),
               pageIndex: 1,
             ),
-        'leaderboard': (context) => const Layout(     
-              body: Leaderboard(),
-              pageIndex: 0,
-            ),
+        'leaderboard': (context) =>
+            const Layout(body: Leaderboard(), pageIndex: 0, driveButton: false),
         'settings': (context) => const Layout(
               body: Settings(),
               pageIndex: 2,
@@ -65,7 +63,7 @@ class MyApp extends StatelessWidget {
         'past_challenges': (context) => Layout(
               body: PastChallengesPage(),
             ),
-        'carbon_report': (context) => const Layout(
+        'carbon_report': (context) => Layout(
               body: CarbonReportPage(),
             ),
         'manual_input': (context) => const Layout(
