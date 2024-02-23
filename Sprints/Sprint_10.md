@@ -2,11 +2,17 @@
 
 ### Sprint Goals
 - [ ] Complete Product License
-- [ ] Testing Leaderboard
-- [ ] Merge Sprint 9 Changes
-- [ ] Flutter UI Update (Darkmode and Stylesheet)
-- [ ] Flutter UI Testing Research 
-- [ ] Application Deployment Testing
+- [X] Testing Leaderboard
+- [X] Merge Sprint 9 Changes
+- [X] Flutter UI Update (Darkmode and Stylesheet)
+- [ ] Flutter UI Testing Research
+
+      * Widget Testing
+- [ ] Deployment Configuration
+      
+      * GitHub Action
+      * PM2 Server Management
+- [X] Application Deployment Testing
 - [ ] Make User Login Info Lowercase
 ---
 
@@ -21,19 +27,23 @@
 * something new
 
 
-
-  
+#### App Screens
+* Leaderboard Page
+* Carbon Report Page
 ---
 
 
 ### Flutter UI Testing Strategies
-* something
+* Widget Testing Technologies
 ---
 
+### Server Deployment
+**Github Action**
+**PM2**
 
 ### Application Deployment Testing
-* something else
-* 
+**testing **
+
 ---
 
 
