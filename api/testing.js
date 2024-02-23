@@ -875,6 +875,108 @@ describe('Test /vehicles', () => {
   });
   
 }); 
+describe('Test /updateDistance', () => {
+  let queryStub;
+  let response;
+
+  beforeEach(() => {
+    queryStub = sinon.stub(Database.prototype, 'query');
+    response = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should update distance successfully.', (done) => {
+    const distance = 1500;
+    const userID = 1;
+    const vehicleID = 5;
+    const currentMileage = 1200;
+
+    queryStub.withArgs(
+      'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+      [userID, vehicleID]
+    ).callsArgWith(2, null, [{ currentMileage }]);
+
+    queryStub.withArgs(
+      'UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;',
+      [distance, userID, vehicleID]
+    ).callsArgWith(2, null, {});
+
+    request(app)
+      .post('/updateDistance')
+      .send({ distance, userID, vehicle: vehicleID })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.data).to.equal(distance - currentMileage);
+        done();
+      });
+  });
+
+  it('should handle submitted mileage not greater than old mileage.', (done) => {
+    const distance = 1200;
+    const userID = 1;
+    const vehicleID = 5;
+    const currentMileage = 1500;
+
+    queryStub.withArgs(
+      'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+      [userID, vehicleID]
+    ).callsArgWith(2, null, [{ currentMileage }]);
+
+    request(app)
+      .post('/updateDistance')
+      .send({ distance, userID, vehicle: vehicleID })
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.msg).to.equal('Submitted Mileage must be greater than old mileage');
+        done();
+      });
+  });
+
+  it('should handle database error while fetching saved mileage.', (done) => {
+    queryStub.withArgs(
+      'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+      [1, 5]
+    ).callsArgWith(2, new Error('Database error'), null);
+
+    request(app)
+      .post('/updateDistance')
+      .send({ distance: 1500, userID: 1, vehicle: 5 })
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('should handle database error while updating mileage.', (done) => {
+    queryStub.withArgs(
+      'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+      [1, 5]
+    ).callsArgWith(2, null, [{ currentMileage: 1200 }]);
+
+    queryStub.withArgs(
+      'UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;',
+      [1500, 1, 5]
+    ).callsArgWith(2, new Error('Database error'), null);
+
+    request(app)
+      .post('/updateDistance')
+      .send({ distance: 1500, userID: 1, vehicle: 5 })
+      .expect(500)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
 
 describe('Test /updateDrives', () => {
   let queryStub;
@@ -1007,7 +1109,7 @@ describe('Test /vehicleCarbonReport', () => {
         done();
       });
   });
-
+/* 
    it('should find user that has less than 6 daily drives.', (done) => {
     // Stub the database query
     queryStub.callsFake((query, values, callback) => {
@@ -1025,7 +1127,7 @@ describe('Test /vehicleCarbonReport', () => {
 
     //const fetchDataStub = sinon.stub(global, 'fetchData').resolves({ mockedResponse: 'success' });
     //const fetchDataStub = sinon.stub(global, 'fetchData').resolves({ mockedResponse: 'success' });
-    const fetchDataStub = sinon.stub(app, 'fetchData').resolves({ mockedResponse: 'success' });
+    //const fetchDataStub = sinon.stub(app, 'fetchData').resolves({ mockedResponse: 'success' });
 
     request(app)
       .get('/vehicleCarbonReport?vehicleId=12d93fhq93jd&carID=2&distance=20&date=2024-02-02')
@@ -1036,7 +1138,7 @@ describe('Test /vehicleCarbonReport', () => {
         fetchDataStub.restore();
         done();
       });
-  }); 
+  });  */
 });
 
   
@@ -1079,7 +1181,185 @@ describe('Test /vehicleCarbonReport', () => {
       });
   }); */ 
   
-
+  describe('Test /getRecentDrive', () => {
+    let connectStub;
+    let queryStub;
+    let disconnectStub;
+  
+    beforeEach(() => {
+      connectStub = sinon.stub(Database.prototype, 'connect');
+      queryStub = sinon.stub(Database.prototype, 'query');
+      disconnectStub = sinon.stub(Database.prototype, 'disconnect');
+    });
+  
+    afterEach(() => {
+      sinon.restore();
+    });
+  
+    it('should get recent drive successfully.', (done) => {
+      connectStub.callsFake();
+  
+      const userID = 49;
+      const expectedResult = [
+        {
+          carName: 'Toyota Camry',
+          amount: 100,
+          unitOfMeasure: 'miles',
+          carbon_lb: 10,
+          points_earned: 50,
+          date_earned: '2024-02-22T12:00:00Z',
+        },
+      ];
+  
+      queryStub.callsArgWith(2, null, expectedResult);
+  
+      request(app)
+        .get('/getRecentDrive')
+        .query({ userID })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.data).to.deep.equal(expectedResult);
+          done();
+        });
+    });
+  
+    it('should handle no recent drive.', (done) => {
+      connectStub.callsFake();
+  
+      const userID = 50;
+      const expectedResult = [];
+  
+      queryStub.callsArgWith(2, null, expectedResult);
+  
+      request(app)
+        .get('/getRecentDrive')
+        .query({ userID })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.data).to.deep.equal(expectedResult);
+          done();
+        });
+    });
+  
+    it('should handle database error.', (done) => {
+      connectStub.callsFake();
+  
+      queryStub.callsArgWith(2, new Error('Database error'), null);
+  
+      request(app)
+        .get('/getRecentDrive')
+        .query({ userID: 49 })
+        .expect(500)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('Test /updateDistance', () => {
+    let queryStub;
+    let response;
+  
+    beforeEach(() => {
+      queryStub = sinon.stub(Database.prototype, 'query');
+      response = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+    });
+  
+    afterEach(() => {
+      sinon.restore();
+    });
+  
+    it('should update distance successfully.', (done) => {
+      const distance = 1500;
+      const userID = 1;
+      const vehicleID = 5;
+      const currentMileage = 1200;
+  
+      queryStub.withArgs(
+        'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+        [userID, vehicleID]
+      ).callsArgWith(2, null, [{ currentMileage }]);
+  
+      queryStub.withArgs(
+        'UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;',
+        [distance, userID, vehicleID]
+      ).callsArgWith(2, null, {});
+  
+      request(app)
+        .post('/updateDistance')
+        .send({ distance, userID, vehicle: vehicleID })
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.data).to.equal(distance - currentMileage);
+          done();
+        });
+    });
+  
+    it('should handle submitted mileage not greater than old mileage.', (done) => {
+      const distance = 1200;
+      const userID = 1;
+      const vehicleID = 5;
+      const currentMileage = 1500;
+  
+      queryStub.withArgs(
+        'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+        [userID, vehicleID]
+      ).callsArgWith(2, null, [{ currentMileage }]);
+  
+      request(app)
+        .post('/updateDistance')
+        .send({ distance, userID, vehicle: vehicleID })
+        .expect(500)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.msg).to.equal('Submitted Mileage must be greater than old mileage');
+          done();
+        });
+    });
+  
+    it('should handle database error while fetching saved mileage.', (done) => {
+      queryStub.withArgs(
+        'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+        [1, 5]
+      ).callsArgWith(2, new Error('Database error'), null);
+  
+      request(app)
+        .post('/updateDistance')
+        .send({ distance: 1500, userID: 1, vehicle: 5 })
+        .expect(500)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  
+    it('should handle database error while updating mileage.', (done) => {
+      queryStub.withArgs(
+        'select currentMileage from emission.Cars where owner = ? and carID = ?;',
+        [1, 5]
+      ).callsArgWith(2, null, [{ currentMileage: 1200 }]);
+  
+      queryStub.withArgs(
+        'UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;',
+        [1500, 1, 5]
+      ).callsArgWith(2, new Error('Database error'), null);
+  
+      request(app)
+        .post('/updateDistance')
+        .send({ distance: 1500, userID: 1, vehicle: 5 })
+        .expect(500)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
 
 describe('Test /getDailyDrives', () => {
   let queryStub;

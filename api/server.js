@@ -234,7 +234,7 @@ app.get("/getEarnedPoints", (req, res) => {
   });
 });
 
-// not tested
+//  tested
 app.get("/getTopTen", (req, res) => {
   console.log("Get earned points called");
 
@@ -870,54 +870,6 @@ async function fetchData(jsonData) {
 }
 
 
-/* 
-// Submits vehicle ID and miles driven to Carbon Report API
-//app.get("/vehicleCarbonReport", async (req, res) => {
-// const { vehicleId, distance, userID } = req.query;
-  console.log("vehicle carbon report called");
-  // Ensure modelID and trip distance were sent
-  if (!vehicleId)
-    return res.status(400).json({ error: "Must provide vehicle id." });
-  if (!distance)
-    return res.status(400).json({ error: "Must provide distance." });
-
-  // Prep data for sending ot Carbon Interface
-  const requestData = {
-    type: "vehicle",
-    distance_unit: "mi",
-    distance_value: distance,
-    vehicle_model_id: vehicleId,
-  };
-  console.log("requestData formed");
-
-  console.log(distance);
-
-  const jsonData = JSON.stringify(requestData);
-
-  // Send request to Carbon Interface
-  fetch("https://www.carboninterface.com/api/v1/estimates", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: jsonData,
-  })
-    .then((res) => res.json())
-    .then(async (data) => {
-      // If we get data back, send it to user
-      if (data) {
-        console.log(data);
-       
-        res.status(200).json({ data: data });
-      } else {
-        res.status(500).json({ error: "Server error." });
-      }
-    })
-    .then((data) => res.json(data)) // added line to send the data
-    .catch((err) => res.status(500).json({ error: err })); */
-
-// Calculates difference between submitted miles and currently saved miles
 app.post("/updateDistance", (req, res) => {
   // Database Credentials
   const dbconfig = {
@@ -979,7 +931,6 @@ app.post("/updateDistance", (req, res) => {
 
 
 app.post("/addDistance", (req, res) => {
-  // Database Credentials
   console.log("Add distance called");
   const dbconfig = {
     host: "mcs.drury.edu",
@@ -988,14 +939,11 @@ app.post("/addDistance", (req, res) => {
     password: "Letmein!eCoders",
     database: "emission",
   };
-  // Connect to database
 
-  // Unpacking sent data
   const distance = req.body.distance;
   const userCredentials = req.body.userID;
   const submittedVehicle = req.body.vehicle;
 
-  // Query to fetch saved milage
   const query =
     "select currentMileage from emission.Cars where owner = ? and carID = ?;";
 
@@ -1025,7 +973,6 @@ app.post("/addDistance", (req, res) => {
               //console.error("Error executing query:", error);
               response.status(500).json({ msg: "Database Error" });
             } else {
-              // After update, return travelled distance
               res.status(200).json({ data: distance });
             }
           }

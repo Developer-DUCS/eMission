@@ -113,7 +113,7 @@ class _LeaderboardState extends State<Leaderboard> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Container(); // Return an empty container while loading
+                          return Container();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
