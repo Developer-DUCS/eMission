@@ -12,10 +12,10 @@ class ApiResponse<T> {
 
 class ApiService {
   late String baseUrl;
-  String port = '3000';
+  String port = '3300';
 
   ApiService() {
-    if (kReleaseMode) {
+    if (true) {
       baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
     } else {
       baseUrl = Platform.isAndroid

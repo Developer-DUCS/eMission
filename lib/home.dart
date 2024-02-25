@@ -45,8 +45,8 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       var jsonResponse = response.data;
       print(jsonResponse);
-      var totalPointsFromJson = jsonResponse['results'][0]['total_points'] ??
-          0; // Access the total points field
+      var totalPointsFromJson =
+          jsonResponse['results'][0]['total_points'] as int? ?? 0;
       return totalPointsFromJson as int;
     } else {
       throw Exception("Failed to load post");
