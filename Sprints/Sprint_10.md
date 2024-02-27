@@ -54,4 +54,4 @@ Steps for action:
 
 
 ### Sprint Retrospective
-* 
+* This sprint saw the optimization of our deployment and production pipeline. Improved tests and server connections were researched in order to implement a more robust application. Alongside the research was a massive UI update. Many pages (including the leaderboard and carbon report page) were changed to better support the intended functions and features. We also created a style sheet for the app with which we can efficiently change color schemes and implement a dark mode. The next sprint will prioritize beta testing and finalizing our deployment strategies alongside any remaining features that need to be completed. 
