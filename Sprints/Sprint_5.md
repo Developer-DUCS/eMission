@@ -70,7 +70,7 @@
   * Selecting the challenge will complete the challenge
  
 see page documentation
-* [Updated Challenge Page]()
+* [Updated Challenge Page](https://github.com/Developer-DUCS/eMission/wiki/Application-Screens#challenges-page)
 
 https://github.com/Developer-DUCS/eMission/assets/78006078/584e58a7-e894-4907-8f52-023bccd24eee
 
@@ -82,7 +82,7 @@ https://github.com/Developer-DUCS/eMission/assets/78006078/584e58a7-e894-4907-8f
 * Next is to implement deleting and editing vehicles
 
 see page documentation
-* [Vehicle Management]()
+* [Vehicle Management Page](https://github.com/Developer-DUCS/eMission/wiki/Application-Screens#vehicle-management-page)
 
 
 ---
