@@ -132,7 +132,7 @@ For an in-depth look at the processes, user stories, and progress thus far, take
     1. [Sprint Goals](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_9.md#sprint-goals)
 9. [**Production Pipeline**](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_10.md)
    - sometjhing 
-10. [Beta Release & Marketing]()
+10. [Beta Release & Marketing](https://github.com/Developer-DUCS/eMission/blob/main/Sprints/Sprint_11.md)
 
 
 </details>
