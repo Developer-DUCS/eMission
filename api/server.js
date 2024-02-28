@@ -26,18 +26,41 @@ const dbconfig = {
   database: "emission",
 };
 const db = new Database(dbconfig);
-db.connect();
 
 app.use(express.json());
-
+const startServer = async()=>{
+  try{
+      console.log("connected to the database");
+      db.connect();
+      app.listen(3000,()=>{
+        console.log("server is running on port 3000");
+      });
+  }catch(error){
+      console.error("Error connecting to database:", error);
+      process.exit(1);
+  }
+};
+const stopServer = async()=>{
+  try{
+    // make asyncrounous?
+      db.disconnect();
+      console.log("Disconnected from the database");
+  }catch(error){
+    console.error('Error disconnecting from the database:', error);
+   
+  }
+  finally{
+    process.exit(0);
+  }
+  
+};
+process.on('SIGINT', stopServer);
+process.on('SIGTERM', stopServer);
 // tested
 app.post("/insertUser", (request, response) => {
   // insert user
   console.log("Inserting Users");
   console.log(request.body);
-
-  const db = new Database(dbconfig);
-
   const userData = request.body;
   userData.profilePicture =
     userData.profilePicture === null ? 0 : userData.profilePicture;
@@ -76,14 +99,10 @@ app.post("/insertUser", (request, response) => {
 app.post("/authUser", (request, response) => {
   //authenticate user
   console.log("authenticating user...");
-  const db = new Database(dbconfig);
-  db.connect();
-
   const loginData = request.body;
   const query =
-
     "SELECT userID, email, userName, displayName, password FROM emission.Users WHERE email = ?";
-
+  try{
   db.query(query, loginData.email, (error, result) => {
     if (error) {
       console.error("Error executing query:", error);
@@ -107,21 +126,30 @@ app.post("/authUser", (request, response) => {
       }
     }
   });
+  }
+  catch(err){
+    response.status(500).json({msg: "Database Connection Error"});
+  }
+  
 });
 
 const updateUserSql =
-  "UPDATE Users SET userName = ?, displayName = ? WHERE userID = ?;";
-
+// don't update with null values check
+"UPDATE Users SET userName = COALESCE(?, userName), displayName = COALESCE(?, displayName) WHERE userID = ?;";
 app.patch("/user", (req, res) => {
-  const values = [req.body.username, req.body.displayName, req.body.id];
-
-  db.query(updateUserSql, values, (err, results) => {
-    if (err) {
-      res.status(500).json({ error: "Error updating information." });
-    } else {
-      res.status(200).send();
-    }
-  });
+  try{
+    const values = [req.body.username, req.body.displayName, req.body.id];
+    db.query(updateUserSql, values, (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Error updating information." });
+      } else {
+        res.status(200).send();
+      }
+    });
+  }
+  catch(err){
+    response.status(500).json({ msg: "Database Connection Error" });
+  }
 });
 
 const updatePasswordSql =
@@ -129,7 +157,6 @@ const updatePasswordSql =
 
 app.patch("/password", (req, res) => {
   const values = [req.body.newPassword, req.body.id, req.body.oldPassword];
-
   console.log("request recieved");
 
   db.query(updatePasswordSql, values, (err, results) => {
@@ -149,7 +176,6 @@ app.patch("/password", (req, res) => {
 // tested
 app.post("/getChallenges2", (req, res) => {
   console.log("Get challenge called");
-
   const userID = req.body.userID;
 
   const query = `
@@ -159,11 +185,7 @@ app.post("/getChallenges2", (req, res) => {
         WHERE earnerID = ?
       )`;
 
-  const db = new Database(dbconfig);
-  //db.connect();
-
   db.query(query, [userID], (err, results) => {
-    //db.disconnect();
 
     if (err) {
       console.error("Error executing query:", err);
@@ -178,7 +200,6 @@ app.post("/getChallenges2", (req, res) => {
 // tested
 app.get("/getEarnedPoints", (req, res) => {
   console.log("Get earned points called");
-
   const {userID} = req.query;
   console.log(userID);
   
@@ -222,7 +243,6 @@ app.get("/getEarnedPoints", (req, res) => {
     WHERE
         u.userID = ?;`;
 
-  const db = new Database(dbconfig);
   db.query(query, [userID], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -237,7 +257,6 @@ app.get("/getEarnedPoints", (req, res) => {
 //  tested
 app.get("/getTopTen", (req, res) => {
   console.log("Get earned points called");
-
   const {userID} = req.query;
   console.log(userID);
   
@@ -293,7 +312,6 @@ app.get("/getTopTen", (req, res) => {
       userID
       LIMIT 10;`;
 
-  const db = new Database(dbconfig);
   db.query(query, [userID], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -307,7 +325,6 @@ app.get("/getTopTen", (req, res) => {
 // make sure all users are represented
 app.get("/getUserRank", (req, res) => {
   console.log("Get earned points called");
-
   const {userID} = req.query;
   console.log(userID);
   
@@ -374,7 +391,6 @@ app.get("/getUserRank", (req, res) => {
       userID = ?;
   `;
 
-  const db = new Database(dbconfig);
   db.query(query, [userID], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -394,8 +410,6 @@ app.get("/getChallengesByID", (req, res) => {
   const body = req.body;
   console.log(body);
   const id = [body.id];
-  const db = new Database(dbconfig);
-
   db.query(query, id, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -415,8 +429,6 @@ app.post("/getCurrentUserChallenges", async (req, res) => {
   const body = req.body;
   const id = body.earnerID;
   console.log(id);
-  const db = new Database(dbconfig);
-  //db.connect();
   const query =
     "SELECT a.challengeID, a.points, a.description, a.length, a.name, MAX(b.dateAccepted), MAX(b.daysInProgress), MAX(b.dateFinished) FROM Challenges a INNER JOIN AcceptedChallenges b ON a.challengeID = b.challengeID WHERE b.earnerID = ? AND b.challengeID NOT IN ( SELECT DISTINCT challengeID FROM AcceptedChallenges WHERE earnerID = ? AND dateFinished IS NOT NULL ) GROUP BY a.challengeID, a.points, a.description, a.length, a.name;";
 
@@ -465,7 +477,6 @@ app.post("/acceptNewChallenges", async (req, res) => {
   };
 
   try {
-    const db = new Database(dbconfig);
 
     const responseMessages = [];
 
@@ -544,7 +555,6 @@ const getVehicleSql =
 
 app.get("/vehicles", (req, res) => {
   const { owner } = req.query;
-
   db.query(getVehicleSql, [owner], (err, results) => {
     if (err) {
       res.status(500).json({ error: "Server error." });
@@ -559,10 +569,8 @@ const insertVehicleSql =
 const updateVehicleSql =
   "UPDATE Cars SET carName = ?, make = ?, model = ?, year = ?, makeID = ?, modelID = ?, currentMileage = ? WHERE carID = ?;";
 
-// tests completed
 app.post("/vehicles", (req, res) => {
   const isEdit = JSON.parse(req.query.isEdit);
-
   const insertValues = [
     parseInt(req.body.owner),
     req.body.name,
@@ -613,7 +621,6 @@ app.post("/completeChallenges", async (req, res) => {
   const challengeDataList = challenges;
   const userID = UserID;
   try {
-    const db = new Database(dbconfig);
 
     for (const challengeData of challengeDataList) {
       const values = [formattedDate, userID, challengeData.challengeID];
@@ -661,7 +668,6 @@ app.get("/getRecentDrive", async (req,res)=>{
     const { userID } = req.query;
   
     console.log(req.body);
-    const db = new Database(dbconfig);
   
     const query = `SELECT c.carName, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned
     from Drives d
@@ -701,7 +707,6 @@ app.get("/getDailyDrives", async (req,res)=>{
     const { userID, date } = req.query;
   
     console.log(req.body);
-    const db = new Database(dbconfig);
   
     const query = `SELECT COUNT(*) as DayDriveTotal from(SELECT c.carName, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned
       from Drives d
@@ -734,7 +739,6 @@ catch
     console.error("Error getting drive results", err);
     res.status(400).send("Error getting drive results");
 }
-  
 });
 
 app.post("/updateDrives", async (req,res)=>{
@@ -748,7 +752,6 @@ app.post("/updateDrives", async (req,res)=>{
       pointsEarned = 0;
     }
   console.log(req.body);
-  const db = new Database(dbconfig);
   const insertData = {
     userID: req.body.userID,
     carID: req.body.vehicleID,
@@ -784,10 +787,12 @@ catch
     console.error("Error updating drives table", err);
     res.status(400).send("Error updating drives table");
 }
+
   
 });
 
 app.get("/vehicleCarbonReport", (req, res) => {
+
   const { vehicleId, carID, distance, date } = req.query;
 
   // Check if the user ID pertaining to this report has too many daily drives
@@ -871,16 +876,7 @@ async function fetchData(jsonData) {
 
 
 app.post("/updateDistance", (req, res) => {
-  // Database Credentials
-  const dbconfig = {
-    host: "mcs.drury.edu",
-    port: "3306",
-    user: "emission",
-    password: "Letmein!eCoders",
-    database: "emission",
-  };
-  // Connect to database
-
+ 
   // Unpacking sent data
   const distance = req.body.distance;
   const userCredentials = req.body.userID;
@@ -889,7 +885,6 @@ app.post("/updateDistance", (req, res) => {
   // Query to fetch saved milage
   const query =
     "select currentMileage from emission.Cars where owner = ? and carID = ?;";
-
   db.query(query, [userCredentials, submittedVehicle], (error, result) => {
     // Catch Errors
     if (error) {
@@ -916,10 +911,8 @@ app.post("/updateDistance", (req, res) => {
           (error, result) => {
             // Catch Errors
             if (error) {
-              //console.error("Error executing query:", error);
               response.status(500).json({ msg: "Database Error" });
             } else {
-              // After update, return travelled distance
               res.status(200).json({ data: travelDist });
             }
           }
@@ -927,18 +920,13 @@ app.post("/updateDistance", (req, res) => {
       }
     }
   });
+ 
 });
 
 
 app.post("/addDistance", (req, res) => {
   console.log("Add distance called");
-  const dbconfig = {
-    host: "mcs.drury.edu",
-    port: "3306",
-    user: "emission",
-    password: "Letmein!eCoders",
-    database: "emission",
-  };
+  
 
   const distance = req.body.distance;
   const userCredentials = req.body.userID;
@@ -946,7 +934,6 @@ app.post("/addDistance", (req, res) => {
 
   const query =
     "select currentMileage from emission.Cars where owner = ? and carID = ?;";
-
   db.query(query, [userCredentials, submittedVehicle], (error, result) => {
     // Catch Errors
     if (error) {
@@ -970,20 +957,20 @@ app.post("/addDistance", (req, res) => {
           (error, result) => {
             // Catch Errors
             if (error) {
-              //console.error("Error executing query:", error);
               response.status(500).json({ msg: "Database Error" });
             } else {
               res.status(200).json({ data: distance });
             }
+
           }
         );
+        
       }
     
   });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  
 });
 
 module.exports = app;
+
+startServer();
