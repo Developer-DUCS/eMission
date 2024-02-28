@@ -41,7 +41,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
     // User's input data
     Map<String, String?> formData = {
-      'email': emailController.text,
+      'email': emailController.text.toLowerCase(),
       'username': usernameController.text,
       'displayName': displayNameController.text,
       'password': encryptedPassword,
