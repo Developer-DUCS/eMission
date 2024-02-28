@@ -4,6 +4,7 @@
 - [ ] Flutter Mobile Deployment
 
       * Research/Implement Android APK Technologies
+      * Work w/ Wigman on Test Flight Implementation
 - [ ] Optimize Node Server
 
       * Meet w/ Sigman to discuss MySQL connection issues
@@ -20,6 +21,7 @@
       
       * GitHub Action
       * PM2 Server Management
+- [ ] Dark Mode/UI Stylesheet Update
 - [ ] Make User Login Info Lowercase
 ---
 
