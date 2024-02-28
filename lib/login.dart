@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
 
     // User's input data
     var formData = {
-      'email': emailController.text,
+      'email': emailController.text.toLowerCase(),
       'password': encryptedPassword,
     };
 
