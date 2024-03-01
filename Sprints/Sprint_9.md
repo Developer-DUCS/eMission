@@ -41,17 +41,30 @@
 
 ---
 ### Deployment Strategies
-* 
+
+**Design Decisions** 
+* To preserve space on the MCS Server, we've decided to separate the api & server files from the codebase and make them it's own branch. This branch will be cloned onto the server and it will expose the necessary port for the application to run. 
+
+**MCS Server Connection**
+1. ssh into the mcs server
+2. clone & run server.
+3. pm2 to run on mcs port.
+
+
+**Server Management**
+* We will use PM2 to manage our emission service running on the mcs server. 
+
 
 ---
 ### Updated Leaderboard Page
-* 
+* The leaderboard will now be interactive, allowing accounts that show up to be ranked based on their points. 
 
 
 ---
 ### GPS/Map Technologies
-* 
+* GPS and map technologies are implemented using the [Flutter Geolocator Plugin](https://pub.dev/packages/geolocator)
 
+* This package will track the user's location during their drive. The distance will be used to calculate the user's carbon footprint. The Geolocator is designed to only be used when a drive has been started.  
 
 
 ---
