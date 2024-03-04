@@ -32,21 +32,15 @@ Future<int> _getUserRank() async {
 }
 
 Future<List<User>> _getUsers() async {
-  var response = await http.get(
-    Uri.parse("http://10.0.2.2:3000/getTopTen"),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+  var response = await ApiService().get("getTopTen");
 
   if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
     List<User> users = [];
-    for (var challenge in jsonResponse['results']) {
+    for (var user in response.data['results']) {
       users.add(User(
-          userID: challenge['userID'],
-          points: challenge['total_points'],
-          username: challenge['username']));
+          userID: user['userID'],
+          points: user['total_points'],
+          username: user['username']));
     }
     return users;
   } else {
@@ -60,7 +54,8 @@ Future<int> getUserID() async {
 }
 
 class Leaderboard extends StatefulWidget {
-  const Leaderboard({Key? key}) : super(key: key);
+  final ApiService apiService;
+  const Leaderboard({Key? key, required this.apiService}) : super(key: key);
 
   @override
   _LeaderboardState createState() => _LeaderboardState();
@@ -69,6 +64,7 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   late Future<int?> userRankFuture;
   late Future<List<User>> usersFuture;
+  ApiService apiService = new ApiService();
 
   @override
   void initState() {

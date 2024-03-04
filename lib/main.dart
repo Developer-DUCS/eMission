@@ -13,6 +13,7 @@ import 'package:emission/home.dart';
 import 'package:emission/drive-button.dart';
 import 'package:emission/manual.dart';
 import 'package:emission/leaderboard.dart';
+import 'api_service.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -45,8 +46,10 @@ class MyApp extends StatelessWidget {
               body: Home(),
               pageIndex: 1,
             ),
-        'leaderboard': (context) =>
-            const Layout(body: Leaderboard(), pageIndex: 0, driveButton: false),
+        'leaderboard': (context) => Layout(
+            body: Leaderboard(apiService: ApiService()),
+            pageIndex: 0,
+            driveButton: false),
         'settings': (context) => const Layout(
               body: Settings(),
               pageIndex: 2,
@@ -77,10 +80,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

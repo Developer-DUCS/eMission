@@ -12,16 +12,15 @@ class ApiResponse<T> {
 
 class ApiService {
   late String baseUrl;
-  String port = '3300';
+  String port = '3000';
 
   ApiService() {
-    if (true) {
-      baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
-    } else {
-      baseUrl = Platform.isAndroid
-          ? 'http://10.0.2.2:$port'
-          : 'http://localhost:$port';
-    }
+    //if (false) {
+    //  baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
+    //} else {
+    baseUrl =
+        Platform.isAndroid ? 'http://10.0.2.2:$port' : 'http://localhost:$port';
+    //}
   }
 
   Future<ApiResponse<T>> get<T>(String endpoint) async {
