@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 
 class Vehicles extends StatefulWidget {
   const Vehicles({super.key});
@@ -44,8 +46,9 @@ class VehiclesState extends State<Vehicles> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager =  Provider.of<ThemeManager>(context);
     return Container(
-      decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
+      decoration: BoxDecoration(color: themeManager.currentTheme.colorScheme.primary),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
@@ -109,8 +112,8 @@ class VehiclesState extends State<Vehicles> {
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-                      backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                      foregroundColor: themeManager.currentTheme.colorScheme.background,
+                      backgroundColor: themeManager.currentTheme.colorScheme.secondary,
                     ),
                     onPressed: vehicles.length < 2
                         ? () {

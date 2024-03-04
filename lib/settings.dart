@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:emission/challenge_page.dart';
 import 'package:emission/encryption.dart';
@@ -19,6 +21,7 @@ class SettingsState extends State<Settings> {
   // main section
   SettingsSection active = SettingsSection.main;
 
+
   // profile
   TextEditingController emailController = new TextEditingController();
   TextEditingController usernameController = new TextEditingController();
@@ -37,6 +40,7 @@ class SettingsState extends State<Settings> {
 
   // support
   bool anonymous = false;
+
 
   @override
   void initState() {
@@ -59,7 +63,7 @@ class SettingsState extends State<Settings> {
         body = account();
         break;
       case SettingsSection.preferences:
-        body = preferences();
+        body = preferences(context);
         break;
       case SettingsSection.privacy:
         body = privacy();
@@ -75,8 +79,9 @@ class SettingsState extends State<Settings> {
         break;
     }
 
+
     return Container(
-      decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
+      decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
@@ -107,14 +112,14 @@ class SettingsState extends State<Settings> {
 
   Widget settingsButton(String text, SettingsSection route) {
     return OutlinedButton(
-        style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white),
-            foregroundColor: MaterialStatePropertyAll(Colors.black54),
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
             overlayColor: MaterialStatePropertyAll(Colors.black12)),
         onPressed: () {
           changeActive(route);
         },
-        child: Align(alignment: Alignment.center, child: Text(text)));
+        child: Align(alignment: Alignment.center, child: Text(text, style: TextStyle(fontWeight: FontWeight.bold))));
   }
 
   Widget account() {
@@ -155,8 +160,8 @@ class SettingsState extends State<Settings> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 75,
-              backgroundColor: Colors.grey.shade200,
+              radius: 78,
+              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
               child: const CircleAvatar(
                 radius: 70,
                 backgroundImage:
@@ -197,8 +202,8 @@ class SettingsState extends State<Settings> {
         )
       ]),
       Container(
-        decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+        decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             border: Border(),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.only(top: 20),
@@ -246,14 +251,14 @@ class SettingsState extends State<Settings> {
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(244, 244, 248, 6),
+                                Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
                             foregroundColor: Colors.black),
                         child: const Text("Change Password")),
                     ElevatedButton(
                         onPressed: () => updateAccount(context),
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(244, 244, 248, 6),
+                                Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
                             foregroundColor: Colors.black),
                         child: const Text("Update"))
                   ],
@@ -266,15 +271,15 @@ class SettingsState extends State<Settings> {
     ]);
   }
 
-  Widget preferences() {
+  Widget preferences(context) {
     return Column(children: [
       const Text(
         "Preferences",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -287,6 +292,11 @@ class SettingsState extends State<Settings> {
                   const Text("Application Audio"),
                   Switch(
                       value: applicationAudio,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       onChanged: (value) {
                         setState(() {
                           applicationAudio = value;
@@ -300,6 +310,11 @@ class SettingsState extends State<Settings> {
                   const Text("Face ID"),
                   Switch(
                       value: faceId,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       onChanged: (value) {
                         setState(() {
                           faceId = value;
@@ -312,12 +327,18 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Dark Mode"),
                   Switch(
-                      value: darkMode,
-                      onChanged: (value) {
-                        setState(() {
-                          darkMode = value;
-                        });
-                      })
+                    value: darkMode,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
+                    onChanged: (value) {
+                      setState(() {
+                        darkMode = value;
+                      });
+                    },
+                  ),
                 ],
               )
             ],
@@ -332,8 +353,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -346,6 +367,11 @@ class SettingsState extends State<Settings> {
                   const Text("Access Location"),
                   Switch(
                       value: accessLocation,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       onChanged: (value) {
                         setState(() {
                           accessLocation = value;
@@ -359,6 +385,11 @@ class SettingsState extends State<Settings> {
                   const Text("Access Photos"),
                   Switch(
                       value: accessPhotos,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       onChanged: (value) {
                         setState(() {
                           accessPhotos = value;
@@ -371,12 +402,17 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Contacts"),
                   Switch(
-                      value: accessContacts,
-                      onChanged: (value) {
-                        setState(() {
-                          accessContacts = value;
-                        });
-                      })
+                    value: accessContacts,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
+                    onChanged: (value) {
+                      setState(() {
+                        accessContacts = value;
+                      });
+                    })
                 ],
               )
             ],
@@ -391,8 +427,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -416,6 +452,8 @@ class SettingsState extends State<Settings> {
                   const Text("Submit anonymously:"),
                   Checkbox(
                       value: anonymous,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      checkColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
                       onChanged: (value) {
                         setState(() {
                           anonymous = value ?? false;
@@ -441,8 +479,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),

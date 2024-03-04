@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:emission/encryption.dart';
+import 'package:emission/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -85,6 +87,7 @@ class _CreateAccountState extends State<CreateAccount> {
   // build goes here
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
     return Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -111,7 +114,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   const Center(
                       child: Text(
                     "Create Account",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   )),
                   const SizedBox(
                     height: 4,
@@ -123,6 +126,8 @@ class _CreateAccountState extends State<CreateAccount> {
                       children: [
                         TextFormField(
                           controller: emailController,
+                          cursorColor: Colors.black,
+                          style: TextStyle(color: themeManager.currentTheme.colorScheme.primary),
                           decoration: const InputDecoration(labelText: 'Email'),
                           validator: (value) {
                             bool isEmailValid = RegExp(
@@ -217,7 +222,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account?"),
+                      const Text(
+                        "Already have an account?",
+                        style: TextStyle(color: Colors.black)
+                      ),
                       const SizedBox(
                         width: 4,
                       ),
@@ -226,6 +234,8 @@ class _CreateAccountState extends State<CreateAccount> {
                           "Login",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
+                              decorationColor: Colors.black,
+                              color: Colors.black,
                               fontWeight: FontWeight.w600),
                         ),
                         onTap: () => Navigator.pushNamed(context, 'login'),

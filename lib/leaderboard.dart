@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import 'package:emission/theme/theme_manager.dart';
 
 class Leaderboard extends StatefulWidget {
   const Leaderboard({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -19,7 +23,7 @@ class _LeaderboardState extends State<Leaderboard> {
               padding: EdgeInsets.only(top: 40),
               height: 330,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(124, 184, 22, 1),
+                  color: themeManager.currentTheme.colorScheme.primary,
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(20),
                       bottomLeft: Radius.circular(20))),
@@ -50,6 +54,7 @@ class _LeaderboardState extends State<Leaderboard> {
                     thickness: 1,
                     indent: 20,
                     endIndent: 20,
+                    color: themeManager.currentTheme.colorScheme.tertiary,
                   ),
                   SizedBox(
                     height: 20,

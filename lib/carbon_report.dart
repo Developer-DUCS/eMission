@@ -12,6 +12,8 @@
 
 // import statements
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 
 /*
     Initializes ChallengePage Class and returns a container of the pages various Widgets
@@ -21,18 +23,19 @@ class CarbonReportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
     return Container(
       padding: const EdgeInsets.all(25.0),
-      color: const Color.fromRGBO(124, 184, 22, 1),
+      color: themeManager.currentTheme.colorScheme.primary,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             padding: const EdgeInsets.fromLTRB(40, 40, 40, 40),
             decoration: BoxDecoration(
-              border:
-                  Border.all(color: const Color.fromRGBO(206, 213, 92, 100)),
-              color: const Color.fromRGBO(160, 197, 89, 100),
+              border: Border.all(color: themeManager.currentTheme.colorScheme.background),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: themeManager.currentTheme.colorScheme.background,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,13 +124,13 @@ class CarbonReportPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   OutlinedButton(
-                      style: const ButtonStyle(
+                      style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
-                            Color.fromRGBO(227, 167, 27, 100)),
+                            themeManager.currentTheme.colorScheme.secondary),
                         foregroundColor: MaterialStatePropertyAll(Colors.white),
                         overlayColor: MaterialStatePropertyAll(
-                            Color.fromRGBO(139, 141, 43, 100)),
-                        shadowColor: MaterialStatePropertyAll(Colors.black),
+                            themeManager.currentTheme.colorScheme.background),
+                        shadowColor: MaterialStatePropertyAll(themeManager.currentTheme.colorScheme.secondary),
                       ),
                       onPressed: () {
                         null;

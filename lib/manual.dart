@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 
 class Manual extends StatefulWidget {
   const Manual({Key? key});
@@ -177,107 +179,105 @@ class _ManualState extends State<Manual> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  color: Color.fromRGBO(124, 184, 22, 1),
-                  padding: EdgeInsets.only(top: 200.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
+    return Container(
+      decoration: BoxDecoration(color: themeManager.currentTheme.colorScheme.primary),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 175),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(238, 230, 231, 0.877),
+                border: Border(),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+              padding: const EdgeInsets.all(50),
+              margin: EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.only(bottom: 10),
                     child: Container(
-                      child: DropdownButton<Map<String, dynamic>>(
-                        value: selectedVehicle,
-                        onChanged: (Map<String, dynamic>? newValue) {
-                          if (newValue != null) {
-                            setState(() {
-                              selectedVehicle = newValue;
-                              print(selectedVehicle);
-                              // Handle the selected value (newValue)
-                            });
-                          }
-                        },
-                        items: vehicles.map((Map<String, dynamic> vehicle) {
-                          return DropdownMenuItem<Map<String, dynamic>>(
-                            value: vehicle,
-                            child: Text(vehicle['carName'] ?? ''),
-                          );
-                        }).toList(),
+                        child: DropdownButton<Map<String, dynamic>>(
+                          padding: EdgeInsets.only(left: 80, right: 80),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          style: TextStyle(color: themeManager.currentTheme.colorScheme.onBackground, fontWeight: FontWeight.bold),
+                          focusColor: themeManager.currentTheme.colorScheme.secondary,
+                          value: selectedVehicle,
+                          onChanged: (Map<String, dynamic>? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedVehicle = newValue;
+                                print(selectedVehicle);
+                                // Handle the selected value (newValue)
+                              });
+                            }
+                          },
+                          items: vehicles.map((Map<String, dynamic> vehicle) {
+                            return DropdownMenuItem<Map<String, dynamic>>(
+                              value: vehicle,
+                              child: Text(vehicle['carName'] ?? ''),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Color.fromRGBO(124, 184, 22, 1),
-                    child: Center(
-                      child: textBox(),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Color.fromRGBO(124, 184, 22, 1),
-                    child: Center(
-                      child: submitButton(),
-                    ),
-                  ),
-                ),
-              ],
+                  textBox(),
+                  submitButton()
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ), 
     );
   }
 
   Widget textBox() {
-    return Container(
-      width: 200, // Set the desired width here
-      child: TextField(
-        controller: textController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Enter Your Total Milage',
-        ),
-        keyboardType: TextInputType.number,
+    return TextField(
+      controller: textController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: 'Enter Your Total Milage',
       ),
+      keyboardType: TextInputType.number,
     );
   }
 
   Widget submitButton() {
     return Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.only(bottom: 10),
+      margin:EdgeInsets.only(top: 10),
       child: SizedBox(
-        height: 30,
+        height: 40,
         width: 250,
         child: TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-              backgroundColor: const Color.fromARGB(244, 244, 248, 6),
-            ),
-            onPressed: () {
-              int milesTotal = int.parse(textController.text);
+          style: TextButton.styleFrom(
+            foregroundColor: const Color.fromARGB(244, 0, 0, 0),
+            backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+          ),
+          onPressed: () {
+            int milesTotal = int.parse(textController.text);
 
-              // Check if vehicles list is not empty and selectedVehicle is not null
-              if (vehicles.isNotEmpty && selectedVehicle != null) {
-                // Get the selected vehicle from the list based on its ID
-                var selectedVehicleFromList = vehicles.firstWhere(
-                    (vehicle) => vehicle['carID'] == selectedVehicle?['carID']);
+            // Check if vehicles list is not empty and selectedVehicle is not null
+            if (vehicles.isNotEmpty && selectedVehicle != null) {
+              // Get the selected vehicle from the list based on its ID
+              var selectedVehicleFromList = vehicles.firstWhere(
+                  (vehicle) => vehicle['carID'] == selectedVehicle?['carID']);
 
-                // Ensure that the selected vehicle is found
-                if (selectedVehicleFromList != null) {
-                  submitMiles(selectedVehicleFromList['carID'], milesTotal,
-                      selectedVehicleFromList['modelID']);
-                }
+              // Ensure that the selected vehicle is found
+              if (selectedVehicleFromList != null) {
+                submitMiles(selectedVehicleFromList['carID'], milesTotal,
+                    selectedVehicleFromList['modelID']);
               }
-            },
-            child: const Text('Submit')),
+            }
+          },
+          child: const Text('Submit')),
       ),
-    );
+    ); 
   }
 }
