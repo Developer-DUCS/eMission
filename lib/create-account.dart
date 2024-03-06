@@ -127,7 +127,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         TextFormField(
                           controller: emailController,
                           cursorColor: Colors.black,
-                          style: TextStyle(color: themeManager.currentTheme.colorScheme.primary),
+                          style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(labelText: 'Email'),
                           validator: (value) {
                             bool isEmailValid = RegExp(
@@ -144,6 +144,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           height: 4,
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           controller: usernameController,
                           decoration:
                               const InputDecoration(labelText: 'Username'),
@@ -158,6 +159,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           height: 4,
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           controller: displayNameController,
                           decoration:
                               const InputDecoration(labelText: 'Display Name'),
@@ -166,6 +168,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           height: 4,
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           controller: passwordController,
                           decoration:
                               const InputDecoration(labelText: 'Password'),
@@ -181,6 +184,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           height: 4,
                         ),
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           controller: confirmPasswordController,
                           decoration: const InputDecoration(
                               labelText: 'Confirm Password'),
@@ -202,7 +206,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor:
-                                    const Color.fromARGB(244, 0, 0, 0),
+                                    Colors.black,
                                 backgroundColor:
                                     const Color.fromARGB(244, 244, 248, 6),
                               ),

@@ -218,6 +218,7 @@ class SettingsState extends State<Settings> {
             TextFormField(
               controller: emailController,
               enabled: false,
+              style: TextStyle(color: Colors.black26)
             ),
             const SizedBox(
               height: 20,
@@ -226,7 +227,10 @@ class SettingsState extends State<Settings> {
               "Username",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextFormField(controller: usernameController),
+            TextFormField(
+              controller: usernameController,
+              style: TextStyle(color: Colors.black)
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -236,6 +240,7 @@ class SettingsState extends State<Settings> {
             ),
             TextFormField(
               controller: displayNameController,
+              style: TextStyle(color: Colors.black)
             ),
             const SizedBox(
               height: 20,
@@ -443,6 +448,7 @@ class SettingsState extends State<Settings> {
                   ),
                   margin: const EdgeInsets.only(top: 16),
                   child: const TextField(
+                    style: TextStyle(color: Colors.black),
                     maxLines: 3,
                     decoration: InputDecoration(border: OutlineInputBorder()),
                   )),

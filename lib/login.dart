@@ -128,6 +128,7 @@ class _LoginState extends State<Login> {
                           ),
                           const SizedBox(height: 4),
                           TextFormField(
+                            style: TextStyle(color: Colors.black),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 code = null;

@@ -82,6 +82,7 @@ class VehiclesState extends State<Vehicles> {
                                   Text(
                                     vehicle['carName'],
                                     style: const TextStyle(
+                                        color: Colors.black45,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
