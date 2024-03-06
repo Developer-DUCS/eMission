@@ -23,6 +23,8 @@
       * PM2 Server Management
 - [ ] Dark Mode/UI Stylesheet Update
 - [ ] Make User Login Info Lowercase
+- [ ] Fusion Day Poster Requirements
+- [ ] Midterm Presentation
 ---
 
 
