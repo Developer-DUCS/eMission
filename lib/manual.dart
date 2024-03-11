@@ -191,7 +191,7 @@ class _ManualState extends State<Manual> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                color: themeManager.currentTheme.colorScheme.primaryContainer,
+                color: themeManager.currentTheme.colorScheme.background,
                 border: Border(),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
               padding: const EdgeInsets.all(50),
@@ -203,11 +203,12 @@ class _ManualState extends State<Manual> {
                     color: Colors.white,
                     margin: EdgeInsets.only(bottom: 10),
                     child: Container(
+                      color: themeManager.currentTheme.colorScheme.tertiary,
                         child: DropdownButton<Map<String, dynamic>>(
                           padding: EdgeInsets.only(left: 80, right: 80),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          style: TextStyle(color: themeManager.currentTheme.colorScheme.onBackground, fontWeight: FontWeight.bold),
-                          focusColor: themeManager.currentTheme.colorScheme.secondary,
+                          style: TextStyle(color: themeManager.currentTheme.colorScheme.background, fontWeight: FontWeight.bold),
+                          dropdownColor: themeManager.currentTheme.colorScheme.tertiary,
                           value: selectedVehicle,
                           onChanged: (Map<String, dynamic>? newValue) {
                             if (newValue != null) {

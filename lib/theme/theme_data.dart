@@ -43,7 +43,7 @@ ThemeData lightMode = ThemeData(
   // Input Decoration Theme 
   //
   inputDecorationTheme: InputDecorationTheme(
-    fillColor: const Color.fromRGBO(251, 251, 251, 1),
+    fillColor: const Color.fromRGBO(238, 230, 231, 0.877), //const Color.fromRGBO(251, 251, 251, 1),
     filled: true,
     focusColor: Colors.blueAccent,
     // text style for input label

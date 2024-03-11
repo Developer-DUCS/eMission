@@ -300,6 +300,7 @@ class _ButtonPageState extends State<ButtonPage> {
               TextButton(
                 onPressed: () {
                   closeOverlay();
+                  Navigator.pop(context);
                 },
                 child: Text('Close'),
               ),

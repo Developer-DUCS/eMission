@@ -551,7 +551,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                    backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary, //Color.fromRGBO(244, 248, 6, 0.957),
                     foregroundColor: Colors.black),
                 child: const Text("Close")),
             ElevatedButton(
@@ -563,7 +563,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
                     ? null
                     : () => isEdit ? editVehicle(context) : addVehicle(context),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                    backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary, //const Color.fromARGB(244, 244, 248, 6),
                     foregroundColor: Colors.black),
                 child: const Text("Submit")),
           ],

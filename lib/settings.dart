@@ -161,7 +161,7 @@ class SettingsState extends State<Settings> {
           children: [
             CircleAvatar(
               radius: 78,
-              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
               child: const CircleAvatar(
                 radius: 70,
                 backgroundImage:
@@ -203,7 +203,7 @@ class SettingsState extends State<Settings> {
       ]),
       Container(
         decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             border: Border(),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.only(top: 20),
@@ -596,6 +596,7 @@ class SettingsState extends State<Settings> {
           return SimpleDialog(
             title: const Text('Change Password'),
             contentPadding: const EdgeInsets.all(20),
+            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             children: [
               TextFormField(
                 controller: oldPassword,
@@ -631,15 +632,15 @@ class SettingsState extends State<Settings> {
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color.fromARGB(244, 244, 248, 6),
-                          foregroundColor: Colors.black),
+                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,//const Color.fromARGB(244, 244, 248, 6),
+                          foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       child: const Text("Close")),
                   ElevatedButton(
                       onPressed: () => changePassword(context),
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color.fromARGB(244, 244, 248, 6),
-                          foregroundColor: Colors.black),
+                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                          foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       child: const Text("Change")),
                 ],
               )
