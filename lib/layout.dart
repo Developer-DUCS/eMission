@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emission/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
-//import 'package:custom_switch/custom_switch.dart';
 
 
 class Layout extends StatelessWidget {
@@ -43,8 +42,6 @@ class Layout extends StatelessWidget {
       appBar: appBar
           ? AppBar(
               title: const Text('eMission'),
-              backgroundColor: themeManager.currentTheme.colorScheme.background,
-              foregroundColor: themeManager.currentTheme.colorScheme.onBackground,
               automaticallyImplyLeading: false,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(1.0),
@@ -56,7 +53,6 @@ class Layout extends StatelessWidget {
             )
           : null,
       endDrawer: Drawer(
-          backgroundColor: themeManager.currentTheme.colorScheme.background,
           child: ListView(padding: EdgeInsets.zero, children: [
             DrawerHeader(
               decoration: BoxDecoration(
@@ -148,9 +144,6 @@ class Layout extends StatelessWidget {
       ),
       floatingActionButton: driveButton
           ? FloatingActionButton(
-            backgroundColor: themeManager.currentTheme.colorScheme.secondary,
-            foregroundColor: themeManager.currentTheme.colorScheme.background,
-            splashColor: themeManager.currentTheme.colorScheme.background,
             shape: const CircleBorder(),
               onPressed: () {
                 Navigator.pushNamed(context, 'button-page');
@@ -166,13 +159,11 @@ class Layout extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.5), width: 1.0))),
         child: BottomNavigationBar(
-          onTap: (index) => {Navigator.pushNamed(context, pages[index])},
-          currentIndex: pageIndex ?? 0,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          selectedItemColor: Colors.green,
-          backgroundColor: themeManager.currentTheme.colorScheme.background,
-          elevation: 5.0, 
+          elevation: 5.0,
+          onTap: (index) => {Navigator.pushNamed(context, pages[index])},
+          currentIndex: pageIndex ?? 0, 
           items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(

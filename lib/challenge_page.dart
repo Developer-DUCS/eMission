@@ -587,7 +587,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
 
         // Make a POST request with the JSON body
         var response = await http.post(
-          Uri.parse("http://10.0.2.2:3000/completeChallenges"),
+          Uri.parse("https://mcs.drury.edu/completeChallenges"),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -645,7 +645,7 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     List<UserChallenge> challenges = [];
 
     // Update the URL to include the userID as a query parameter
-    String url = 'http://10.0.2.2:3000/getCurrentUserChallenges';
+    String url = 'https://mcs.drury.edu/emission/getCurrentUserChallenges';
 
     var response = await http.post(
       Uri.parse(url),
@@ -738,16 +738,19 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<UserChallenge> challenges = snapshot.data!;
-                  return Container(
-                    decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                        border: Border(),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
-                    child: Scrollbar(
+
+
+                  return Scrollbar(
                       trackVisibility: true,
                       showTrackOnHover: true,
                       thickness: 5,
-                      child: ListView.builder(
+                      child: Container(
+                        decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                        border: Border(),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                        padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
+                        child: ListView.builder(
+                          
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -810,8 +813,9 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
                           );
                         },
                       ),
-                    ),
+                    )
                   );
+                
                 } else if (snapshot.hasError) {
                   return Text(snapshot.error.toString());
                 } else {

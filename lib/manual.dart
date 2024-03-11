@@ -191,7 +191,7 @@ class _ManualState extends State<Manual> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                color: Color.fromRGBO(238, 230, 231, 0.877),
+                color: themeManager.currentTheme.colorScheme.primaryContainer,
                 border: Border(),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
               padding: const EdgeInsets.all(50),
@@ -228,7 +228,7 @@ class _ManualState extends State<Manual> {
                       ),
                   ),
                   textBox(),
-                  submitButton()
+                  submitButton(themeManager)
                 ],
               ),
             ),
@@ -241,6 +241,7 @@ class _ManualState extends State<Manual> {
   Widget textBox() {
     return TextField(
       controller: textController,
+      style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         hintText: 'Enter Your Total Milage',
@@ -249,7 +250,7 @@ class _ManualState extends State<Manual> {
     );
   }
 
-  Widget submitButton() {
+  Widget submitButton(themeManager) {
     return Container(
       margin:EdgeInsets.only(top: 10),
       child: SizedBox(
@@ -257,8 +258,8 @@ class _ManualState extends State<Manual> {
         width: 250,
         child: TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-            backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+            foregroundColor: themeManager.currentTheme.colorScheme.background,
+            backgroundColor: themeManager.currentTheme.colorScheme.secondary,
           ),
           onPressed: () {
             int milesTotal = int.parse(textController.text);

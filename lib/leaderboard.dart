@@ -32,8 +32,12 @@ class _LeaderboardState extends State<Leaderboard> {
                   Stack(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/plant.jpg"),
                         radius: 50,
+                        backgroundColor: themeManager.currentTheme.colorScheme.secondary,
+                        child: const CircleAvatar(
+                          radius: 45,
+                          backgroundImage: AssetImage("assets/images/plant.jpg"),
+                        ),
                       ),
                     ],
                   ),
@@ -54,7 +58,6 @@ class _LeaderboardState extends State<Leaderboard> {
                     thickness: 1,
                     indent: 20,
                     endIndent: 20,
-                    color: themeManager.currentTheme.colorScheme.tertiary,
                   ),
                   SizedBox(
                     height: 20,
@@ -135,7 +138,7 @@ class _LeaderboardState extends State<Leaderboard> {
                     },
                     separatorBuilder: (context, index) => Divider(
                           thickness: 1,
-                          color: Color.fromRGBO(160, 197, 89, 100),
+                          color: themeManager.currentTheme.colorScheme.secondary,
                           indent: 10,
                           endIndent: 10,
                         ),

@@ -81,7 +81,7 @@ class SettingsState extends State<Settings> {
 
 
     return Container(
-      decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
+      decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
@@ -113,7 +113,7 @@ class SettingsState extends State<Settings> {
   Widget settingsButton(String text, SettingsSection route) {
     return OutlinedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary),
+            backgroundColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary),
             foregroundColor: MaterialStatePropertyAll(Colors.white),
             overlayColor: MaterialStatePropertyAll(Colors.black12)),
         onPressed: () {
@@ -161,7 +161,7 @@ class SettingsState extends State<Settings> {
           children: [
             CircleAvatar(
               radius: 78,
-              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
               child: const CircleAvatar(
                 radius: 70,
                 backgroundImage:
@@ -203,7 +203,7 @@ class SettingsState extends State<Settings> {
       ]),
       Container(
         decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             border: Border(),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.only(top: 20),
@@ -255,16 +255,17 @@ class SettingsState extends State<Settings> {
                           openPasswordModal(context);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
-                            foregroundColor: Colors.black),
+                            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                            foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                          ),
+                            
                         child: const Text("Change Password")),
                     ElevatedButton(
                         onPressed: () => updateAccount(context),
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
-                            foregroundColor: Colors.black),
+                            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                            foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                          ),
                         child: const Text("Update"))
                   ],
                 )
@@ -284,7 +285,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -296,17 +297,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Application Audio"),
                   Switch(
-                      value: applicationAudio,
-                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
-                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
-                      onChanged: (value) {
-                        setState(() {
-                          applicationAudio = value;
-                        });
-                      })
+                    value: applicationAudio,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        applicationAudio = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -314,17 +317,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Face ID"),
                   Switch(
-                      value: faceId,
-                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
-                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
-                      onChanged: (value) {
-                        setState(() {
-                          faceId = value;
-                        });
-                      })
+                    value: faceId,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        faceId = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -333,11 +338,12 @@ class SettingsState extends State<Settings> {
                   const Text("Dark Mode"),
                   Switch(
                     value: darkMode,
-                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
                     inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
                     inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                    //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
                     onChanged: (value) {
                       setState(() {
                         darkMode = value;
@@ -359,7 +365,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -371,17 +377,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Location"),
                   Switch(
-                      value: accessLocation,
-                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
-                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
-                      onChanged: (value) {
-                        setState(() {
-                          accessLocation = value;
-                        });
-                      })
+                    value: accessLocation,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        accessLocation = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -389,17 +397,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Photos"),
                   Switch(
-                      value: accessPhotos,
-                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
-                      inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                      inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                      //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
-                      onChanged: (value) {
-                        setState(() {
-                          accessPhotos = value;
-                        });
-                      })
+                    value: accessPhotos,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        accessPhotos = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -408,16 +418,18 @@ class SettingsState extends State<Settings> {
                   const Text("Access Contacts"),
                   Switch(
                     value: accessContacts,
-                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
                     inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
-                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
                     inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
-                    //trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
                     onChanged: (value) {
                       setState(() {
                         accessContacts = value;
                       });
-                    })
+                    }
+                  )
                 ],
               )
             ],
@@ -433,7 +445,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -470,8 +482,8 @@ class SettingsState extends State<Settings> {
               ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(244, 244, 248, 6),
-                      foregroundColor: Colors.black),
+                      backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,),
                   child: const Text("Submit"))
             ],
           ))
@@ -486,7 +498,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
