@@ -31,6 +31,7 @@ class CarbonReportPage extends StatefulWidget {
   double carbon_lb = 0.0;
   int points_earned = 0;
   DateTime date_earned = DateTime.now();
+  double lifetime_carbon = 0;
 
   @override
   _CarbonReportPageState createState() => _CarbonReportPageState();
@@ -45,6 +46,7 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     print("Init state called");
     super.initState();
     getMostRecentDrive();
+    getLifetimeCarbon();
   }
 
   Future<Map<String, dynamic>> getMostRecentDrive2() async {
@@ -52,6 +54,15 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     ApiResponse res =
         await apiService.get('getRecentDrive?userID=${pref.getInt("userID")}');
     return res.data;
+  }
+
+  void getLifetimeCarbon() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    ApiResponse res =
+        await apiService.get('lifetimeCarbon?userID=${pref.getInt("userID")}');
+    setState(() {
+      widget.lifetime_carbon = res.data['lifetime_carbon'];
+    });
   }
 
   Future<void> getMostRecentDrive() async {
@@ -185,6 +196,29 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "Lifetime Carbon Footprint: ${widget.lifetime_carbon} lbs",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                            fontFamily: 'Nunito',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "Over the span of a year it would take ${(widget.lifetime_carbon / 55).toStringAsFixed(2)} trees to offset your carbon footprint.",
+                          style: TextStyle(
+                            fontSize: 11,
                             letterSpacing: 2.0,
                             fontFamily: 'Nunito',
                           ),

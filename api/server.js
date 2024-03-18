@@ -1,12 +1,11 @@
 /*
-*   server.js Authors: eCoders members
-*   Defines routes for interacting with the mysql database
-*   and Carbon Interface
-*
-*   To Start, run:
-*   npm start
-*/
-
+ *   server.js Authors: eCoders members
+ *   Defines routes for interacting with the mysql database
+ *   and Carbon Interface
+ *
+ *   To Start, run:
+ *   npm start
+ */
 
 const express = require("express");
 const vehicleMakes = require("./VehicleMakes.json");
@@ -16,7 +15,7 @@ const app = express();
 const axios = require("axios");
 const API_URL = "https://www.carboninterface.com/api/v1";
 const API_KEY = "5p3VT63zAweQ6X3j8OQriw";
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 const dbconfig = {
   host: "mcs.drury.edu",
@@ -28,34 +27,31 @@ const dbconfig = {
 const db = new Database(dbconfig);
 
 app.use(express.json());
-const startServer = async()=>{
-  try{
-      console.log("connected to the database");
-      db.connect();
-      app.listen(3000,()=>{
-        console.log("server is running on port 3000");
-      });
-  }catch(error){
-      console.error("Error connecting to database:", error);
-      process.exit(1);
+const startServer = async () => {
+  try {
+    console.log("connected to the database");
+    db.connect();
+    app.listen(3000, () => {
+      console.log("server is running on port 3000");
+    });
+  } catch (error) {
+    console.error("Error connecting to database:", error);
+    process.exit(1);
   }
 };
-const stopServer = async()=>{
-  try{
+const stopServer = async () => {
+  try {
     // make asyncrounous?
-      db.disconnect();
-      console.log("Disconnected from the database");
-  }catch(error){
-    console.error('Error disconnecting from the database:', error);
-   
-  }
-  finally{
+    db.disconnect();
+    console.log("Disconnected from the database");
+  } catch (error) {
+    console.error("Error disconnecting from the database:", error);
+  } finally {
     process.exit(0);
   }
-  
 };
-process.on('SIGINT', stopServer);
-process.on('SIGTERM', stopServer);
+process.on("SIGINT", stopServer);
+process.on("SIGTERM", stopServer);
 // tested
 app.post("/insertUser", (request, response) => {
   // insert user
@@ -102,42 +98,40 @@ app.post("/authUser", (request, response) => {
   const loginData = request.body;
   const query =
     "SELECT userID, email, userName, displayName, password FROM emission.Users WHERE email = ?";
-  try{
-  db.query(query, loginData.email, (error, result) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      response.status(500).json({ msg: "Database Error" });
-    } else {
-      if (result.length == 0) {
-        // The email was not present in database
-        console.log("Email was not recognized!");
-        response.status(401).json({ msg: "Authentication Failed" });
+  try {
+    db.query(query, loginData.email, (error, result) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        response.status(500).json({ msg: "Database Error" });
       } else {
-        if (
-          result[0].email == loginData["email"] &&
-          result[0].password == loginData["password"]
-        ) {
-          console.log("User Authenticated");
-          response.status(200).send(result[0]);
-        } else {
-          console.log(`Authentication Failed: ${loginData.email}`);
+        if (result.length == 0) {
+          // The email was not present in database
+          console.log("Email was not recognized!");
           response.status(401).json({ msg: "Authentication Failed" });
+        } else {
+          if (
+            result[0].email == loginData["email"] &&
+            result[0].password == loginData["password"]
+          ) {
+            console.log("User Authenticated");
+            response.status(200).send(result[0]);
+          } else {
+            console.log(`Authentication Failed: ${loginData.email}`);
+            response.status(401).json({ msg: "Authentication Failed" });
+          }
         }
       }
-    }
-  });
+    });
+  } catch (err) {
+    response.status(500).json({ msg: "Database Connection Error" });
   }
-  catch(err){
-    response.status(500).json({msg: "Database Connection Error"});
-  }
-  
 });
 
 const updateUserSql =
-// don't update with null values check
-"UPDATE Users SET userName = COALESCE(?, userName), displayName = COALESCE(?, displayName) WHERE userID = ?;";
+  // don't update with null values check
+  "UPDATE Users SET userName = COALESCE(?, userName), displayName = COALESCE(?, displayName) WHERE userID = ?;";
 app.patch("/user", (req, res) => {
-  try{
+  try {
     const values = [req.body.username, req.body.displayName, req.body.id];
     db.query(updateUserSql, values, (err, results) => {
       if (err) {
@@ -146,8 +140,7 @@ app.patch("/user", (req, res) => {
         res.status(200).send();
       }
     });
-  }
-  catch(err){
+  } catch (err) {
     response.status(500).json({ msg: "Database Connection Error" });
   }
 });
@@ -186,7 +179,6 @@ app.post("/getChallenges2", (req, res) => {
       )`;
 
   db.query(query, [userID], (err, results) => {
-
     if (err) {
       console.error("Error executing query:", err);
       return res.status(500).json({ error: "Error getting challenges." });
@@ -200,18 +192,43 @@ app.post("/getChallenges2", (req, res) => {
 // tested
 app.get("/getEarnedPoints", (req, res) => {
   console.log("Get earned points called");
-  const {userID} = req.query;
+  const { userID } = req.query;
   console.log(userID);
-  
-    const query =
-    `   
+
+  const query = `   
     SELECT
-    COALESCE(dp.userID, cp.userID) AS userID,
-    COALESCE(dp.drive_points, 0) + cp.challenge_points AS total_points
-    FROM (
+    u.userID,
+    COALESCE(SUM(t1.total_points), 0) AS challenge_points,
+    COALESCE(SUM(t2.drive_points), 0) AS drive_points,
+    COALESCE(SUM(t1.total_points), 0) + COALESCE(SUM(t2.drive_points), 0) AS total_points
+FROM
+    Users u
+LEFT JOIN (
+    SELECT
+        u.userID,
+        COALESCE(SUM(c.points), 0) AS total_points,
+        0 AS drive_points
+    FROM
+        Users u
+    LEFT JOIN
+        AcceptedChallenges ac ON u.userID = ac.earnerID AND ac.dateFinished IS NOT NULL
+    LEFT JOIN
+        Challenges c ON ac.challengeID = c.challengeID
+    GROUP BY
+        u.userID
+) t1 ON u.userID = t1.userID
+
+LEFT JOIN (
+    SELECT
+        u.userID,
+        0 AS total_points,
+        COALESCE(SUM(t.points_earned), 0) AS drive_points
+    FROM
+        Users u
+    LEFT JOIN (
         SELECT
             userID,
-            COALESCE(SUM(points_earned), 0) AS drive_points
+            points_earned
         FROM (
             SELECT
                 userID,
@@ -223,25 +240,13 @@ app.get("/getEarnedPoints", (req, res) => {
             WHERE date_earned IS NOT NULL
         ) t
         WHERE row_num = 1
-        GROUP BY userID
-    ) dp
-    RIGHT OUTER JOIN (
-        SELECT
-            a.earnerID AS userID,
-            COALESCE(SUM(c.points), 0) AS challenge_points
-        FROM
-            AcceptedChallenges a
-        LEFT JOIN
-            Challenges c ON c.challengeID = a.challengeID
-        WHERE
-            a.dateFinished IS NOT NULL
-        GROUP BY
-            a.earnerID
-    ) cp ON dp.userID = cp.userID
-    LEFT JOIN
-        Users u ON COALESCE(dp.userID, cp.userID) = u.userID
-    WHERE
-        u.userID = ?;`;
+    ) t ON u.userID = t.userID
+    GROUP BY
+        u.userID
+) t2 ON u.userID = t2.userID
+WHERE u.userID = ?
+GROUP BY
+    u.userID;`;
 
   db.query(query, [userID], (err, results) => {
     if (err) {
@@ -257,11 +262,10 @@ app.get("/getEarnedPoints", (req, res) => {
 //  tested
 app.get("/getTopTen", (req, res) => {
   console.log("Get earned points called");
-  const {userID} = req.query;
+  const { userID } = req.query;
   console.log(userID);
-  
-    const query =
-    `   
+
+  const query = `   
     WITH DrivePoints AS (
       SELECT
           userID,
@@ -325,11 +329,10 @@ app.get("/getTopTen", (req, res) => {
 // make sure all users are represented
 app.get("/getUserRank", (req, res) => {
   console.log("Get earned points called");
-  const {userID} = req.query;
+  const { userID } = req.query;
   console.log(userID);
-  
-    const query =
-    `   
+
+  const query = `   
     WITH DrivePoints AS (
       SELECT
           userID,
@@ -462,7 +465,7 @@ app.post("/acceptNewChallenges", async (req, res) => {
     "INSERT INTO AcceptedChallenges (earnerID, challengeID, dateAccepted, daysInProgress, dateFinished) VALUES (?,?,?,?,?)";
 
   const challengeDataList = challenges;
-  const userID = UserID; 
+  const userID = UserID;
 
   const queryPromise = (db, queryString, values) => {
     return new Promise((resolve, reject) => {
@@ -477,7 +480,6 @@ app.post("/acceptNewChallenges", async (req, res) => {
   };
 
   try {
-
     const responseMessages = [];
 
     for (const challengeData of challengeDataList) {
@@ -518,8 +520,6 @@ app.post("/acceptNewChallenges", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 app.get("/makes", (req, res) => {
   res.json(vehicleMakes);
@@ -621,7 +621,6 @@ app.post("/completeChallenges", async (req, res) => {
   const challengeDataList = challenges;
   const userID = UserID;
   try {
-
     for (const challengeData of challengeDataList) {
       const values = [formattedDate, userID, challengeData.challengeID];
 
@@ -660,15 +659,12 @@ app.delete("/vehicles", (req, res) => {
   });
 });
 
-
-
-app.get("/getRecentDrive", async (req,res)=>{
-  try{
-   
+app.get("/getRecentDrive", async (req, res) => {
+  try {
     const { userID } = req.query;
-  
+
     console.log(req.body);
-  
+
     const query = `SELECT c.carName, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned
     from Drives d
     inner join Cars c on c.owner=d.userID and c.carID=d.carID
@@ -677,37 +673,48 @@ app.get("/getRecentDrive", async (req,res)=>{
     limit 1`;
     values = [userID];
 
-  await new Promise((resolve, reject) => {
-    db.query(query, values, (err, results) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        reject(err);
-        res.status(500).json({ error: err });
-      } else {
-        console.log("Query results:", results);
-        
-        // Handle results if needed
-        resolve();
-        res.status(200).json({ data: results });
-      }
+    await new Promise((resolve, reject) => {
+      db.query(query, values, (err, results) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          reject(err);
+          res.status(500).json({ error: err });
+        } else {
+          console.log("Query results:", results);
+
+          // Handle results if needed
+          resolve();
+          res.status(200).json({ data: results });
+        }
+      });
     });
-  });
-}
-catch
-  (err) {
+  } catch (err) {
     console.error("Error getting drive results", err);
     res.status(400).send("Error getting drive results");
-}
-  
+  }
 });
 
-app.get("/getDailyDrives", async (req,res)=>{
-  try{
-   
+app.get("/lifetimeCarbon", async (req, res) => {
+  const { userID } = req.query;
+
+  const query = `SELECT sum(carbon_lb) as lifetime_carbon FROM Drives WHERE userID = ?;`;
+
+  db.query(query, [userID], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err });
+    } else {
+      console.log("lifetime results: " + results);
+      res.status(200).json({ ...results[0] });
+    }
+  });
+});
+
+app.get("/getDailyDrives", async (req, res) => {
+  try {
     const { userID, date } = req.query;
-  
+
     console.log(req.body);
-  
+
     const query = `SELECT COUNT(*) as DayDriveTotal from(SELECT c.carName, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned
       from Drives d
       inner join Cars c on c.owner=d.userID and c.carID=d.carID
@@ -718,86 +725,87 @@ app.get("/getDailyDrives", async (req,res)=>{
 
     values = [userID, date];
 
-  await new Promise((resolve, reject) => {
-    db.query(query, values, (err, results) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        reject(err);
-        res.status(500).json({ error: err });
-      } else {
-        console.log("Query results:", results);
-        
-        // Handle results if needed
-        resolve();
-        res.status(200).json({ data: results });
-      }
+    await new Promise((resolve, reject) => {
+      db.query(query, values, (err, results) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          reject(err);
+          res.status(500).json({ error: err });
+        } else {
+          console.log("Query results:", results);
+
+          // Handle results if needed
+          resolve();
+          res.status(200).json({ data: results });
+        }
+      });
     });
-  });
-}
-catch
-  (err) {
+  } catch (err) {
     console.error("Error getting drive results", err);
     res.status(400).send("Error getting drive results");
-}
+  }
 });
 
-app.post("/updateDrives", async (req,res)=>{
-  try{
+app.post("/updateDrives", async (req, res) => {
+  try {
     let pointsEarned;
     if (req.body.carbon_lb > 30) {
       pointsEarned = 5;
-    } else if (req.body.carbon_lb > 0 && req.body.carbon_lb<30) {
+    } else if (req.body.carbon_lb > 0 && req.body.carbon_lb < 30) {
       pointsEarned = 20;
     } else {
       pointsEarned = 0;
     }
-  console.log(req.body);
-  const insertData = {
-    userID: req.body.userID,
-    carID: req.body.vehicleID,
-    unitOfMeasure: "mi",
-    distance: req.body.distance,
-    carbon_lb: req.body.carbon_lb,
-    carbon_kg: req.body.carbon_kg,
-    points_earned: pointsEarned,
-    date_earned:  new Date()
-  };
-  const query =
-        "INSERT INTO Drives (userID, carID, unitOfMeasure, amount, carbon_lb, carbon_kg, points_earned, date_earned) VALUES (?, ?, ?, ?, ?, ?,? , ?)";
-  const values = [insertData.userID, insertData.carID, insertData.unitOfMeasure, insertData.distance, insertData.carbon_lb, insertData.carbon_kg, insertData.points_earned, insertData.date_earned];
-  console.log(values);
-  await new Promise((resolve, reject) => {
-    db.query(query, values, (err, results) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        reject(err);
-        res.status(500).json({ error: err });
-      } else {
-        console.log("Query results:", results);
-        
-        // Handle results if needed
-        resolve();
-        res.status(200).json({ data: results });
-      }
+    console.log(req.body);
+    const insertData = {
+      userID: req.body.userID,
+      carID: req.body.vehicleID,
+      unitOfMeasure: "mi",
+      distance: req.body.distance,
+      carbon_lb: req.body.carbon_lb,
+      carbon_kg: req.body.carbon_kg,
+      points_earned: pointsEarned,
+      date_earned: new Date(),
+    };
+    const query =
+      "INSERT INTO Drives (userID, carID, unitOfMeasure, amount, carbon_lb, carbon_kg, points_earned, date_earned) VALUES (?, ?, ?, ?, ?, ?,? , ?)";
+    const values = [
+      insertData.userID,
+      insertData.carID,
+      insertData.unitOfMeasure,
+      insertData.distance,
+      insertData.carbon_lb,
+      insertData.carbon_kg,
+      insertData.points_earned,
+      insertData.date_earned,
+    ];
+    console.log(values);
+    await new Promise((resolve, reject) => {
+      db.query(query, values, (err, results) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          reject(err);
+          res.status(500).json({ error: err });
+        } else {
+          console.log("Query results:", results);
+
+          // Handle results if needed
+          resolve();
+          res.status(200).json({ data: results });
+        }
+      });
     });
-  });
-}
-catch
-  (err) {
+  } catch (err) {
     console.error("Error updating drives table", err);
     res.status(400).send("Error updating drives table");
-}
-
-  
+  }
 });
 
 app.get("/vehicleCarbonReport", (req, res) => {
-
   const { vehicleId, carID, distance, date } = req.query;
 
   // Check if the user ID pertaining to this report has too many daily drives
-  const query1 =
-    `SELECT COUNT(*) as DayDriveTotal
+  const query1 = `SELECT COUNT(*) as DayDriveTotal
     FROM (
         SELECT c.carName, c.modelID, d.amount, d.unitOfMeasure, d.carbon_lb, d.points_earned, d.date_earned, c.owner
         FROM Drives d
@@ -841,7 +849,9 @@ app.get("/vehicleCarbonReport", (req, res) => {
         }
       } else {
         console.log(results[0].DayDriveTotal);
-        res.status(422).json({ error: "Too many drives for the day, try again later." });
+        res
+          .status(422)
+          .json({ error: "Too many drives for the day, try again later." });
       }
     } catch (error) {
       console.error("Error in route handler:", error);
@@ -850,17 +860,19 @@ app.get("/vehicleCarbonReport", (req, res) => {
   });
 });
 
-
 async function fetchData(jsonData) {
   try {
-    const response = await fetch("https://www.carboninterface.com/api/v1/estimates", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: jsonData,
-    });
+    const response = await fetch(
+      "https://www.carboninterface.com/api/v1/estimates",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      }
+    );
 
     if (!response.ok) {
       console.error("Error in fetch:", response.statusText);
@@ -874,9 +886,7 @@ async function fetchData(jsonData) {
   }
 }
 
-
 app.post("/updateDistance", (req, res) => {
- 
   // Unpacking sent data
   const distance = req.body.distance;
   const userCredentials = req.body.userID;
@@ -920,13 +930,10 @@ app.post("/updateDistance", (req, res) => {
       }
     }
   });
- 
 });
-
 
 app.post("/addDistance", (req, res) => {
   console.log("Add distance called");
-  
 
   const distance = req.body.distance;
   const userCredentials = req.body.userID;
@@ -947,28 +954,24 @@ app.post("/addDistance", (req, res) => {
       console.log(newMileage);
       // Check if submitted mileage is greater than the saved mileage.
       // If not, send back an error.
-      
-        // Query to update saved mileage to submitted mileage
-        const updateQuery =
-          "UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;";
-        db.query(
-          updateQuery,
-          [newMileage, userCredentials, submittedVehicle],
-          (error, result) => {
-            // Catch Errors
-            if (error) {
-              response.status(500).json({ msg: "Database Error" });
-            } else {
-              res.status(200).json({ data: distance });
-            }
 
+      // Query to update saved mileage to submitted mileage
+      const updateQuery =
+        "UPDATE emission.Cars SET currentMileage = ? WHERE owner = ? AND carID = ?;";
+      db.query(
+        updateQuery,
+        [newMileage, userCredentials, submittedVehicle],
+        (error, result) => {
+          // Catch Errors
+          if (error) {
+            response.status(500).json({ msg: "Database Error" });
+          } else {
+            res.status(200).json({ data: distance });
           }
-        );
-        
-      }
-    
+        }
+      );
+    }
   });
-  
 });
 
 module.exports = app;

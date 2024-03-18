@@ -150,7 +150,7 @@ class _ButtonPageState extends State<ButtonPage> {
     print(data);
 
     // API call to update milage and calculate trip distance
-    var res = await ApiService().post('/addDistance', data);
+    var res = await ApiService().post('addDistance', data);
 
     dynamic dataValue = res.data['data'];
 

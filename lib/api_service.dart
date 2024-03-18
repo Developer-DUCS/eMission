@@ -15,12 +15,11 @@ class ApiService {
   String port = '3300';
 
   ApiService() {
-    if (true) {
+    if (kReleaseMode) {
       baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
     } else {
-      baseUrl = Platform.isAndroid
-          ? 'http://10.0.2.2:$port'
-          : 'http://localhost:$port';
+      baseUrl =
+          Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
     }
   }
 
