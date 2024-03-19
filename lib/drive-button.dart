@@ -1,7 +1,7 @@
+import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -58,19 +58,11 @@ class _ButtonPageState extends State<ButtonPage> {
 
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    http
-        .get(Uri.parse(
-            'https://mcs.drury.edu/emission/vehicles?owner=${pref.getInt("userID")}'))
-        .then((res) {
+    ApiService().get('vehicles?owner=${pref.getInt("userID")}').then((res) {
       setState(() {
-        vehicles = List<dynamic>.from(json.decode(res.body))
+        vehicles = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
             .toList();
-
-        // Print the items in the vehicles list
-        for (var vehicle in vehicles) {
-          print(vehicle);
-        }
       });
     });
   }
@@ -162,13 +154,9 @@ class _ButtonPageState extends State<ButtonPage> {
     print(data);
 
     // API call to update milage and calculate trip distance
-    var res = await http.post(Uri.parse('https://mcs.drury.edu/emission/addDistance'),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
+    var res = await ApiService().post('/addDistance', data);
 
-    // Parse the JSON string into a Map
-    Map<String, dynamic> responseMap = json.decode(res.body);
-    // Access the value associated with the "data" key
-    dynamic dataValue = responseMap['data'];
+    dynamic dataValue = res.data['data'];
 
     if (dataValue == null) {
       showErrorAlert(context);
@@ -178,14 +166,11 @@ class _ButtonPageState extends State<ButtonPage> {
       var vehicle = modelID;
 
       // API request to Carbon Interface
-      var results = await http.get(Uri.parse(
-          'https://mcs.drury.edu/emission/vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}'));
-
-      // Parse the JSON string into a Map
-      Map<String, dynamic> resultsMap = json.decode(results.body);
+      var results = await ApiService().get(
+          'vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}');
 
       // Extract the data
-      var carbonLb = resultsMap['data']['data']['attributes']['carbon_lb'];
+      var carbonLb = results.data['data']['data']['attributes']['carbon_lb'];
 
       // Create pop-up
       showResultAlert(context, carbonLb);
@@ -215,10 +200,6 @@ class _ButtonPageState extends State<ButtonPage> {
   }
 
   Future<void> showCustomDialog() async {
-    //const make = 'Toyota';
-    // final response =
-    //    await http.get(Uri.parse('http://10.0.2.2:3000/makeId?make=$make'));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -289,7 +270,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       style: TextStyle(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background)
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green, // Use your desired color
+                      backgroundColor: Colors.green,
                     ),
                     
                   ),
@@ -312,12 +293,8 @@ class _ButtonPageState extends State<ButtonPage> {
   }
 
   Future<void> showCustomDialog1() async {
-    //final apiService = CalculateApiService();
-    //final response = await apiService.calculateCarbonFootprint();
-    const make = 'Toyota';
-    final response =
-        await http.get(Uri.parse('https://mcs.drury.edu/emission/makeId?make=$make'));
-    print(response);
+    // const make = 'Toyota';
+    // final response = await ApiService().get('makeId?make=$make');
     // ignore: use_build_context_synchronously
     showDialog(
       context: context,

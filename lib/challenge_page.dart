@@ -8,10 +8,9 @@
 
 // import statements
 
+import 'api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -113,41 +112,22 @@ class UserChallenge {
 }
 
 Future<List<Challenge>> _getChallenges() async {
-  print("here");
   var userID = await getUserID();
-  var jsonBody = jsonEncode({"userID": userID});
-  // this is the url for using a Android emulator
-  // Apple emulators use localhost like normal
   List<Challenge> challenges = [];
 
-  var response = await http.post(
-    Uri.parse("https://mcs.drury.edu/emission/getChallenges2"),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: jsonBody,
-  );
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    print("JSON RESPONSE");
-    print(jsonResponse);
-    for (var challenge in jsonResponse['results']) {
-      Challenge thisOne = Challenge(
-          challengeID: challenge['challengeID'],
-          name: challenge['name'],
-          points: challenge['points'],
-          description: challenge['description'],
-          length: challenge['length'],
-          expirationDate: null);
-      challenges.add(thisOne);
-    }
-    return challenges;
-  } else {
-    throw Exception("Failed to load post");
+  var response = await ApiService().post("getChallenges2", {"userID": userID});
+
+  for (var challenge in response.data['results']) {
+    Challenge thisOne = Challenge(
+        challengeID: challenge['challengeID'],
+        name: challenge['name'],
+        points: challenge['points'],
+        description: challenge['description'],
+        length: challenge['length'],
+        expirationDate: null);
+    challenges.add(thisOne);
   }
+  return challenges;
 }
 
 Future<dynamic> getUserID() async {
@@ -218,16 +198,12 @@ class _ChallengePageState extends State<ChallengePage> {
 
   void _acceptChallenges(BuildContext context) async {
     var userID = await getUserID();
-    print(userID);
     var list = [];
     List<Challenge> challengeList = await challenges;
     selectedChallenges =
         challengeList.where((challenge) => challenge.isSelected).toList();
-    print(selectedChallenges);
-    if (selectedChallenges.isNotEmpty) {
-      print('Selected Challenges: $selectedChallenges');
-      var url = "https://mcs.drury.edu/emission/acceptChallenges";
 
+    if (selectedChallenges.isNotEmpty) {
       for (Challenge challenge in selectedChallenges) {
         list.add(challenge.toJson());
       }
@@ -236,45 +212,27 @@ class _ChallengePageState extends State<ChallengePage> {
         "UserID": userID,
         "challenges": list,
       };
-      print(requestBody);
 
-      String jsonBody = jsonEncode(requestBody);
-      print(jsonBody);
+      var response = await ApiService()
+          .post<List<dynamic>>("acceptNewChallenges", requestBody);
 
-      var response = await http.post(
-        Uri.parse("https://mcs.drury.edu/emission/acceptNewChallenges"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonBody,
-      );
+      List<String> challengeSummaries = [];
 
-      if (response.statusCode == 200) {
-        print('Challenges accepted successfully');
-        List<dynamic> responseMessages = json.decode(response.body);
+      for (var message in response.data) {
+        var name = message['challengeData']['name'];
+        var dateFinished = message['challengeData']['dateFinished'];
+        var status = "accepted";
 
-        List<String> challengeSummaries = [];
-
-        for (var message in responseMessages) {
-          var name = message['challengeData']['name'];
-          var dateFinished = message['challengeData']['dateFinished'];
-          var status = "accepted";
-
-          if (name == null) {
-            name = "";
-          }
-
-          if (dateFinished != null) {
-            status = "You have already completed that challenge.";
-          }
-          challengeSummaries.add('${name}  ${status}');
+        if (name == null) {
+          name = "";
         }
-        _showDialog(context, "Update", challengeSummaries.join('\n'));
-      } else {
-        print('Failed to accept challenges');
-        _showDialog(
-            context, "Error", "Something went wrong, please try again later.");
+
+        if (dateFinished != null) {
+          status = "You have already completed that challenge.";
+        }
+        challengeSummaries.add('${name}  ${status}');
       }
+      _showDialog(context, "Update", challengeSummaries.join('\n'));
     } else {
       _showDialog(
           context, "Update", "Please select challenges to accept them.");
@@ -428,51 +386,7 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 }
 
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(16.0),
-//       color: const Color.fromRGBO(255, 168, 48, 100),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: <Widget>[
-//           ToggleButton(isPastPage: false),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Text(
-//                 'Duration',
-//                 style: TextStyle(
-//                   fontSize: 21,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               ),
-//               Text(
-//                 'Pts',
-//                 style: TextStyle(
-//                   fontSize: 20.0,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               ),
-//               Text(
-//                 'Challenge',
-//                 style: TextStyle(
-//                   fontSize: 20.0,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               )
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+
 
 /*
     A custom ToggleButton Widget that returns a CupertinoSegmentedControl Button.
@@ -570,7 +484,6 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     print("updating user challenges");
     try {
       var userID = await getUserID();
-      print(userID);
       var list = [];
       List<UserChallenge> challengeList = await userChallenges;
       selectedChallenges =
@@ -579,28 +492,13 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
         for (UserChallenge challenge in selectedChallenges) {
           list.add(challenge.toAcceptedJson());
         }
-        print(list.length);
-        if (list.length == 0) {
-          _showDialog(context, 'Error', 'No Challenges Selected.');
-        }
-        var jsonBody = jsonEncode({"UserID": userID, "challenges": list});
 
         // Make a POST request with the JSON body
-        var response = await http.post(
-          Uri.parse("https://mcs.drury.edu/completeChallenges"),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonBody,
-        );
-
-        if (response.statusCode == 200) {
+        ApiService().post("completeChallenges",
+            {"UserID": userID, "challenges": list}).then((response) {
           print('Challenges completed successfully');
           _showDialog(context, 'Success', 'Challenges completed successfully');
-        } else {
-          print('Failed to accept challenges');
-          _showDialog(context, 'Error', 'Failed to update challenges');
-        }
+        });
       } else {
         _showDialog(
             context, 'Update', 'Please select challenges to complete them.');
@@ -644,54 +542,34 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
     print(userID);
     List<UserChallenge> challenges = [];
 
-    // Update the URL to include the userID as a query parameter
-    String url = 'https://mcs.drury.edu/emission/getCurrentUserChallenges';
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Include the userID as a query parameter
-      body: jsonEncode({'earnerID': userID.toString()}),
+    var response = await ApiService().post(
+      'getCurrentUserChallenges',
+      {'earnerID': userID.toString()},
     );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      print("JSON RESPONSE");
-      print(jsonResponse);
-      print("JSON.RESULTS");
-      print(jsonResponse['results']);
+    for (var challenge in response.data['results']) {
+      UserChallenge thisOne = UserChallenge(
+          challengeID: challenge['challengeID'],
+          name: challenge['name'],
+          description: challenge['description'],
+          dateAccepted: challenge['dateAccepted'],
+          points: challenge['points'],
+          length: challenge['length']);
 
-      for (var challenge in jsonResponse['results']) {
-        UserChallenge thisOne = UserChallenge(
-            challengeID: challenge['challengeID'],
-            name: challenge['name'],
-            description: challenge['description'],
-            dateAccepted: challenge['dateAccepted'],
-            points: challenge['points'],
-            length: challenge['length']);
+      /* challengeID: challenge['challengeID'],
+          points: challenge['points'],
+          name: challenge['name'],
+          description: challenge['description'],
+          length: challenge['length'],
+          // getting weird error when trying to get dateAccepted...
+          //dateAccepted: DateTime.parse(challenge['dateAccepted']),
+          daysInProgress: challenge['daysInProgress']); */
 
-        /* challengeID: challenge['challengeID'],
-            points: challenge['points'],
-            name: challenge['name'],
-            description: challenge['description'],
-            length: challenge['length'],
-            // getting weird error when trying to get dateAccepted...
-            //dateAccepted: DateTime.parse(challenge['dateAccepted']),
-            daysInProgress: challenge['daysInProgress']); */
-
-        //dateFinished: null);
-        print(thisOne);
-        challenges.add(thisOne);
-      }
-      return challenges;
-    } else {
-      throw Exception("Failed to load post");
+      //dateFinished: null);
+      print(thisOne);
+      challenges.add(thisOne);
     }
+    return challenges;
   }
 
   /* @override

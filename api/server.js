@@ -32,8 +32,8 @@ const startServer = async()=>{
   try{
       console.log("connected to the database");
       db.connect();
-      app.listen(3000,()=>{
-        console.log("server is running on port 3000");
+      app.listen(3300,()=>{
+        console.log("server is running on port 3300");
       });
   }catch(error){
       console.error("Error connecting to database:", error);

@@ -1,3 +1,4 @@
+import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:emission/encryption.dart';
@@ -38,27 +39,21 @@ class _LoginState extends State<Login> {
   // this request will authenticate the user's login information, storing response data
   // and returning the response statuse code.
   Future<int> _submitForm(context) async {
-    // android emulator url
-    String url = 'https://mcs.drury.edu/emission/authUser'; // alt url ->       
-
     // Encrypt the password
     String encryptedPassword = encryptPassword(passwordController.text);
 
     // User's input data
     var formData = {
-      'email': emailController.text,
+      'email': emailController.text.toLowerCase(),
       'password': encryptedPassword,
     };
 
     // http request here
-    var res = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(formData));
+    var res = await ApiService().post('authUser', formData);
 
     // store the responses status code and body
     var resCode = res.statusCode;
-    var responseBody = res.body;
-    var response = Map<String, dynamic>.from(json.decode(responseBody));
+    var response = Map<String, dynamic>.from(res.data);
 
     // verify the request code
     if (resCode == 200) {

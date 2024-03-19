@@ -1,3 +1,4 @@
+import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emission/theme/theme_manager.dart';
@@ -21,6 +22,8 @@ class _HomeState extends State<Home> {
   int? totalPoints;
   
 
+  ApiService apiService = new ApiService();
+
   @override
   void initState() {
     super.initState();
@@ -39,21 +42,16 @@ class _HomeState extends State<Home> {
   }
 
   Future<int?> _getTotalPoints() async {
+    print("totalPointsCalled");
     var userID = await getUserID();
-    var jsonBody = jsonEncode({"userID": userID});
-
-    var response = await http.post(
-      Uri.parse("https://mcs.drury.edu/emission/getEarnedPoints"),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonBody,
-    );
+    print(userID);
+    var response = await apiService.get('getEarnedPoints?userID=${userID}');
 
     if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      var totalPointsFromJson = jsonResponse['results'][0]['totalPointsBoth'] ??
-          0; // Access the total points field
+      var jsonResponse = response.data;
+      print(jsonResponse);
+      var totalPointsFromJson =
+          jsonResponse['results'][0]['total_points'] as int? ?? 0;
       return totalPointsFromJson as int;
     } else {
       throw Exception("Failed to load post");

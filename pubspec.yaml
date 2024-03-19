@@ -57,12 +57,14 @@ dependencies:
   geolocator: ^10.1.0
   permission_handler: ^11.0.1
   provider: ^6.1.1
+  screenshot: ^2.1.0
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  mockito: ^5.4.4
   flutter_launcher_icons: "^0.13.1"
 
 flutter_launcher_icons:

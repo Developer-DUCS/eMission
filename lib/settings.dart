@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:emission/theme/theme_manager.dart';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:emission/challenge_page.dart';
-import 'package:emission/encryption.dart';
+import 'challenge_page.dart';
+import 'encryption.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -124,15 +123,11 @@ class SettingsState extends State<Settings> {
 
   Widget account() {
     void updateAccount(BuildContext context) {
-      http
-          .patch(Uri.parse('https://mcs.drury.edu/emission/user'),
-              headers: {'Content-Type': 'application/json'},
-              body: json.encode({
-                'id': userID,
-                'username': usernameController.text,
-                'displayName': displayNameController.text
-              }))
-          .then((res) {
+      ApiService().patch('user', {
+        'id': userID,
+        'username': usernameController.text,
+        'displayName': displayNameController.text
+      }).then((res) {
         if (res.statusCode == 200) {
           Flushbar(
             title: 'Success',
@@ -556,15 +551,11 @@ class SettingsState extends State<Settings> {
         return;
       }
 
-      http
-          .patch(Uri.parse('https://mcs.drury.edu/emission/password'),
-              headers: {'Content-Type': 'application/json'},
-              body: json.encode({
-                'id': userID,
-                'oldPassword': encryptPassword(oldPassword.text),
-                'newPassword': encryptPassword(newPassword.text)
-              }))
-          .then((res) {
+      ApiService().patch('password', {
+        'id': userID,
+        'oldPassword': encryptPassword(oldPassword.text),
+        'newPassword': encryptPassword(newPassword.text)
+      }).then((res) {
         if (res.statusCode == 200) {
           Flushbar(
             title: 'Success',
