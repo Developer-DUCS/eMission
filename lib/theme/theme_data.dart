@@ -14,7 +14,7 @@ ThemeData lightMode = ThemeData(
   //
   colorScheme: ColorScheme.light(
     primary: const Color.fromRGBO(0, 180, 92, 1),
-    secondary: const Color.fromRGBO(232, 140, 140, 1),
+    secondary: Color.fromRGBO(255, 139, 71, 1),
     tertiary: const Color.fromRGBO(223, 194, 146, 1),
     background: const Color.fromRGBO(255, 255, 255, 1), 
     onBackground: const Color.fromRGBO(22, 25, 21, 1),
@@ -60,7 +60,7 @@ ThemeData lightMode = ThemeData(
   // Floating Action Button Theme
   //
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-    backgroundColor: const Color.fromRGBO(232, 140, 140, 1),
+    backgroundColor: Color.fromRGBO(255, 139, 71, 1),
     foregroundColor: const  Color.fromRGBO(251, 251, 251, 1),
     splashColor: const Color.fromRGBO(251, 251, 251, 1),
   ),
