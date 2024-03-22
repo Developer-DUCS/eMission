@@ -174,7 +174,7 @@ class _ButtonPageState extends State<ButtonPage> {
     ;
   }
 
-  void showResultAlert(BuildContext context, double carbonLb) {
+  void showResultAlert(BuildContext context, int carbonLb) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
