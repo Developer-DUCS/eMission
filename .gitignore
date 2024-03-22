@@ -12,13 +12,13 @@ build/
 .idea/
 
 # Android specific
-#*/android/gradle.properties
-#*/android/local.properties
-#*/android/**/local.properties
-#*/android/gradlew
-#*/android/gradlew.bat
-#*/android/.gradle
-#*/android/build/
+*/android/gradle.properties
+*/android/local.properties
+*/android/**/local.properties
+*/android/gradlew
+*/android/gradlew.bat
+*/android/.gradle
+*/android/build/
 
 # iOS specific
 */ios/Pods/
