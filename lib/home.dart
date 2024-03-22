@@ -1,6 +1,10 @@
 import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:emission/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class _HomeState extends State<Home> {
   String? userDisplayName;
 
   int? totalPoints;
+  
 
   ApiService apiService = new ApiService();
 
@@ -55,25 +60,30 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
     return Scaffold(
       body: Column(
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(202, 217, 150, 1),
+              color: themeManager.currentTheme.colorScheme.primary,
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20)
+              ),
               border: Border.all(
-                color: Colors.black,
-                width: 2.0,
+                color: Colors.grey.withOpacity(0.5),
+                width: 0.5,
               ),
             ),
             height: MediaQuery.of(context).size.height / 4,
             child: Center(
-              child: profilePic(),
+              child: profilePic(themeManager),
             ),
           ),
           Expanded(
             child: Container(
-              color: const Color.fromRGBO(124, 184, 22, 1),
+              color: themeManager.currentTheme.colorScheme.background,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,13 +104,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget profilePic() {
+  Widget profilePic(themeManager) {
     return Container(
       child: Column(children: [
         SizedBox(height: 20),
         CircleAvatar(
           radius: 50,
-          backgroundColor: Colors.grey.shade200,
+          backgroundColor: themeManager.currentTheme.colorScheme.secondary,
           child: const CircleAvatar(
             radius: 45,
             backgroundImage: AssetImage('assets/images/plant.jpg'),

@@ -44,3 +44,5 @@ build/
 *.jks
 *.lock
 *.map
+*.probe
+*.bin

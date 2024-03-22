@@ -1,4 +1,4 @@
-# Sprint 6-7
+# Sprint 6-7: Iteration & Development
 
 ### Sprint Goals
 - [x] Vehicle to SQL Database

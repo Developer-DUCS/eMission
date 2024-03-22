@@ -4,6 +4,8 @@ import 'api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 
 class Vehicles extends StatefulWidget {
   const Vehicles({super.key});
@@ -38,8 +40,9 @@ class VehiclesState extends State<Vehicles> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager =  Provider.of<ThemeManager>(context);
     return Container(
-      decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
+      decoration: BoxDecoration(color: themeManager.currentTheme.colorScheme.primary),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
@@ -47,7 +50,7 @@ class VehiclesState extends State<Vehicles> {
         padding: const EdgeInsets.all(32),
         child: Container(
           decoration: BoxDecoration(
-              color: const Color.fromRGBO(160, 214, 66, 1),
+              color: themeManager.currentTheme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(10)),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -73,6 +76,7 @@ class VehiclesState extends State<Vehicles> {
                                   Text(
                                     vehicle['carName'],
                                     style: const TextStyle(
+                                        color: Colors.black45,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
@@ -103,8 +107,8 @@ class VehiclesState extends State<Vehicles> {
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-                      backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                      foregroundColor: themeManager.currentTheme.colorScheme.background,
+                      backgroundColor: themeManager.currentTheme.colorScheme.secondary,
                     ),
                     onPressed: vehicles.length < 2
                         ? () {
@@ -530,7 +534,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                    backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary, //Color.fromRGBO(244, 248, 6, 0.957),
                     foregroundColor: Colors.black),
                 child: const Text("Close")),
             ElevatedButton(
@@ -542,7 +546,7 @@ class AddVehicleDialogState extends State<AddVehicleDialog> {
                     ? null
                     : () => isEdit ? editVehicle(context) : addVehicle(context),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                    backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary, //const Color.fromARGB(244, 244, 248, 6),
                     foregroundColor: Colors.black),
                 child: const Text("Submit")),
           ],

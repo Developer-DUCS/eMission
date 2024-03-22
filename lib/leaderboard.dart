@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import 'package:emission/theme/theme_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -33,7 +36,7 @@ Future<int> _getUserRank() async {
 
 Future<List<User>> _getUsers() async {
   var response = await http.get(
-    Uri.parse("http://10.0.2.2:3000/getTopTen"),
+    Uri.parse("http://10.0.2.2:3300/getTopTen"),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -79,6 +82,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
     return Stack(
       children: [
         Scaffold(
@@ -88,7 +92,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 padding: EdgeInsets.only(top: 40),
                 height: 330,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(124, 184, 22, 1),
+                  color: themeManager.currentTheme.colorScheme.primary,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
@@ -99,9 +103,12 @@ class _LeaderboardState extends State<Leaderboard> {
                     Stack(
                       children: [
                         CircleAvatar(
-                          backgroundImage:
-                              AssetImage("assets/images/plant.jpg"),
                           radius: 50,
+                          backgroundColor: themeManager.currentTheme.colorScheme.secondary,
+                          child: const CircleAvatar(
+                            radius: 45,
+                              backgroundImage: AssetImage("assets/images/plant.jpg"),
+                          ),
                         ),
                       ],
                     ),
@@ -217,4 +224,6 @@ class _LeaderboardState extends State<Leaderboard> {
       ],
     );
   }
-}
+  }
+                
+                  

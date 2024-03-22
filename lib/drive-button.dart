@@ -4,6 +4,10 @@ import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:emission/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
+
 
 class ButtonPage extends StatefulWidget {
   const ButtonPage({Key? key});
@@ -261,10 +265,14 @@ class _ButtonPageState extends State<ButtonPage> {
                       //Navigator.of(context).pop();
                       //Navigator.pushNamed(context, 'carbon_report');
                     },
-                    child: Text('See My Carbon Footprint'),
+                    child: Text(
+                      'See My Carbon Footprint',
+                      style: TextStyle(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background)
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
+                    
                   ),
                 ),
               ],
@@ -273,6 +281,7 @@ class _ButtonPageState extends State<ButtonPage> {
               TextButton(
                 onPressed: () {
                   closeOverlay();
+                  Navigator.pop(context);
                 },
                 child: Text('Close'),
               ),

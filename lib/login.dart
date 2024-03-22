@@ -5,6 +5,8 @@ import 'package:emission/encryption.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:emission/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -72,6 +74,7 @@ class _LoginState extends State<Login> {
   // build goes here
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
     return Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -94,10 +97,10 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Center(
+                  Center(
                       child: Text(
                     "Login",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   )),
                   const SizedBox(height: 4),
                   Form(
@@ -106,6 +109,7 @@ class _LoginState extends State<Login> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextFormField(
+                            style: TextStyle(color: Colors.black),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -119,6 +123,7 @@ class _LoginState extends State<Login> {
                           ),
                           const SizedBox(height: 4),
                           TextFormField(
+                            style: TextStyle(color: Colors.black),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 code = null;
@@ -160,13 +165,18 @@ class _LoginState extends State<Login> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account?"),
+                      const Text(
+                        "Don't have an account?",
+                        style: TextStyle(color: Colors.black)
+                      ),
                       const SizedBox(width: 4),
                       GestureDetector(
                         child: const Text(
                           "Create One",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
+                              decorationColor: Colors.black,
+                              color: Colors.black,
                               fontWeight: FontWeight.w600),
                         ),
                         onTap: () =>

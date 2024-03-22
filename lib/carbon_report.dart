@@ -13,15 +13,16 @@
 // import statements
 import 'api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-//import 'package:screenshot/screenshot.dart';
 import 'package:intl/intl.dart';
-import 'api_service.dart';
 
 /*
     Initializes ChallengePage Class and returns a container of the pages various Widgets
 */
+// ignore: must_be_immutable
 class CarbonReportPage extends StatefulWidget {
   CarbonReportPage({Key? key}) : super(key: key);
 
@@ -51,7 +52,7 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     ApiResponse res =
         await apiService.get('getRecentDrive?userID=${pref.getInt("userID")}');
-    return res.data;
+    return res.data ?? {}; // Return empty map if data is null
   }
 
   Future<void> getMostRecentDrive() async {
@@ -100,6 +101,9 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
         } else if (snapshot.hasError) {
           // If there's an error during the fetch, display an error message
           return Text('Error: ${snapshot.error}');
+        } else if (snapshot.data!["data"] == null || snapshot.data!["data"].isEmpty) {
+          //Handle case when data is empty
+          return Text('No data available');
         } else {
           // Once the data is available, update the widget's properties
           var firstDataItem = snapshot.data!["data"][0];
@@ -113,7 +117,7 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
           // Return your UI with the updated values
           return Container(
             padding: const EdgeInsets.all(25.0),
-            color: const Color.fromRGBO(124, 184, 22, 1),
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -122,7 +126,7 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
                   decoration: BoxDecoration(
                     border: Border.all(
                         color: const Color.fromRGBO(206, 213, 92, 100)),
-                    color: const Color.fromRGBO(160, 197, 89, 100),
+                    color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,132 +205,3 @@ class _CarbonReportPageState extends State<CarbonReportPage> {
     );
   }
 }
-
-/* @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(25.0),
-      color: const Color.fromRGBO(124, 184, 22, 1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(40, 40, 40, 40),
-            decoration: BoxDecoration(
-              border:
-                  Border.all(color: const Color.fromRGBO(206, 213, 92, 100)),
-              color: const Color.fromRGBO(160, 197, 89, 100),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: const Text(
-                      "Your Carbon Footprint",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: const Text(
-                    "Your Car Here",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: const Text(
-                    "[#] total [unit]",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: const Text(
-                    "Your carbon footprint is equal to: ",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: const Text(
-                    "[Carbon Emission Score]",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: const Text(
-                    $"That is {carbon_lb/30} than the daily average for most Americans today.",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
-                      fontFamily: 'Nunito',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              width: 150,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  OutlinedButton(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Color.fromRGBO(227, 167, 27, 100)),
-                        foregroundColor: MaterialStatePropertyAll(Colors.white),
-                        overlayColor: MaterialStatePropertyAll(
-                            Color.fromRGBO(139, 141, 43, 100)),
-                        shadowColor: MaterialStatePropertyAll(Colors.black),
-                      ),
-                      onPressed: () {
-                        null;
-                      },
-                      child: const Align(
-                          alignment: Alignment.center,
-                          child: Text("Save To Photos"))),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-} */

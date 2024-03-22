@@ -1,4 +1,4 @@
-# Sprint 4
+# Sprint 4: Server Development
 
 ### Sprint Goals
 - [X] Update Home and Manual UI

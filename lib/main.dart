@@ -1,8 +1,11 @@
 //
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
+
 
 import 'package:emission/vehicles.dart';
-import 'package:flutter/material.dart';
 import 'package:emission/layout.dart';
 import 'package:emission/login.dart';
 import 'package:emission/create-account.dart';
@@ -14,10 +17,18 @@ import 'package:emission/drive-button.dart';
 import 'package:emission/manual.dart';
 import 'package:emission/leaderboard.dart';
 
+
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeManager(),
+      child: const MyApp(),
+      )
+  );
 }
+
+
 
 /* */
 class MyApp extends StatelessWidget {
@@ -28,6 +39,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'eMission',
       initialRoute: 'create-account',
+      theme: Provider.of<ThemeManager>(context).currentTheme,
+      darkTheme: Provider.of<ThemeManager>(context).currentTheme,
+      themeMode: Provider.of<ThemeManager>(context).isDark
+        ? ThemeMode.dark
+        : ThemeMode.light,
       routes: {
         'create-account': (context) => const Layout(
               body: CreateAccount(),

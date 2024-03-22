@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'challenge_page.dart';
 import 'encryption.dart';
@@ -15,6 +19,7 @@ class Settings extends StatefulWidget {
 class SettingsState extends State<Settings> {
   // main section
   SettingsSection active = SettingsSection.main;
+
 
   // profile
   TextEditingController emailController = new TextEditingController();
@@ -34,6 +39,7 @@ class SettingsState extends State<Settings> {
 
   // support
   bool anonymous = false;
+
 
   @override
   void initState() {
@@ -56,7 +62,7 @@ class SettingsState extends State<Settings> {
         body = account();
         break;
       case SettingsSection.preferences:
-        body = preferences();
+        body = preferences(context);
         break;
       case SettingsSection.privacy:
         body = privacy();
@@ -72,8 +78,9 @@ class SettingsState extends State<Settings> {
         break;
     }
 
+
     return Container(
-      decoration: const BoxDecoration(color: Color.fromRGBO(124, 184, 22, 1)),
+      decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
@@ -104,14 +111,14 @@ class SettingsState extends State<Settings> {
 
   Widget settingsButton(String text, SettingsSection route) {
     return OutlinedButton(
-        style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white),
-            foregroundColor: MaterialStatePropertyAll(Colors.black54),
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
             overlayColor: MaterialStatePropertyAll(Colors.black12)),
         onPressed: () {
           changeActive(route);
         },
-        child: Align(alignment: Alignment.center, child: Text(text)));
+        child: Align(alignment: Alignment.center, child: Text(text, style: TextStyle(fontWeight: FontWeight.bold))));
   }
 
   Widget account() {
@@ -148,8 +155,8 @@ class SettingsState extends State<Settings> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 75,
-              backgroundColor: Colors.grey.shade200,
+              radius: 78,
+              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
               child: const CircleAvatar(
                 radius: 70,
                 backgroundImage:
@@ -190,8 +197,8 @@ class SettingsState extends State<Settings> {
         )
       ]),
       Container(
-        decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+        decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             border: Border(),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.only(top: 20),
@@ -206,6 +213,7 @@ class SettingsState extends State<Settings> {
             TextFormField(
               controller: emailController,
               enabled: false,
+              style: TextStyle(color: Colors.black26)
             ),
             const SizedBox(
               height: 20,
@@ -214,7 +222,10 @@ class SettingsState extends State<Settings> {
               "Username",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextFormField(controller: usernameController),
+            TextFormField(
+              controller: usernameController,
+              style: TextStyle(color: Colors.black)
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -224,6 +235,7 @@ class SettingsState extends State<Settings> {
             ),
             TextFormField(
               controller: displayNameController,
+              style: TextStyle(color: Colors.black)
             ),
             const SizedBox(
               height: 20,
@@ -238,16 +250,17 @@ class SettingsState extends State<Settings> {
                           openPasswordModal(context);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(244, 244, 248, 6),
-                            foregroundColor: Colors.black),
+                            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                            foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                          ),
+                            
                         child: const Text("Change Password")),
                     ElevatedButton(
                         onPressed: () => updateAccount(context),
                         style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(244, 244, 248, 6),
-                            foregroundColor: Colors.black),
+                            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                            foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                          ),
                         child: const Text("Update"))
                   ],
                 )
@@ -259,15 +272,15 @@ class SettingsState extends State<Settings> {
     ]);
   }
 
-  Widget preferences() {
+  Widget preferences(context) {
     return Column(children: [
       const Text(
         "Preferences",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -279,12 +292,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Application Audio"),
                   Switch(
-                      value: applicationAudio,
-                      onChanged: (value) {
-                        setState(() {
-                          applicationAudio = value;
-                        });
-                      })
+                    value: applicationAudio,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        applicationAudio = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -292,12 +312,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Face ID"),
                   Switch(
-                      value: faceId,
-                      onChanged: (value) {
-                        setState(() {
-                          faceId = value;
-                        });
-                      })
+                    value: faceId,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        faceId = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -305,12 +332,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Dark Mode"),
                   Switch(
-                      value: darkMode,
-                      onChanged: (value) {
-                        setState(() {
-                          darkMode = value;
-                        });
-                      })
+                    value: darkMode,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        darkMode = value;
+                      });
+                    },
+                  ),
                 ],
               )
             ],
@@ -325,8 +359,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -338,12 +372,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Location"),
                   Switch(
-                      value: accessLocation,
-                      onChanged: (value) {
-                        setState(() {
-                          accessLocation = value;
-                        });
-                      })
+                    value: accessLocation,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        accessLocation = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -351,12 +392,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Photos"),
                   Switch(
-                      value: accessPhotos,
-                      onChanged: (value) {
-                        setState(() {
-                          accessPhotos = value;
-                        });
-                      })
+                    value: accessPhotos,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        accessPhotos = value;
+                      });
+                    }
+                  )
                 ],
               ),
               Row(
@@ -364,12 +412,19 @@ class SettingsState extends State<Settings> {
                 children: [
                   const Text("Access Contacts"),
                   Switch(
-                      value: accessContacts,
-                      onChanged: (value) {
-                        setState(() {
-                          accessContacts = value;
-                        });
-                      })
+                    value: accessContacts,
+                    activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    inactiveThumbColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                    activeTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                    inactiveTrackColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    trackOutlineColor: MaterialStatePropertyAll(Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground),
+                    trackOutlineWidth: MaterialStatePropertyAll(1.5),
+                    onChanged: (value) {
+                      setState(() {
+                        accessContacts = value;
+                      });
+                    }
+                  )
                 ],
               )
             ],
@@ -384,8 +439,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -400,6 +455,7 @@ class SettingsState extends State<Settings> {
                   ),
                   margin: const EdgeInsets.only(top: 16),
                   child: const TextField(
+                    style: TextStyle(color: Colors.black),
                     maxLines: 3,
                     decoration: InputDecoration(border: OutlineInputBorder()),
                   )),
@@ -409,6 +465,8 @@ class SettingsState extends State<Settings> {
                   const Text("Submit anonymously:"),
                   Checkbox(
                       value: anonymous,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      checkColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
                       onChanged: (value) {
                         setState(() {
                           anonymous = value ?? false;
@@ -419,8 +477,8 @@ class SettingsState extends State<Settings> {
               ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(244, 244, 248, 6),
-                      foregroundColor: Colors.black),
+                      backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,),
                   child: const Text("Submit"))
             ],
           ))
@@ -434,8 +492,8 @@ class SettingsState extends State<Settings> {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
       ),
       Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(160, 214, 66, 1),
+          decoration: BoxDecoration(
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -529,6 +587,7 @@ class SettingsState extends State<Settings> {
           return SimpleDialog(
             title: const Text('Change Password'),
             contentPadding: const EdgeInsets.all(20),
+            backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             children: [
               TextFormField(
                 controller: oldPassword,
@@ -564,15 +623,15 @@ class SettingsState extends State<Settings> {
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color.fromARGB(244, 244, 248, 6),
-                          foregroundColor: Colors.black),
+                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,//const Color.fromARGB(244, 244, 248, 6),
+                          foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       child: const Text("Close")),
                   ElevatedButton(
                       onPressed: () => changePassword(context),
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color.fromARGB(244, 244, 248, 6),
-                          foregroundColor: Colors.black),
+                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                          foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       child: const Text("Change")),
                 ],
               )

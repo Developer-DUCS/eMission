@@ -12,6 +12,11 @@ import 'api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:emission/theme/theme_manager.dart';
+
 
 class Challenge {
   final int challengeID;
@@ -243,10 +248,11 @@ class _ChallengePageState extends State<ChallengePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeManager themeManager = Provider.of<ThemeManager>(context);
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
       padding: const EdgeInsets.all(16.0),
-      color: const Color.fromRGBO(255, 168, 48, 100),
+      color: themeManager.currentTheme.colorScheme.primary,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -277,7 +283,11 @@ class _ChallengePageState extends State<ChallengePage> {
                     showTrackOnHover: true,
                     thickness: 5,
                     child: Container(
-                      color: const Color.fromRGBO(160, 197, 89, 100),
+                      decoration: BoxDecoration(
+                        color: themeManager.currentTheme.colorScheme.background,
+                        border: Border(),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                        //margin: EdgeInsets.only(bottom: 54),
                       child: ListView.builder(
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
@@ -350,7 +360,6 @@ class _ChallengePageState extends State<ChallengePage> {
                   return Text(snapshot.error.toString());
                 } else {
                   return Container(
-                    color: const Color.fromRGBO(255, 168, 48, 100),
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -362,8 +371,8 @@ class _ChallengePageState extends State<ChallengePage> {
           Center(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-                backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                foregroundColor: themeManager.currentTheme.colorScheme.background,
+                backgroundColor: themeManager.currentTheme.colorScheme.secondary,
               ),
               onPressed: () {
                 _acceptChallenges(context);
@@ -377,51 +386,7 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 }
 
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(16.0),
-//       color: const Color.fromRGBO(255, 168, 48, 100),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: <Widget>[
-//           ToggleButton(isPastPage: false),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Text(
-//                 'Duration',
-//                 style: TextStyle(
-//                   fontSize: 21,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               ),
-//               Text(
-//                 'Pts',
-//                 style: TextStyle(
-//                   fontSize: 20.0,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               ),
-//               Text(
-//                 'Challenge',
-//                 style: TextStyle(
-//                   fontSize: 20.0,
-//                   fontWeight: FontWeight.bold,
-//                   letterSpacing: 2.0,
-//                   fontFamily: 'Nunito',
-//                 ),
-//               )
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+
 
 /*
     A custom ToggleButton Widget that returns a CupertinoSegmentedControl Button.
@@ -449,28 +414,28 @@ class ToggleButton extends StatelessWidget {
       children: {
         'Past': Container(
           color: isPastPage
-              ? const Color.fromRGBO(160, 197, 89, 100)
-              : Colors.grey[300],
+              ? Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary
+              : Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
           padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
           child: Text(
             "My Challenges",
             style: TextStyle(
               fontFamily: 'Nunito',
-              color: Colors.black,
+              color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
               fontSize: fontSizeFactor,
             ),
           ),
         ),
         'Current': Container(
           color: isPastPage
-              ? Colors.grey[300]
-              : const Color.fromRGBO(160, 197, 89, 100),
+              ? Provider.of<ThemeManager>(context).currentTheme.colorScheme.background
+              : Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
           padding: EdgeInsets.fromLTRB(1, 5, 1.3, 5.8),
           child: Text(
             "New Challenges",
             style: TextStyle(
               fontFamily: 'Nunito',
-              color: Colors.black,
+              color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
               fontSize: fontSizeFactor,
             ),
           ),
@@ -628,12 +593,11 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.all(16.0),
-      color: Color.fromRGBO(124, 184, 22, 100),
+      color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primary,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           ToggleButton(isPastPage: true),
           Center(
@@ -646,20 +610,25 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
             ),
           ),
           SizedBox(
-            height: screenHeight * .5,
+            height: screenHeight * .45,
             child: FutureBuilder<List<UserChallenge>>(
               future: userChallenges,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<UserChallenge> challenges = snapshot.data!;
-                  return Container(
-                    padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
-                    color: Colors.grey[300],
-                    child: Scrollbar(
+
+
+                  return Scrollbar(
                       trackVisibility: true,
                       showTrackOnHover: true,
                       thickness: 5,
-                      child: ListView.builder(
+                      child: Container(
+                        decoration: BoxDecoration(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                        border: Border(),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                        padding: EdgeInsets.fromLTRB(7, 5, 8, 5.5),
+                        child: ListView.builder(
+                          
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -722,13 +691,13 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
                           );
                         },
                       ),
-                    ),
+                    )
                   );
+                
                 } else if (snapshot.hasError) {
                   return Text(snapshot.error.toString());
                 } else {
                   return Container(
-                    color: const Color.fromRGBO(255, 168, 48, 100),
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -741,8 +710,8 @@ class _PastChallengesPageState extends State<PastChallengesPage> {
           Center(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(244, 0, 0, 0),
-                backgroundColor: const Color.fromARGB(244, 244, 248, 6),
+                foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
               ),
               onPressed: () {
                 _acceptUserChallenges(context);
