@@ -154,7 +154,7 @@ class _ButtonPageState extends State<ButtonPage> {
     print(data);
 
     // API call to update milage and calculate trip distance
-    var res = await ApiService().post('/addDistance', data);
+    var res = await ApiService().post('addDistance', data);
 
     dynamic dataValue = res.data['data'];
 
@@ -178,7 +178,7 @@ class _ButtonPageState extends State<ButtonPage> {
     ;
   }
 
-  void showResultAlert(BuildContext context, double carbonLb) {
+  void showResultAlert(BuildContext context, int carbonLb) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
