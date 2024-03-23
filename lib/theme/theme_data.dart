@@ -18,7 +18,7 @@ ThemeData lightMode = ThemeData(
     tertiary: const Color.fromRGBO(223, 194, 146, 1),
     background: const Color.fromRGBO(255, 255, 255, 1), 
     onBackground: const Color.fromRGBO(22, 25, 21, 1),
-    primaryContainer: const Color.fromRGBO(238, 230, 231, 0.877),
+    primaryContainer: Color.fromRGBO(238, 230, 231, 0.925),
   ),
 
 
@@ -43,7 +43,7 @@ ThemeData lightMode = ThemeData(
   // Input Decoration Theme 
   //
   inputDecorationTheme: InputDecorationTheme(
-    fillColor: const Color.fromRGBO(238, 230, 231, 0.877), //const Color.fromRGBO(251, 251, 251, 1),
+    fillColor:  const Color.fromRGBO(251, 251, 251, 1), //const Color.fromRGBO(238, 230, 231, 0.877), //
     filled: true,
     focusColor: Colors.blueAccent,
     // text style for input label
@@ -77,7 +77,7 @@ ThemeData lightMode = ThemeData(
   // Divider Theme
   //
   dividerTheme: DividerThemeData(
-    color: const Color.fromRGBO(223, 194, 146, 1),
+    color: Color.fromRGBO(255, 139, 71, 1),
   ),
 
 
