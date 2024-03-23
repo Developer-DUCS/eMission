@@ -14,11 +14,11 @@ ThemeData lightMode = ThemeData(
   //
   colorScheme: ColorScheme.light(
     primary: const Color.fromRGBO(0, 180, 92, 1),
-    secondary: Color.fromRGBO(255, 139, 71, 1),
+    secondary: const Color.fromRGBO(255, 139, 71, 1),
     tertiary: const Color.fromRGBO(223, 194, 146, 1),
     background: const Color.fromRGBO(255, 255, 255, 1), 
     onBackground: const Color.fromRGBO(22, 25, 21, 1),
-    primaryContainer: Color.fromRGBO(238, 230, 231, 0.925),
+    primaryContainer: const Color.fromRGBO(238, 230, 231, 0.925),
   ),
 
 
@@ -61,7 +61,7 @@ ThemeData lightMode = ThemeData(
   //
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Color.fromRGBO(255, 139, 71, 1),
-    foregroundColor: const  Color.fromRGBO(251, 251, 251, 1),
+    foregroundColor: const Color.fromRGBO(251, 251, 251, 1),
     splashColor: const Color.fromRGBO(251, 251, 251, 1),
   ),
 
@@ -77,7 +77,7 @@ ThemeData lightMode = ThemeData(
   // Divider Theme
   //
   dividerTheme: DividerThemeData(
-    color: Color.fromRGBO(255, 139, 71, 1),
+    color: const Color.fromRGBO(223, 194, 146, 1),
   ),
 
 

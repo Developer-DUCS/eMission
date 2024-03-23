@@ -196,7 +196,7 @@ class _ManualState extends State<Manual> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                color: themeManager.currentTheme.colorScheme.background,
+                color: themeManager.currentTheme.colorScheme.primaryContainer,
                 border: Border(),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
               padding: const EdgeInsets.all(50),
@@ -205,15 +205,23 @@ class _ManualState extends State<Manual> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: themeManager.currentTheme.colorScheme.background,
+                      border: Border.all(
+                        color: themeManager.currentTheme.colorScheme.onBackground,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     margin: EdgeInsets.only(bottom: 10),
                     child: Container(
-                      color: themeManager.currentTheme.colorScheme.tertiary,
                         child: DropdownButton<Map<String, dynamic>>(
-                          padding: EdgeInsets.only(left: 80, right: 80),
+                          padding: EdgeInsets.only(left: 5, right: 5),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          style: TextStyle(color: themeManager.currentTheme.colorScheme.background, fontWeight: FontWeight.bold),
-                          dropdownColor: themeManager.currentTheme.colorScheme.tertiary,
+                          style: TextStyle(color: themeManager.currentTheme.colorScheme.onBackground, fontWeight: FontWeight.bold),
+                          dropdownColor: themeManager.currentTheme.colorScheme.background,
+                          elevation: 100,
+                          
                           value: selectedVehicle,
                           onChanged: (Map<String, dynamic>? newValue) {
                             if (newValue != null) {
