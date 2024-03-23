@@ -156,7 +156,7 @@ class SettingsState extends State<Settings> {
           children: [
             CircleAvatar(
               radius: 78,
-              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+              backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
               child: const CircleAvatar(
                 radius: 70,
                 backgroundImage:
@@ -198,7 +198,7 @@ class SettingsState extends State<Settings> {
       ]),
       Container(
         decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             border: Border(),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         margin: const EdgeInsets.only(top: 20),
@@ -280,7 +280,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -360,7 +360,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -465,7 +465,7 @@ class SettingsState extends State<Settings> {
                   const Text("Submit anonymously:"),
                   Checkbox(
                       value: anonymous,
-                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
+                      activeColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.tertiary,
                       checkColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
                       onChanged: (value) {
                         setState(() {
@@ -493,7 +493,7 @@ class SettingsState extends State<Settings> {
       ),
       Container(
           decoration: BoxDecoration(
-            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+            color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: const EdgeInsets.only(top: 16),
@@ -623,7 +623,7 @@ class SettingsState extends State<Settings> {
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,//const Color.fromARGB(244, 244, 248, 6),
+                              Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
                           foregroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background),
                       child: const Text("Close")),
                   ElevatedButton(

@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
         SizedBox(height: 20),
         CircleAvatar(
           radius: 50,
-          backgroundColor: themeManager.currentTheme.colorScheme.secondary,
+          backgroundColor: themeManager.currentTheme.colorScheme.tertiary,
           child: const CircleAvatar(
             radius: 45,
             backgroundImage: AssetImage('assets/images/plant.jpg'),
