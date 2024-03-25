@@ -19,8 +19,8 @@ build/
 */android/gradlew.bat
 */android/.gradle
 */android/build/
-*/android/.gradle/*/executionHistory/executionHistory.bin
-*/android/.gradle/*/fileHashes/fileHashes.bin
+*/android/.gradle/7.5/executionHistory/
+*/android/.gradle/7.5/fileHashes/
 */android/.gradle/file-system.probe
 
 # iOS specific
