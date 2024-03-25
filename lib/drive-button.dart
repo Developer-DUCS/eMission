@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'package:emission/theme/theme_manager.dart';
 import 'package:provider/provider.dart';
 
-
 class ButtonPage extends StatefulWidget {
   const ButtonPage({Key? key});
 
@@ -29,8 +28,65 @@ class _ButtonPageState extends State<ButtonPage> {
   double totalDistance = 0.0;
   List<Map<String, dynamic>> vehicles = [];
   Map<String, dynamic>? selectedVehicle;
+  bool _agreedToTerms = false;
+  bool _initialized = false;
 
-  void initLocationService() async {
+  Future<void> _checkTermsAgreement() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool agreed = prefs.getBool('agreed_to_terms') ?? false;
+    if (!agreed) {
+      await _showTermsDialog();
+    }
+  }
+
+  Future<void> _showTermsDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms of Use'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Please do not interact with the app while driving, only press the button when the car is stopped. The eCoders team is not responsible for using the app while driving.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Agree'),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('agreed_to_terms', true);
+                Navigator.of(context).pop();
+                setState(() {
+                  _agreedToTerms = true;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkTermsAgreement();
+    _initialize();
+  }
+
+  void _initialize() async {
+    await initLocationService();
+    setState(() {
+      _initialized = true;
+    });
+  }
+
+  Future<void> initLocationService() async {
     await Geolocator.requestPermission();
     fetchVehicles();
   }
@@ -265,14 +321,15 @@ class _ButtonPageState extends State<ButtonPage> {
                       //Navigator.of(context).pop();
                       //Navigator.pushNamed(context, 'carbon_report');
                     },
-                    child: Text(
-                      'See My Carbon Footprint',
-                      style: TextStyle(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background)
-                    ),
+                    child: Text('See My Carbon Footprint',
+                        style: TextStyle(
+                            color: Provider.of<ThemeManager>(context)
+                                .currentTheme
+                                .colorScheme
+                                .background)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    
                   ),
                 ),
               ],
@@ -352,6 +409,14 @@ class _ButtonPageState extends State<ButtonPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_agreedToTerms) {
+      // Show terms dialog if terms are not agreed
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     Color buttonColor = isGreen ? Color(0xFF7CB816) : Color(0xFFE3A71B);
     Color originalColor = Color(0xFFf18f47); // Original color
 
@@ -361,7 +426,6 @@ class _ButtonPageState extends State<ButtonPage> {
       (originalColor.green + 255) ~/ 2,
       (originalColor.blue + 255) ~/ 2,
     );
-
     return Container(
       color: lighterColor,
       child: Column(
