@@ -4,30 +4,46 @@ import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class ButtonPage extends StatefulWidget {
-  const ButtonPage({Key? key});
+  final ApiService apiService;
+  const ButtonPage({Key? key, required this.apiService}) : super(key: key);
 
   @override
   _ButtonPageState createState() => _ButtonPageState();
 }
 
 class _ButtonPageState extends State<ButtonPage> {
-  bool isGreen = false;
-  bool isDone = false;
-  int lastDrive = 0;
-  String buttonText = "Press to start drive";
-  Timer? timer;
-  int secondsElapsed = 0;
-  bool isOverlayVisible = false;
+  late bool isGreen = false;
+  late bool isDone = false;
+  late int lastDrive = 0;
+  late String buttonText = "Press to start drive";
+  late Timer? timer;
+  late int secondsElapsed = 0;
+  late bool isOverlayVisible = false;
   late StreamSubscription<Position> locationStream;
   Position? lastPosition;
   double totalDistance = 0.0;
-  List<Map<String, dynamic>> vehicles = [];
+  late List<Map<String, dynamic>> vehicles = [];
   Map<String, dynamic>? selectedVehicle;
 
+  @override
+  void initState() {
+    super.initState();
+    initLocationService();
+  }
+
   void initLocationService() async {
-    await Geolocator.requestPermission();
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) {
+      print('Location permission denied.');
+    } else if (permission == LocationPermission.deniedForever) {
+      print('Location permission permanently denied.');
+    } else {
+      startLocationUpdates();
+    }
     fetchVehicles();
   }
 
@@ -54,13 +70,22 @@ class _ButtonPageState extends State<ButtonPage> {
 
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    ApiService().get('vehicles?owner=${pref.getInt("userID")}').then((res) {
-      setState(() {
-        vehicles = List<dynamic>.from(res.data)
-            .map((item) => Map<String, dynamic>.from(item))
-            .toList();
-      });
-    });
+    try {
+      ApiResponse<dynamic> response =
+          await ApiService().get('vehicles?owner=${pref.getInt("userID")}');
+      if (response.data != null) {
+        setState(() {
+          vehicles = List<dynamic>.from(response.data)
+              .map((item) => Map<String, dynamic>.from(item))
+              .toList();
+        });
+      } else {
+        // Handle null response
+        print('No data received from the API');
+      }
+    } catch (e) {
+      print('Error fetching vehicles: $e');
+    }
   }
 
   void toggleColor() {
@@ -112,7 +137,7 @@ class _ButtonPageState extends State<ButtonPage> {
   @override
   void dispose() {
     stopTimer();
-    locationStream.cancel();
+    //locationStream.cancel();
     super.dispose();
   }
 
@@ -150,7 +175,7 @@ class _ButtonPageState extends State<ButtonPage> {
     print(data);
 
     // API call to update milage and calculate trip distance
-    var res = await ApiService().post('/addDistance', data);
+    var res = await widget.apiService.post('/addDistance', data);
 
     dynamic dataValue = res.data['data'];
 
@@ -162,7 +187,7 @@ class _ButtonPageState extends State<ButtonPage> {
       var vehicle = modelID;
 
       // API request to Carbon Interface
-      var results = await ApiService().get(
+      var results = await widget.apiService.get(
           'vehicleCarbonReport?vehicleId=${vehicle}&distance=${tripDistance}');
 
       // Extract the data

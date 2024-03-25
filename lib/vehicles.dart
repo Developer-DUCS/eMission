@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Vehicles extends StatefulWidget {
-  const Vehicles({super.key});
+  final ApiService apiService;
+
+  const Vehicles({Key? key, required this.apiService}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => VehiclesState();
@@ -23,7 +25,9 @@ class VehiclesState extends State<Vehicles> {
 
   void fetchVehicles() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    ApiService().get('vehicles?owner=${pref.getInt("userID")}').then((res) {
+    widget.apiService
+        .get('vehicles?owner=${pref.getInt("userID")}')
+        .then((res) {
       setState(() {
         vehicles = List<dynamic>.from(res.data)
             .map((item) => Map<String, dynamic>.from(item))
@@ -33,7 +37,9 @@ class VehiclesState extends State<Vehicles> {
   }
 
   void deleteVehicle(int id) {
-    ApiService().delete('vehicles?id=${id}').then((value) => fetchVehicles());
+    widget.apiService
+        .delete('vehicles?id=${id}')
+        .then((value) => fetchVehicles());
   }
 
   @override

@@ -37,6 +37,13 @@ class _CreateAccountState extends State<CreateAccount> {
   // this request will insert the user's login information.
   void _submitForm(context) async {
     // Encrypt the password
+    if (emailController.text == null ||
+        usernameController.text == null ||
+        displayNameController.text == null ||
+        passwordController.text == null ||
+        confirmPasswordController.text == null) {
+      return;
+    }
     String encryptedPassword = encryptPassword(confirmPasswordController.text);
 
     // User's input data
@@ -206,10 +213,12 @@ class _CreateAccountState extends State<CreateAccount> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account?"),
-                      const SizedBox(
-                        width: 4,
+                      Expanded(
+                        child: const Text("Already have an account?"),
                       ),
+                      /* const SizedBox(
+                        width: 4,
+                      ), */
                       GestureDetector(
                         child: const Text(
                           "Login",

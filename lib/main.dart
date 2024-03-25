@@ -55,8 +55,8 @@ class MyApp extends StatelessWidget {
               pageIndex: 2,
               driveButton: false,
             ),
-        'button-page': (context) => const Layout(
-              body: ButtonPage(),
+        'button-page': (context) => Layout(
+              body: ButtonPage(apiService: ApiService()),
               appBar: true,
               driveButton: false,
             ),
@@ -69,11 +69,11 @@ class MyApp extends StatelessWidget {
         'carbon_report': (context) => Layout(
               body: CarbonReportPage(),
             ),
-        'manual_input': (context) => const Layout(
-              body: Manual(),
+        'manual_input': (context) => Layout(
+              body: Manual(apiService: ApiService()),
             ),
-        'vehicles': (context) => const Layout(
-              body: Vehicles(),
+        'vehicles': (context) => Layout(
+              body: Vehicles(apiService: ApiService()),
             ),
       },
     );
