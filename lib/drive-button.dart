@@ -218,6 +218,14 @@ class _ButtonPageState extends State<ButtonPage> {
                 ),
                 SizedBox(height: 10),
                 Container(
+                  decoration: BoxDecoration(
+                    color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background,
+                    border: Border.all(
+                      color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.onBackground,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: DropdownButton<Map<String, dynamic>>(
                     value: selectedVehicle,
                     onChanged: (Map<String, dynamic>? newValue) {
@@ -270,7 +278,7 @@ class _ButtonPageState extends State<ButtonPage> {
                       style: TextStyle(color: Provider.of<ThemeManager>(context).currentTheme.colorScheme.background)
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Provider.of<ThemeManager>(context).currentTheme.colorScheme.secondary,
                     ),
                     
                   ),
@@ -400,8 +408,7 @@ class _ButtonPageState extends State<ButtonPage> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors
-                                .white, // Border color same as button color
+                            color: Colors.white, // Border color same as button color
                             width:
                                 15.0, // Border width same as the white border
                           ),

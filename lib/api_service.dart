@@ -16,7 +16,7 @@ class ApiService {
 
   ApiService() {
     if (kReleaseMode) {
-      baseUrl = 'http://mcs.drury.edu:$port'; //replace with actual server url
+      baseUrl = 'https://mcs.drury.edu:$port'; //replace with actual server url
     } else {
       baseUrl =
           Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';

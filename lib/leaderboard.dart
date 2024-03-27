@@ -36,7 +36,7 @@ Future<int> _getUserRank() async {
 
 Future<List<User>> _getUsers() async {
   var response = await http.get(
-    Uri.parse("http://10.0.2.2:3300/getTopTen"),
+    Uri.parse("http://10.0.2.2:3000/getTopTen"),
     headers: {
       'Content-Type': 'application/json',
     },
